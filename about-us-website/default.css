@@ -5,7 +5,7 @@ body {
 
 .header-div,
 .footer-div {
-  background-color: rgb(207, 207, 207);
+  background-color: rgb(199, 235, 199);
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 10px;
@@ -36,6 +36,7 @@ body {
   padding-right: 5px;
   background-color: rgb(105, 207, 105);
   border-radius: 4px;
+  color: rgb(231, 252, 231);
 }
 
 .header-div h3 a,
@@ -47,6 +48,11 @@ body {
 .header-div h3 a:visited,
 .footer-div h4 a:visited {
   color: rgb(231, 252, 231);
+}
+
+.header-div h3 a:hover,
+.footer-div h4 a:hover {
+  color: rgb(190, 241, 190);
 }
 
 .body-div {
