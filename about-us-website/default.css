@@ -13,6 +13,7 @@ body {
   color: rgb(66, 178, 66);
   line-height: 80%;
   border-radius: 4px;
+  clear: both;
 }
 
 .header-text {
@@ -70,4 +71,21 @@ body {
 #dev-2t1l label {
   display: block;
   padding-bottom: 3px;
+}
+
+#rainforest {
+  float: right;
+  height: 184px;
+}
+
+#truths-lies {
+  background-color: rgb(66, 178, 66);
+  color: rgb(231, 252, 231);
+  border-radius: 6px;
+  width: 300px;
+  padding: 8px;
+  margin: 5px;
+  border-style: dashed;
+  border-color: antiquewhite;
+  border-width: 3px;
 }
