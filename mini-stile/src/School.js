@@ -1,3 +1,6 @@
+import { IDgenerator } from "./IDgenerator";
+import { Teacher } from "./Teacher";
+
 export class School {
   constructor(name, suburb, mascot) {
     this._name = name;
@@ -26,7 +29,27 @@ export class School {
     //add the new subject obj to the schools obj of subjects
   }
   hireTeacher(name, DOB, ambition) {
-    //generate an ID
+    let teacherID = IDgenerator(name, DOB);
+    let teacher;
+    switch (ambition) {
+      case "Create a student army":
+        teacher = new Teacher(teacherID, name, DOB, ambition);
+        break;
+
+      case "Kill the principal and take their job":
+        teacher = new Teacher(teacherID, name, DOB, ambition);
+        break;
+
+      case "Doing the bare minimum until they retire":
+        teacher = new Teacher(teacherID, name, DOB, ambition);
+        break;
+
+      default:
+        throw new Error("Invalid ambition.");
+    }
+    this._teachers[teacherID] = teacher;
+    return teacherID;
+
     //have a check to see if ambition is valid
     //create a new teacher obj with the parameters nd the ID
     //then add the teacher obj to the school list of teacher objs

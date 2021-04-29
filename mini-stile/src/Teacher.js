@@ -4,6 +4,8 @@ export class Teacher {
     this._name = name;
     this._DOB = DOB;
     this._ambition = ambition;
+    this._faveStudent = null;
+    this._hatedStudent = null;
   }
 
   assignGrade(student, subject, grade) {
