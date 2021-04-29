@@ -4,14 +4,14 @@ export class School {
     this._suburb = suburb;
     this._mascot = mascot;
     this._teachers = {};
-    this._classes = {};
+    this._subjects = {};
     this._students = {};
   }
   createClass(name, room, times, teacher) {
     //generate an ID
     //check if the teacher is an obj
-    // create a new class obj with the given parameters and the ID
-    //add the new class obj to the schools obj of classes
+    // create a new subject obj with the given parameters and the ID
+    //add the new subject obj to the schools obj of subjects
   }
   hireTeacher(name, DOB, ambition) {
     //generate an ID
@@ -25,18 +25,18 @@ export class School {
     //then create a new student obj with the parameters and the iD
     //then add the student obj to the school's list of student objs
   }
-  assignAssistantTeacher(classID, teacher) {
+  assignAssistantTeacher(subject, teacher) {
     //this is only for assigning assistant teachers bc create class alr assigns primary ones
     //check if theres alr an assistant teacher assigned
     //if there isnt one assigned, assign the new teacher
     //of not, return an error saying there's alr an assistant teacher
   }
-  assignStudent(classID, student) {
-    //needs to check if there's alr 25 or more students in the class
-    //if there isnt, add the student to the class' students obj lists
+  assignStudent(subject, student) {
+    //needs to check if there's alr 25 or more students in the subject
+    //if there isnt, add the student to the subjects students obj lists
     //otherwise, throw an error
   }
   gradingTime() {
-    //for each class, tell the primary teacher to doYourJob()
+    //for each subject, tell the primary teacher to doYourJob()
   }
 }
