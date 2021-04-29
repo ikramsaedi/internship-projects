@@ -1,5 +1,6 @@
 export class Student {
-  constructor(name, DOB, faveFood, faveSuit) {
+  constructor(ID, name, DOB, faveFood, faveSuit) {
+    this._ID = ID;
     this._name = name;
     this._DOB = DOB;
     this._faveFood = faveFood;

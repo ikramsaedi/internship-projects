@@ -1,5 +1,6 @@
 export class Teacher {
-  constructor(name, DOB, ambition) {
+  constructor(ID, name, DOB, ambition) {
+    this._ID = ID;
     this._name = name;
     this._DOB = DOB;
     this._ambition = ambition;

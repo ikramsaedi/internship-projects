@@ -1,5 +1,6 @@
 export class Subject {
-  constructor(teacher, name, room, times) {
+  constructor(ID, teacher, name, room, times) {
+    this._ID = ID;
     this._teacher = teacher;
     this._assistantTeacher = null;
     this._students = {};
@@ -9,4 +10,6 @@ export class Subject {
   }
 
   // Our subject doesn't have any methods lol
+
+  //get student list
 }

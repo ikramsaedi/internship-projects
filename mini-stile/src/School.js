@@ -7,7 +7,19 @@ export class School {
     this._subjects = {};
     this._students = {};
   }
-  createClass(name, room, times, teacher) {
+  get teachers() {
+    return this._teachers;
+  }
+
+  get subjects() {
+    return this._subjects;
+  }
+
+  get students() {
+    return this._students;
+  }
+
+  createSubject(name, room, times, teacher) {
     //generate an ID
     //check if the teacher is an obj
     // create a new subject obj with the given parameters and the ID
