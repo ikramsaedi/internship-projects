@@ -37,23 +37,7 @@ export class School {
 
   hireTeacher(name, DOB, ambition) {
     let teacherID = personIDGen(name, DOB);
-    let teacher;
-    switch (ambition) {
-      case "Create a student army":
-        teacher = new Teacher(teacherID, name, DOB, ambition);
-        break;
-
-      case "Kill the principal and take their job":
-        teacher = new Teacher(teacherID, name, DOB, ambition);
-        break;
-
-      case "Doing the bare minimum until they retire":
-        teacher = new Teacher(teacherID, name, DOB, ambition);
-        break;
-
-      default:
-        throw new Error("Invalid ambition.");
-    }
+    let teacher = new Teacher(teacherID, name, DOB, ambition);
     this._teachers[teacherID] = teacher;
     return teacherID;
   }
@@ -62,10 +46,6 @@ export class School {
     let student = new Student(studentID, name, DOB, faveFood, faveSuit);
     this._students[studentID] = student;
     return studentID;
-    //generate an ID
-    //needs to check if the suit is valid (hearts, spades etc)
-    //then create a new student obj with the parameters and the iD
-    //then add the student obj to the school's list of student objs
   }
   assignAssistantTeacher(subject, teacher) {
     //this is only for assigning assistant teachers bc create class alr assigns primary ones

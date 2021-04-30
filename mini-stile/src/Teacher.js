@@ -3,7 +3,7 @@ export class Teacher {
     this._ID = ID;
     this._name = name;
     this._DOB = DOB;
-    this._ambition = ambition;
+    this._ambition = this.validateAmbition(ambition);
     this._faveStudent = null;
     this._hatedStudent = null;
   }
@@ -19,5 +19,19 @@ export class Teacher {
   doYourJob() {
     // call getStudentList and store the output in a constant
     // iterate through that constant and call assignGrade on each student
+  }
+
+  validateAmbition(ambition) {
+    const validAmbitions = [
+      "Create a student army",
+      "Kill the principal and take their job",
+      "Doing the bare minimum until they retire",
+    ];
+
+    if (validAmbitions.includes(ambition)) {
+      return ambition;
+    } else {
+      throw new Error("Invalid ambition.");
+    }
   }
 }
