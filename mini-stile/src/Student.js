@@ -8,6 +8,7 @@ export class Student {
     this._grades = {};
   }
   addGrade(subject, percent) {
+    this._grades[subject] = percent;
     //needs to check if the student is allowed to get that % (student name check)
     //if they r not allowed, throw an error
     //determine the correlating grade if they r allowed
