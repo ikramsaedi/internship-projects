@@ -1,5 +1,7 @@
-import { IDgenerator } from "./IDgenerator";
+import { personIDGen, subjectIDGen } from "./IDgenerator";
 import { Teacher } from "./Teacher";
+import { Subject } from "./Subject";
+import { Student } from "./Student";
 
 export class School {
   constructor(name, suburb, mascot) {
@@ -23,13 +25,18 @@ export class School {
   }
 
   createSubject(name, room, times, teacher) {
-    //generate an ID
-    //check if the teacher is an obj
-    // create a new subject obj with the given parameters and the ID
-    //add the new subject obj to the schools obj of subjects
+    let subjectID = subjectIDGen(name, room);
+    if (teacher instanceof Teacher) {
+      let subject = new Subject(subjectID, teacher, name, room, times);
+      this._subjects[subjectID] = subject;
+      return subjectID;
+    } else {
+      throw new Error("Please assign a valid teacher.");
+    }
   }
+
   hireTeacher(name, DOB, ambition) {
-    let teacherID = IDgenerator(name, DOB);
+    let teacherID = personIDGen(name, DOB);
     let teacher;
     switch (ambition) {
       case "Create a student army":
@@ -49,12 +56,12 @@ export class School {
     }
     this._teachers[teacherID] = teacher;
     return teacherID;
-
-    //have a check to see if ambition is valid
-    //create a new teacher obj with the parameters nd the ID
-    //then add the teacher obj to the school list of teacher objs
   }
   enrolStudent(name, DOB, faveFood, faveSuit) {
+    let studentID = personIDGen(name, DOB);
+    let student = new Student(studentID, name, DOB, faveFood, faveSuit);
+    this._students[studentID] = student;
+    return studentID;
     //generate an ID
     //needs to check if the suit is valid (hearts, spades etc)
     //then create a new student obj with the parameters and the iD

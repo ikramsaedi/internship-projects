@@ -45,12 +45,12 @@ describe("Start of Term", () => {
       "Year 10 Maths",
       "10B",
       ["Monday 10:00 am", "Thursday 12:30 pm"],
-      stileSchool.staffID
+      stileSchool.teachers[staffID]
     );
     expect(stileSchool.subjects).toEqual({
       [subjectID]: {
         _ID: subjectID,
-        _teacher: stileSchool.staffID,
+        _teacher: stileSchool.teachers[staffID],
         _assistantTeacher: null,
         _students: {},
         _name: "Year 10 Maths",
