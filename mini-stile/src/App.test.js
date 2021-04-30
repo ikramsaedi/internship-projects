@@ -140,8 +140,9 @@ describe("Start of Term", () => {
       "Hearts"
     );
     stileSchool.assignStudent(subjectID, studentID);
-    expect(stileSchool._subjects[subjectID][_students]).toEqual({
-      [studentID]: [stileSchool._students[studentID]], //this is students obj with studentID in it, referring to the same obj as the one in the school
+    console.log(stileSchool._students[studentID]);
+    expect(stileSchool._subjects[subjectID]._students).toEqual({
+      [studentID]: stileSchool._students[studentID], //this is students obj with studentID in it, referring to the same obj as the one in the school
     });
   });
 });

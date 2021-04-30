@@ -54,7 +54,13 @@ export class School {
     //of not, return an error saying there's alr an assistant teacher
   }
   assignStudent(subject, student) {
-    //needs to check if there's alr 25 or more students in the subject
+    let currentSubject = this._subjects[subject];
+    if (Object.keys(currentSubject._students).length < 3) {
+      currentSubject._students[student] = this._students[student];
+    } else {
+      throw new Error("This subject is full!");
+    }
+    //needs to check if there's alr 3 or more students in the subject
     //if there isnt, add the student to the subjects students obj lists
     //otherwise, throw an error
   }
