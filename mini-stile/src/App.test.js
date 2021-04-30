@@ -111,9 +111,10 @@ describe("Start of Term", () => {
       ["Monday 10:00 am", "Thursday 12:30 pm"],
       stileSchool.teachers[primaryID]
     );
+    console.log(subjectID);
     stileSchool.assignAssistantTeacher(subjectID, assistantID);
 
-    expect(stileSchool._subjects[subjectID][_assistantTeacher]).toEqual(
+    expect(stileSchool._subjects[subjectID]["_assistantTeacher"]).toEqual(
       stileSchool._teachers[assistantID]
     ); //check specific property
   });
@@ -140,9 +141,40 @@ describe("Start of Term", () => {
       "Hearts"
     );
     stileSchool.assignStudent(subjectID, studentID);
-    console.log(stileSchool._students[studentID]);
     expect(stileSchool._subjects[subjectID]._students).toEqual({
       [studentID]: stileSchool._students[studentID], //this is students obj with studentID in it, referring to the same obj as the one in the school
     });
+  });
+});
+
+describe("End of term", () => {
+  test("check if student can add grade", () => {
+    let studentDOB = new Date(2004, 6, 8);
+    let studentID = stileSchool.enrolStudent(
+      "Polly Cracker",
+      studentDOB,
+      "Cheese and biscuits",
+      "Hearts"
+    );
+    let teacherDOB = new Date(1974, 6, 8);
+    let teacherID = stileSchool.hireTeacher(
+      //primary teacher
+      "Ms Jenkins",
+      teacherDOB,
+      "Kill the principal and take their job"
+    );
+    let subjectID = stileSchool.createSubject(
+      "Year 10 Maths",
+      "10B",
+      ["Monday 10:00 am", "Thursday 12:30 pm"],
+      stileSchool.teachers[teacherID]
+    );
+    stileSchool._students[studentID].addGrade(subjectID, 20);
+    expect(stileSchool._students[studentID]._grades).toEqual({
+      [subjectID]: 20,
+    });
+    //create a student
+    //call the addGrade() method
+    //check to see if the grades obj has the percentage in it
   });
 });
