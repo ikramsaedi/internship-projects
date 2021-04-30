@@ -48,6 +48,13 @@ export class School {
     return studentID;
   }
   assignAssistantTeacher(subject, teacher) {
+    let currentSubject = this._subjects[subject];
+
+    if (currentSubject._assistantTeacher instanceof Teacher) {
+      throw new Error("This subject already has an assistant teacher");
+    } else {
+      currentSubject._assistantTeacher = this._teachers[teacher];
+    }
     //this is only for assigning assistant teachers bc create class alr assigns primary ones
     //check if theres alr an assistant teacher assigned
     //if there isnt one assigned, assign the new teacher
