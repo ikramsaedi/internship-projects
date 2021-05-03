@@ -29,6 +29,7 @@ export class School {
     if (teacher instanceof Teacher) {
       let subject = new Subject(subjectID, teacher, name, room, times);
       this._subjects[subjectID] = subject;
+      teacher._subjects[subjectID] = subject;
       return subjectID;
     } else {
       throw new Error("Please assign a valid teacher.");

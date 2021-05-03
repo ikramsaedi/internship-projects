@@ -39,6 +39,7 @@ describe("Start of Term", () => {
         _faveStudent: null,
         _hatedStudent: null,
         _ambition: "Kill the principal and take their job",
+        _subjects: {},
       },
     });
   });
@@ -111,7 +112,6 @@ describe("Start of Term", () => {
       ["Monday 10:00 am", "Thursday 12:30 pm"],
       stileSchool.teachers[primaryID]
     );
-    console.log(subjectID);
     stileSchool.assignAssistantTeacher(subjectID, assistantID);
 
     expect(stileSchool._subjects[subjectID]["_assistantTeacher"]).toEqual(
@@ -176,5 +176,33 @@ describe("End of term", () => {
     //create a student
     //call the addGrade() method
     //check to see if the grades obj has the percentage in it
+  });
+
+  test("Teacher can assign grade", () => {
+    let studentDOB = new Date(2004, 6, 8);
+    let studentID = stileSchool.enrolStudent(
+      "Polly Cracker",
+      studentDOB,
+      "Cheese and biscuits",
+      "Hearts"
+    );
+    let teacherDOB = new Date(1974, 6, 8);
+    let teacherID = stileSchool.hireTeacher(
+      //primary teacher
+      "Ms Jenkins",
+      teacherDOB,
+      "Kill the principal and take their job"
+    );
+    let subjectID = stileSchool.createSubject(
+      "Year 10 Maths",
+      "10B",
+      ["Monday 10:00 am", "Thursday 12:30 pm"],
+      stileSchool.teachers[teacherID]
+    );
+    stileSchool.assignStudent(subjectID, studentID);
+    stileSchool._teachers[teacherID].assignGrade(studentID, subjectID, 75);
+    expect(stileSchool._students[studentID]._grades).toEqual({
+      [subjectID]: 75,
+    });
   });
 });

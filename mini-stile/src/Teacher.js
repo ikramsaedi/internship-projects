@@ -6,14 +6,12 @@ export class Teacher {
     this._ambition = this.validateAmbition(ambition);
     this._faveStudent = null;
     this._hatedStudent = null;
+    this._subjects = {};
   }
 
   assignGrade(student, subject, grade) {
-    // get the student object to add the grade
-  }
-
-  getStudentList(subject) {
-    // return the object containing all the students in that subject
+    this._subjects[subject]._students[student].addGrade(subject, grade);
+    // we had to make them know about the classes they were in, we couldn't think of any other way to do this
   }
 
   doYourJob() {
