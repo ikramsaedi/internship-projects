@@ -300,4 +300,44 @@ describe("End of term", () => {
       subjectID2,
     ]);
   });
+
+  test("invalid grades are not assigned", () => {
+    let studentDOB = new Date(2004, 6, 8);
+    let studentID = stileSchool.enrolStudent(
+      "Anne of Green Gables", // not allowed a narwhal grade
+      studentDOB,
+      "Cheese and biscuits",
+      "Hearts"
+    );
+    let studentDOB2 = new Date(2003, 7, 5);
+    let studentID2 = stileSchool.enrolStudent(
+      "Mat Annoying", // only allowed sloth or narwhal
+      studentDOB2,
+      "Cheezels",
+      "Spades"
+    );
+    let teacherDOB = new Date(1974, 6, 8);
+    let teacherID = stileSchool.hireTeacher(
+      //primary teacher
+      "Ms Jenkins",
+      teacherDOB,
+      "Kill the principal and take their job"
+    );
+    let subjectID = stileSchool.createSubject(
+      "Year 10 Maths",
+      "10B",
+      ["Monday 10:00 am", "Thursday 12:30 pm"],
+      stileSchool.teachers[teacherID]
+    );
+    stileSchool.assignStudent(subjectID, studentID);
+    stileSchool.assignStudent(subjectID, studentID2);
+
+    expect(() => {
+      stileSchool._students[studentID].addGrade(98);
+    }).toThrow(Error); // should throw an error
+    expect(() => {
+      stileSchool._students[studentID2].addGrade(45);
+    }).toThrow(Error); // should throw an error // should also throw an error */
+  });
+
 });
