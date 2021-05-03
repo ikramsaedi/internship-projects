@@ -171,7 +171,7 @@ describe("End of term", () => {
     );
     stileSchool._students[studentID].addGrade(subjectID, 20);
     expect(stileSchool._students[studentID]._grades).toEqual({
-      [subjectID]: 20,
+      [subjectID]: { percent: 20, grade: "slug" },
     });
     //create a student
     //call the addGrade() method
@@ -202,7 +202,7 @@ describe("End of term", () => {
     stileSchool.assignStudent(subjectID, studentID);
     stileSchool._teachers[teacherID].assignGrade(studentID, subjectID, 75);
     expect(stileSchool._students[studentID]._grades).toEqual({
-      [subjectID]: 75,
+      [subjectID]: { percent: 75, grade: "chameleon" },
     });
   });
 

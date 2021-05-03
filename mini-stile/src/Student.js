@@ -8,7 +8,20 @@ export class Student {
     this._grades = {};
   }
   addGrade(subject, percent) {
-    this._grades[subject] = percent;
+    let word;
+    //work out the word
+    if (percent >= 0 && percent <= 52) {
+      word = "slug";
+    } else if (percent > 52 && percent <= 67) {
+      word = "sloth";
+    } else if (percent > 67 && percent <= 86) {
+      word = "chameleon";
+    } else if (percent > 86 && percent <= 96) {
+      word = "dugong";
+    } else if (percent > 96 && percent <= 100) {
+      word = "narwhal";
+    }
+    this._grades[subject] = { percent: percent, grade: word };
     //needs to check if the student is allowed to get that % (student name check)
     //if they r not allowed, throw an error
     //determine the correlating grade if they r allowed
