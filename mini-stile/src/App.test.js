@@ -246,4 +246,58 @@ describe("End of term", () => {
       subjectID,
     ]);
   });
+
+  test("it's grading time!", () => {
+    let studentDOB = new Date(2004, 6, 8);
+    let studentID = stileSchool.enrolStudent(
+      "Polly Cracker",
+      studentDOB,
+      "Cheese and biscuits",
+      "Hearts"
+    );
+    let studentDOB2 = new Date(2003, 7, 5);
+    let studentID2 = stileSchool.enrolStudent(
+      "Harriet Harrietson",
+      studentDOB2,
+      "Cheezels",
+      "Spades"
+    );
+    let teacherDOB = new Date(1974, 6, 8);
+    let teacherID = stileSchool.hireTeacher(
+      //primary teacher
+      "Ms Jenkins",
+      teacherDOB,
+      "Kill the principal and take their job"
+    );
+    let subjectID = stileSchool.createSubject(
+      "Year 10 Maths",
+      "10B",
+      ["Monday 10:00 am", "Thursday 12:30 pm"],
+      stileSchool.teachers[teacherID]
+    );
+    stileSchool.assignStudent(subjectID, studentID);
+    stileSchool.assignStudent(subjectID, studentID2);
+    let subjectID2 = stileSchool.createSubject(
+      "Baby Maths (Yr 7)",
+      "3G",
+      ["Tuesday 12:00 pm", "Thursday 10:00 am"],
+      stileSchool.teachers[teacherID]
+    );
+    stileSchool.assignStudent(subjectID2, studentID);
+    stileSchool.assignStudent(subjectID2, studentID2);
+    stileSchool.gradingTime();
+    expect(stileSchool._students[studentID]._grades).toHaveProperty([
+      subjectID,
+    ]);
+    expect(stileSchool._students[studentID]._grades).toHaveProperty([
+      subjectID2,
+    ]);
+
+    expect(stileSchool._students[studentID2]._grades).toHaveProperty([
+      subjectID,
+    ]);
+    expect(stileSchool._students[studentID2]._grades).toHaveProperty([
+      subjectID2,
+    ]);
+  });
 });

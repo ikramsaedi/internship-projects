@@ -73,6 +73,9 @@ export class School {
     //otherwise, throw an error
   }
   gradingTime() {
+    for (let subjectName in this._subjects) {
+      this._subjects[subjectName]._teacher.doYourJob(subjectName);
+    }
     //for each subject, tell the primary teacher to doYourJob()
   }
 }
