@@ -205,4 +205,45 @@ describe("End of term", () => {
       [subjectID]: 75,
     });
   });
+
+  test("Adding grades for a whole class of students", () => {
+    let studentDOB = new Date(2004, 6, 8);
+    let studentID = stileSchool.enrolStudent(
+      "Polly Cracker",
+      studentDOB,
+      "Cheese and biscuits",
+      "Hearts"
+    );
+    let studentDOB2 = new Date(2003, 7, 5);
+    let studentID2 = stileSchool.enrolStudent(
+      "Harriet Harrietson",
+      studentDOB2,
+      "Cheezels",
+      "Spades"
+    );
+    let teacherDOB = new Date(1974, 6, 8);
+    let teacherID = stileSchool.hireTeacher(
+      //primary teacher
+      "Ms Jenkins",
+      teacherDOB,
+      "Kill the principal and take their job"
+    );
+    let subjectID = stileSchool.createSubject(
+      "Year 10 Maths",
+      "10B",
+      ["Monday 10:00 am", "Thursday 12:30 pm"],
+      stileSchool.teachers[teacherID]
+    );
+    stileSchool.assignStudent(subjectID, studentID);
+    stileSchool.assignStudent(subjectID, studentID2);
+    stileSchool._teachers[teacherID].doYourJob(subjectID);
+
+    expect(stileSchool._students[studentID]._grades).toHaveProperty([
+      subjectID,
+    ]);
+
+    expect(stileSchool._students[studentID2]._grades).toHaveProperty([
+      subjectID,
+    ]);
+  });
 });

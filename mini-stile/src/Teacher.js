@@ -14,9 +14,12 @@ export class Teacher {
     // we had to make them know about the classes they were in, we couldn't think of any other way to do this
   }
 
-  doYourJob() {
-    // call getStudentList and store the output in a constant
-    // iterate through that constant and call assignGrade on each student
+  doYourJob(subjectID) {
+    let currentSubject = this._subjects[subjectID];
+    for (let keyName in currentSubject._students) {
+      let grade = Math.floor(Math.random() * 101); //randomly generated percentage
+      this.assignGrade(keyName, subjectID, grade);
+    }
   }
 
   validateAmbition(ambition) {
