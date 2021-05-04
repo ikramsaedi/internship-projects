@@ -17,8 +17,26 @@ export class Teacher {
   doYourJob(subjectID) {
     let currentSubject = this._subjects[subjectID];
     for (let keyName in currentSubject._students) {
+      /*       console.log(keyName);
+      console.log(
+        currentSubject._students[keyName]._grades[subjectID] === undefined
+      ); */
+      /*       let i = 0;
+      while (i >= 0) {
+        i++;
+        console.log(i);
+      } */
+      while (
+        currentSubject._students[keyName]._grades[subjectID] === undefined
+      ) {
+        console.log("something");
+      }
+      // while there is not a grade assigned, do this
       let grade = Math.floor(Math.random() * 101); //randomly generated percentage
       this.assignGrade(keyName, subjectID, grade);
+      console.log(
+        currentSubject._students[keyName]._grades[subjectID] === undefined
+      );
     }
   }
 

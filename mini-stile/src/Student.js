@@ -8,7 +8,7 @@ export class Student {
     this._grades = {};
   }
   addGrade(subject, percent) {
-    if (this._name.search(/(a|A)[nNmMpP]/) !== -1) {
+    if (this._name.search(/(a|A)[nNmMpP]/) !== -1 && percent > 96) {
       throw new Error("Invalid grade.");
     } else if (this._name.search(/^(m|M).{0,2}[aAnNtT]$/) !== -1) {
       throw new Error("Invalid grade.");

@@ -1,11 +1,6 @@
 import { School } from "./School";
 
 let stileSchool;
-let primaryTeacher;
-let assistantTeacher;
-let DOB;
-let student;
-let subject;
 
 beforeEach(() => {
   //create successful variable
@@ -148,7 +143,7 @@ describe("Start of Term", () => {
 });
 
 describe("End of term", () => {
-  test("check if student can add grade", () => {
+  xtest("check if student can add grade", () => {
     let studentDOB = new Date(2004, 6, 8);
     let studentID = stileSchool.enrolStudent(
       "Polly Cracker",
@@ -178,7 +173,7 @@ describe("End of term", () => {
     //check to see if the grades obj has the percentage in it
   });
 
-  test("Teacher can assign grade", () => {
+  xtest("Teacher can assign grade", () => {
     let studentDOB = new Date(2004, 6, 8);
     let studentID = stileSchool.enrolStudent(
       "Polly Cracker",
@@ -236,7 +231,9 @@ describe("End of term", () => {
     );
     stileSchool.assignStudent(subjectID, studentID);
     stileSchool.assignStudent(subjectID, studentID2);
+    console.log("hello");
     stileSchool._teachers[teacherID].doYourJob(subjectID);
+    console.log("goodbye");
 
     expect(stileSchool._students[studentID]._grades).toHaveProperty([
       subjectID,
@@ -247,7 +244,7 @@ describe("End of term", () => {
     ]);
   });
 
-  test("it's grading time!", () => {
+  xtest("it's grading time!", () => {
     let studentDOB = new Date(2004, 6, 8);
     let studentID = stileSchool.enrolStudent(
       "Polly Cracker",
@@ -301,7 +298,7 @@ describe("End of term", () => {
     ]);
   });
 
-  test("invalid grades are not assigned", () => {
+  xtest("invalid grades are not assigned", () => {
     let studentDOB = new Date(2004, 6, 8);
     let studentID = stileSchool.enrolStudent(
       "Anne of Green Gables", // not allowed a narwhal grade
@@ -333,11 +330,53 @@ describe("End of term", () => {
     stileSchool.assignStudent(subjectID, studentID2);
 
     expect(() => {
-      stileSchool._students[studentID].addGrade(98);
+      stileSchool._students[studentID].addGrade(subjectID, 98);
     }).toThrow(Error); // should throw an error
     expect(() => {
-      stileSchool._students[studentID2].addGrade(45);
-    }).toThrow(Error); // should throw an error // should also throw an error */
+      stileSchool._students[studentID2].addGrade(subjectID, 98);
+    }).toThrow(Error); // should also throw an error
   });
 
+  xtest("all students will recieve a grade, even if errors are thrown", () => {
+    let studentDOB = new Date(2004, 6, 8);
+    let studentID = stileSchool.enrolStudent(
+      "Anne of Green Gables", // not allowed a narwhal grade
+      studentDOB,
+      "Cheese and biscuits",
+      "Hearts"
+    );
+    let studentDOB2 = new Date(2003, 7, 5);
+    let studentID2 = stileSchool.enrolStudent(
+      "Mat", // only allowed sloth or narwhal
+      studentDOB2,
+      "Cheezels",
+      "Spades"
+    );
+    let teacherDOB = new Date(1974, 6, 8);
+    let teacherID = stileSchool.hireTeacher(
+      //primary teacher
+      "Ms Jenkins",
+      teacherDOB,
+      "Kill the principal and take their job"
+    );
+    let subjectID = stileSchool.createSubject(
+      "Year 10 Maths",
+      "10B",
+      ["Monday 10:00 am", "Thursday 12:30 pm"],
+      stileSchool.teachers[teacherID]
+    );
+    stileSchool.assignStudent(subjectID, studentID);
+    stileSchool.assignStudent(subjectID, studentID2);
+
+    stileSchool.gradingTime();
+
+    // expect them both to have grades
+    expect(stileSchool._students[studentID]._grades).toHaveProperty([
+      subjectID,
+    ]);
+
+    expect(stileSchool._students[studentID2]._grades).toHaveProperty([
+      subjectID,
+    ]);
+  });
 });
