@@ -45,22 +45,39 @@
           Here's some facts about me, but not all of them are actually true. Can
           you guess which one's the lie?
         </p>
-        <form id="2t1l-form">
+        <form>
           <label>
-            <input type="radio" name="2t1l" value="true" />I've had surgery on
-            my nose</label
+            <input type="radio" name="2t1l" value="incorrect" />I've had surgery
+            on my nose</label
           >
           <label>
-            <input type="radio" name="2t1l" value="false" />I've broken my arm
+            <input type="radio" name="2t1l" value="correct" />I've broken my arm
             twice</label
           >
           <label>
-            <input type="radio" name="2t1l" value="true" />I don't like peanut
-            butter</label
+            <input type="radio" name="2t1l" value="incorrect" />I don't like
+            peanut butter</label
           >
           <label><input type="button" id="2t1l-submit" value="Submit" /></label>
+          <p class="form-result"></p>
         </form>
-        <h4 id="2t1l-result"></h4>
+
+        <form>
+          <label>
+            <input type="radio" name="test" value="incorrect" />This is
+            incorrect</label
+          >
+          <label>
+            <input type="radio" name="test" value="correct" />This is
+            correct</label
+          >
+          <label>
+            <input type="radio" name="test" value="incorrect" />This is
+            incorrect</label
+          >
+          <label><input type="button" id="test-submit" value="Submit" /></label>
+          <p class="form-result"></p>
+        </form>
       </div>
     </div>
 
@@ -72,27 +89,38 @@
     </div>
 
     <script>
-      console.log("why is my console disappearing?");
-      let submitButton = document.getElementById("2t1l-submit");
+      let twoTruthsSubmit = document.getElementById("2t1l-submit");
+      let testSubmit = document.getElementById("test-submit");
 
-      function submit2t1l() {
-        let answeredCorrectly;
+      function singleCorrectChecker(event) {
+        let answeredCorrectly = "not answered";
 
-        let form = document.getElementById("2t1l-form");
+        let form = event.target.parentNode.parentNode; // document.getElementById("2t1l-form");
 
-        if (form[0].checked) {
-          answeredCorrectly = "no";
-        } else if (form[1].checked) {
+        for (let child of form) {
+          if (child.type === "radio" && child.checked) {
+            if (child.value === "correct") {
           answeredCorrectly = "yes";
-        } else if (form[2].checked) {
+            } else if (child.value === "incorrect") {
           answeredCorrectly = "no";
-        } else {
-          answeredCorrectly = "not answered";
+            }
+          }
         }
 
         console.log("answeredCorrectly:", answeredCorrectly); // DEBUG
 
-      submitButton.addEventListener("click", submit2t1l);
+        let result = form.querySelector(".form-result");
+        if (answeredCorrectly === "yes") {
+          result.textContent = "Correct!";
+        } else if (answeredCorrectly === "no") {
+          result.textContent = "Nope, try again!";
+        } else {
+          result.textContent = "You need to pick something!";
+        }
+      }
+
+      twoTruthsSubmit.addEventListener("click", singleCorrectChecker);
+      testSubmit.addEventListener("click", singleCorrectChecker);
     </script>
   </body>
 </html>
