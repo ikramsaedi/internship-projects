@@ -61,7 +61,7 @@
           <input type="radio" name="test" value="incorrect" />
           <label>I love eye makeup on myself</label><br />
 
-          <input type="radio" name="test" value="correct" />
+          <input type="radio" id="fullFace" name="test" value="correct" />
           <label>I love full face makeup on myself</label><br />
 
           <input type="radio" name="test" value="incorrect" />
@@ -86,16 +86,20 @@
 
       document.getElementById("coffee").checked = true;
 
-      function formCheck() {
+      let formMakeup = document.getElementById("form-makeup");
+      document.getElementById("fullFace").checked = true;
+
+      function formCheck(event) {
         /* console.log("hi"); */
         //console.log(formCats);
-        for (childIndex = 0; childIndex < formCats.length; childIndex++) {
-          //console.log(formCats[childIndex].value);
-
-          if (formCats[childIndex].type === "radio") {
+        let formDesired = event.target.parentNode;
+        console.log(formDesired);
+        for (childIndex = 0; childIndex < formDesired.length; childIndex++) {
+          //console.log(formDesired[childIndex].value);
+          if (formDesired[childIndex].type === "radio") {
             if (
-              formCats[childIndex].checked &&
-              formCats[childIndex].value === "correct"
+              formDesired[childIndex].checked &&
+              formDesired[childIndex].value === "correct"
             ) {
               console.log("correct");
             }
@@ -104,7 +108,9 @@
       }
       /* console.log("hello"); */
       let submitCats = document.getElementById("submit-cats");
+      let submitMakeup = document.getElementById("submit-makeup");
       submitCats.addEventListener("click", formCheck);
+      submitMakeup.addEventListener("click", formCheck);
       /*  console.log("howdy"); */
     </script>
   </body>
