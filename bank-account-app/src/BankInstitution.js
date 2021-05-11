@@ -4,17 +4,19 @@ import deepClone from "deep-clone";
 
 export class BankInstitution {
   constructor(name) {
-    this.name = name;
+    this.name = name; //bank acc name
     this.accounts = {}; // think of this object like a dictionary
-    this.loans = [];
-    this.runningTotal = 0;
+    this.loans = []; //list of loans that bank acc has
+    this.runningTotal = 0; //amount of money stored in bank
   }
 
   makeAccount() {
     // let account = new BankAccount();
     let accID = ID();
-    this.accounts[accID] = new BankAccount(
+    this.accounts[accID] = new BankAccount( //with the new bank acc id, create a new instance of the bank acc class
       this.updateTotalAccountBalance.bind(this)
+      //this. is being used to find the update method within the bank institution class
+      //when passing in <this> as a parameter, we r binding it to the bank institution class
     );
     return accID;
   }
