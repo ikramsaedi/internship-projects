@@ -42,29 +42,31 @@
       />
 
       <div id="truths-lies">
-        <form>
-          <input type="radio" name="test" value="true" />
+        <form id="form-cats">
+          <input type="radio" name="test" value="incorrect" />
+          <!-- need to use inputs specifically -->
           <label>I love cats</label><br />
 
-          <input type="radio" name="test" value="true" />
+          <input type="radio" name="test" value="incorrect" />
+          <!-- lies are correct -->
           <label>I love tea</label><br />
 
-          <input type="radio" name="test" value="false" />
+          <input type="radio" name="test" id="coffee" value="correct" />
           <label>I love coffee</label><br />
 
-          <input type="submit" /><br />
+          <input type="button" id="submit-cats" value="Submit" /><br />
         </form>
 
-        <form>
-          <input type="radio" name="test" value="true" />
+        <form id="form-makeup">
+          <input type="radio" name="test" value="incorrect" />
           <label>I love eye makeup on myself</label><br />
 
-          <input type="radio" name="test" value="false" />
+          <input type="radio" name="test" value="correct" />
           <label>I love full face makeup on myself</label><br />
 
-          <input type="radio" name="test" value="true" />
+          <input type="radio" name="test" value="incorrect" />
           <label>I love lip gloss</label><br />
-          <input type="submit" /><br />
+          <input type="button" id="submit-makeup" value="Submit" /><br />
         </form>
       </div>
     </div>
@@ -75,5 +77,35 @@
       <h4>Dev's Theme</h4>
       <h4><a href="https://stileeducation.com/" target="_blank">Stile</a></h4>
     </div>
+
+    <script>
+      let formCats = document.getElementById("form-cats"); //submit element
+      /* console.log(formCats);
+       */
+      let formCatsChildren = formCats.childNodes;
+
+      document.getElementById("coffee").checked = true;
+
+      function formCheck() {
+        /* console.log("hi"); */
+        //console.log(formCats);
+        for (childIndex = 0; childIndex < formCats.length; childIndex++) {
+          //console.log(formCats[childIndex].value);
+
+          if (formCats[childIndex].type === "radio") {
+            if (
+              formCats[childIndex].checked &&
+              formCats[childIndex].value === "correct"
+            ) {
+              console.log("correct");
+            }
+          }
+        }
+      }
+      /* console.log("hello"); */
+      let submitCats = document.getElementById("submit-cats");
+      submitCats.addEventListener("click", formCheck);
+      /*  console.log("howdy"); */
+    </script>
   </body>
 </html>
