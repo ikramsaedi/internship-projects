@@ -45,21 +45,22 @@
           Here's some facts about me, but not all of them are actually true. Can
           you guess which one's the lie?
         </p>
-        <form>
-          <label
-            ><input type="radio" name="2t1l" value="true" />I've had surgery on
+        <form id="2t1l-form">
+          <label>
+            <input type="radio" name="2t1l" value="true" />I've had surgery on
             my nose</label
           >
-          <label
-            ><input type="radio" name="2t1l" value="false" />I've broken my arm
+          <label>
+            <input type="radio" name="2t1l" value="false" />I've broken my arm
             twice</label
           >
-          <label
-            ><input type="radio" name="2t1l" value="true" />I don't like peanut
+          <label>
+            <input type="radio" name="2t1l" value="true" />I don't like peanut
             butter</label
           >
-          <label><input type="submit" /></label>
+          <label><input type="button" id="2t1l-submit" value="Submit" /></label>
         </form>
+        <h4 id="2t1l-result"></h4>
       </div>
     </div>
 
@@ -69,5 +70,29 @@
       <h4>Dev's Theme</h4>
       <h4><a href="https://stileeducation.com/" target="_blank">Stile</a></h4>
     </div>
+
+    <script>
+      console.log("why is my console disappearing?");
+      let submitButton = document.getElementById("2t1l-submit");
+
+      function submit2t1l() {
+        let answeredCorrectly;
+
+        let form = document.getElementById("2t1l-form");
+
+        if (form[0].checked) {
+          answeredCorrectly = "no";
+        } else if (form[1].checked) {
+          answeredCorrectly = "yes";
+        } else if (form[2].checked) {
+          answeredCorrectly = "no";
+        } else {
+          answeredCorrectly = "not answered";
+        }
+
+        console.log("answeredCorrectly:", answeredCorrectly); // DEBUG
+
+      submitButton.addEventListener("click", submit2t1l);
+    </script>
   </body>
 </html>
