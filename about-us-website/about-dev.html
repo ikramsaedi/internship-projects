@@ -4,6 +4,28 @@
     <meta charset="utf-8" />
     <title>About Dev</title>
     <link rel="stylesheet" href="./default.css" />
+    <style>
+      form {
+        padding-bottom: 3px;
+      }
+
+      #dev-2t1l .form-result {
+        margin: 0px;
+        padding: 3px;
+        display: inline-block;
+        border-radius: 5px;
+      }
+
+      #dev-2t1l .correct-result {
+        background-color: rgb(231, 252, 231);
+        color: rgb(105, 207, 105);
+      }
+
+      #dev-2t1l .incorrect-result {
+        background-color: rgb(255, 206, 206);
+        color: red;
+      }
+    </style>
   </head>
 
   <body>
@@ -100,9 +122,9 @@
         for (let child of form) {
           if (child.type === "radio" && child.checked) {
             if (child.value === "correct") {
-          answeredCorrectly = "yes";
+              answeredCorrectly = "yes";
             } else if (child.value === "incorrect") {
-          answeredCorrectly = "no";
+              answeredCorrectly = "no";
             }
           }
         }
@@ -111,10 +133,15 @@
 
         let result = form.querySelector(".form-result");
         if (answeredCorrectly === "yes") {
+          result.className = "form-result";
+          result.className += " correct-result";
           result.textContent = "Correct!";
         } else if (answeredCorrectly === "no") {
+          result.className = "form-result";
+          result.className += " incorrect-result";
           result.textContent = "Nope, try again!";
         } else {
+          result.className = "form-result";
           result.textContent = "You need to pick something!";
         }
       }
