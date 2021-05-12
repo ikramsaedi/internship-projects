@@ -25,6 +25,28 @@
         background-color: rgb(255, 206, 206);
         color: red;
       }
+
+      #vinyl-music-player {
+        float: right;
+      }
+
+      #vinyl-music-player img {
+        width: 150px;
+        margin-left: 20px;
+        display: inline-block;
+      }
+
+      #vinyl-music-player .vinyl-disk {
+        margin-right: -130px;
+      }
+
+      #vinyl-music-player audio {
+        display: none;
+      }
+
+      #dev-2t1l {
+        clear: right;
+      }
     </style>
   </head>
 
@@ -47,6 +69,11 @@
     </div>
 
     <div class="body-div">
+      <div id="vinyl-music-player">
+        <img src="./resources/vinyl-disk.png" class="vinyl-disk" />
+        <img src="./resources/cherry-bomb-image.jpeg" />
+        <audio id="cherry-bomb" src="./resources/cherry-bomb-audio.mp3"></audio>
+      </div>
       <div id="dev-about-info">
         <h3>Who am I?</h3>
         <p>
@@ -115,6 +142,7 @@
     </div>
 
     <script>
+      // this script manages the two forms on this page
       let medicalSubmit = document.getElementById("medical-submit");
       let schoolSubmit = document.getElementById("school-submit");
 
@@ -152,6 +180,45 @@
 
       medicalSubmit.addEventListener("click", singleCorrectChecker);
       schoolSubmit.addEventListener("click", singleCorrectChecker);
+    </script>
+
+    <script>
+      // this script will manage my vinyl disk pop up, once it's built
+      let musicComponent = document.getElementById("vinyl-music-player");
+
+      function diskSlideIn(event) {
+        console.log("event.target.children[0]:", event.target.children[0]); // DEBUG
+        let currentStyle = getComputedStyle(event.target.children[0]);
+        while (parseFloat(currentStyle.marginRight) >= -130) {
+          console.log("while loop");
+          event.target.children[0].style.marginRight =
+            parseFloat(currentStyle.marginRight) - 10 + "px";
+          currentStyle = getComputedStyle(event.target.children[0]);
+        }
+      }
+
+      function diskSlideOut(event) {
+        console.log("event.target.children[0]:", event.target.children[0]); // DEBUG
+        let currentStyle = getComputedStyle(event.target.children[0]);
+        while (parseFloat(currentStyle.marginRight) <= -90) {
+          console.log("while loop");
+          event.target.children[0].style.marginRight =
+            parseFloat(currentStyle.marginRight) + 10 + "px";
+          currentStyle = getComputedStyle(event.target.children[0]);
+        }
+      }
+
+      function playPauseSong(event) {
+        if (event.target.parentNode.children[2].paused) {
+          event.target.parentNode.children[2].play();
+        } else {
+          event.target.parentNode.children[2].pause();
+        }
+      }
+
+      musicComponent.addEventListener("mouseenter", diskSlideOut);
+      musicComponent.addEventListener("mouseleave", diskSlideIn);
+      musicComponent.addEventListener("click", playPauseSong);
     </script>
   </body>
 </html>
