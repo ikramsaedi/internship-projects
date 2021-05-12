@@ -69,35 +69,39 @@
         </p>
         <form>
           <label>
-            <input type="radio" name="2t1l" value="incorrect" />I've had surgery
-            on my nose</label
+            <input type="radio" name="medical-2t1l" value="incorrect" />I've had
+            surgery on my nose</label
           >
           <label>
-            <input type="radio" name="2t1l" value="correct" />I've broken my arm
-            twice</label
+            <input type="radio" name="medical-2t1l" value="correct" />I've
+            broken my arm twice</label
           >
           <label>
-            <input type="radio" name="2t1l" value="incorrect" />I don't like
-            peanut butter</label
+            <input type="radio" name="medical-2t1l" value="incorrect" />I'm
+            allergic to aloe vera</label
           >
-          <label><input type="button" id="2t1l-submit" value="Submit" /></label>
+          <label
+            ><input type="button" id="medical-submit" value="Submit"
+          /></label>
           <p class="form-result"></p>
         </form>
 
         <form>
           <label>
-            <input type="radio" name="test" value="incorrect" />This is
-            incorrect</label
+            <input type="radio" name="school-2t1l" value="incorrect" />I've been
+            to 4 schools since starting primary school</label
           >
           <label>
-            <input type="radio" name="test" value="correct" />This is
-            correct</label
+            <input type="radio" name="school-2t1l" value="incorrect" />I already
+            have credits at university</label
           >
           <label>
-            <input type="radio" name="test" value="incorrect" />This is
-            incorrect</label
+            <input type="radio" name="school-2t1l" value="correct" />I did two
+            maths subjects in year 11</label
           >
-          <label><input type="button" id="test-submit" value="Submit" /></label>
+          <label
+            ><input type="button" id="school-submit" value="Submit"
+          /></label>
           <p class="form-result"></p>
         </form>
       </div>
@@ -111,8 +115,8 @@
     </div>
 
     <script>
-      let twoTruthsSubmit = document.getElementById("2t1l-submit");
-      let testSubmit = document.getElementById("test-submit");
+      let medicalSubmit = document.getElementById("medical-submit");
+      let schoolSubmit = document.getElementById("school-submit");
 
       function singleCorrectChecker(event) {
         let answeredCorrectly = "not answered";
@@ -146,8 +150,8 @@
         }
       }
 
-      twoTruthsSubmit.addEventListener("click", singleCorrectChecker);
-      testSubmit.addEventListener("click", singleCorrectChecker);
+      medicalSubmit.addEventListener("click", singleCorrectChecker);
+      schoolSubmit.addEventListener("click", singleCorrectChecker);
     </script>
   </body>
 </html>
