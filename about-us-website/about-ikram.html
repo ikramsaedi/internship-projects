@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="./default.css" />
     <style>
       .form-result {
-        visibility: hidden;
+        display: none;
       }
       .correct {
         background-color: rgb(199, 235, 199);
@@ -74,7 +74,9 @@
 
           <input type="button" id="submit-cats" value="Submit" /><br />
 
-          <p class="form-result correct"></p>
+          <p class="form-result">Hellooooo are you there? Pick something!</p>
+          <p class="form-result correct">You're right, coffee is lame.</p>
+          <p class="form-result incorrect">Wrong! Try again.</p>
         </form>
 
         <form id="form-makeup">
@@ -87,7 +89,11 @@
           <input type="radio" name="test" value="incorrect" />
           <label>I love lip gloss</label><br />
           <input type="button" id="submit-makeup" value="Submit" /><br />
-          <p class="form-result"></p>
+          <p class="form-result">Hellooooo are you there? Pick something!</p>
+          <p class="form-result correct">
+            You're right, I'm too lazy and pretty for full face.
+          </p>
+          <p class="form-result incorrect">Wrong! Try again.</p>
         </form>
       </div>
     </div>
@@ -102,7 +108,13 @@
     <script>
       function formCheck() {
         let formDesired = event.target.parentNode;
-        let formResult = formDesired.getElementsByClassName("form-result")[0];
+        let formResult = formDesired.querySelector(".form-result"); //the result of the form
+        let correctResult = formDesired.querySelector(".correct");
+        let incorrectResult = formDesired.querySelector(".incorrect");
+
+        console.log(correctResult);
+        console.log(incorrectResult);
+        console.log(formResult);
 
         for (childIndex = 0; childIndex < formDesired.length; childIndex++) {
           if (formDesired[childIndex].type === "radio") {
@@ -110,25 +122,23 @@
               formDesired[childIndex].checked &&
               formDesired[childIndex].value === "correct"
             ) {
-              //console.log("correct");
-              formResult.textContent = "Correct!";
-              formResult.className = "form-result correct";
-              formResult.style.visibility = "visible";
+              correctResult.style.display = "block";
+              incorrectResult.style.display = "none";
+              formResult.style.display = "none";
               break;
             } else if (
               formDesired[childIndex].checked &&
               formDesired[childIndex].value === "incorrect"
             ) {
-              formResult.textContent = "Incorrect!";
-              formResult.style.visibility = "visible";
-              formResult.className = "form-result incorrect";
+              incorrectResult.style.display = "block";
+              correctResult.style.display = "none";
+              formResult.style.display = "none";
               break;
               console.log("incorrect");
             } else {
-              formResult.textContent =
-                "Helllooooo are you theeere? Pick something!";
-              formResult.style.visibility = "visible";
-              formResult.className = "form-result";
+              incorrectResult.style.display = "none";
+              correctResult.style.display = "none";
+              formResult.style.display = "block";
             }
           }
         }
