@@ -26,6 +26,11 @@
         color: red;
       }
 
+      #dev-2t1l .no-result {
+        background-color: rgb(158, 221, 255);
+        color: blue;
+      }
+
       #vinyl-music-player {
         float: right;
       }
@@ -170,16 +175,14 @@
 
         let result = form.querySelector(".form-result");
         if (answeredCorrectly === "yes") {
-          result.className = "form-result";
-          result.className += " correct-result";
-          result.textContent = "Correct!";
+          result.className = "form-result correct-result";
+          result.textContent = "Yep, that's a lie!";
         } else if (answeredCorrectly === "no") {
-          result.className = "form-result";
-          result.className += " incorrect-result";
-          result.textContent = "Nope, try again!";
+          result.className = "form-result incorrect-result";
+          result.textContent = "Nope, that's the truth, try again!";
         } else {
-          result.className = "form-result";
-          result.textContent = "You need to pick something!";
+          result.className = "form-result no-result";
+          result.innerHTML = "You need to pick <em>something</em>!";
         }
       }
 
