@@ -31,6 +31,10 @@
         color: blue;
       }
 
+      #dev-2t1l .invisible {
+        display: none;
+      }
+
       #vinyl-music-player {
         float: right;
       }
@@ -120,7 +124,15 @@
           <label
             ><input type="button" id="medical-submit" value="Submit"
           /></label>
-          <p class="form-result"></p>
+          <p class="form-result incorrect-result invisible">
+            Nope, that's the truth
+          </p>
+          <p class="form-result correct-result invisible">
+            Yes! That's a lie, I've never broken a bone
+          </p>
+          <p class="form-result no-result invisible">
+            You need to pick <em>something</em>!
+          </p>
         </form>
 
         <form>
@@ -139,7 +151,15 @@
           <label
             ><input type="button" id="school-submit" value="Submit"
           /></label>
-          <p class="form-result"></p>
+          <p class="form-result incorrect-result invisible">
+            Nope, that's the truth
+          </p>
+          <p class="form-result correct-result invisible">
+            Yes! That's a lie, I only did one (but I did two in year 12!)
+          </p>
+          <p class="form-result no-result invisible">
+            You need to pick <em>something</em>!
+          </p>
         </form>
       </div>
     </div>
@@ -171,17 +191,22 @@
           }
         }
 
-        let result = form.querySelector(".form-result");
+        let correctResult = form.querySelector(".correct-result");
+        let incorrectResult = form.querySelector(".incorrect-result");
+        let noResult = form.querySelector(".no-result");
 
         if (answeredCorrectly === "yes") {
-          result.className = "form-result correct-result";
-          result.textContent = "Yep, that's a lie!";
+          correctResult.className = "form-result correct-result";
+          incorrectResult.className = "form-result incorrect-result invisible";
+          noResult.className = "form-result no-result invisible";
         } else if (answeredCorrectly === "no") {
-          result.className = "form-result incorrect-result";
-          result.textContent = "Nope, that's the truth, try again!";
+          correctResult.className = "form-result correct-result invisible";
+          incorrectResult.className = "form-result incorrect-result";
+          noResult.className = "form-result no-result invisible";
         } else {
-          result.className = "form-result no-result";
-          result.innerHTML = "You need to pick <em>something</em>!";
+          correctResult.className = "form-result correct-result invisible";
+          incorrectResult.className = "form-result incorrect-result invisible";
+          noResult.className = "form-result no-result";
         }
       }
 
