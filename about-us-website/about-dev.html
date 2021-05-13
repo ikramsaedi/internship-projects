@@ -47,10 +47,10 @@
 
       #vinyl-music-player .vinyl-disk {
         margin-right: -130px;
-        transition: margin-right, 0.5s;
+        transition: margin-right, 0.3s;
       }
 
-      #vinyl-music-player .vinyl-disk:hover {
+      #vinyl-music-player .vinyl-disk.hover {
         margin-right: -90px;
       }
 
@@ -215,7 +215,7 @@
     </script>
 
     <script>
-      // this script will manage my vinyl disk pop up, once it's built
+      // this script manages my vinyl disk pop up
       let musicComponent = document.getElementById("vinyl-music-player");
 
       function playPauseSong(event) {
@@ -225,8 +225,14 @@
           event.target.parentNode.children[2].pause();
         }
       }
-      // change hover state in code so that hovering anywhere on the widget will slide out??
+
+      function slideDisk(event) {
+        event.target.querySelector(".vinyl-disk").classList.toggle("hover");
+      }
+
       musicComponent.addEventListener("click", playPauseSong);
+      musicComponent.addEventListener("mouseenter", slideDisk);
+      musicComponent.addEventListener("mouseleave", slideDisk);
     </script>
   </body>
 </html>
