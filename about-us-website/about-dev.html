@@ -159,7 +159,7 @@
       function singleCorrectChecker(event) {
         let answeredCorrectly = "not answered";
 
-        let form = event.target.parentNode.parentNode; // document.getElementById("2t1l-form");
+        let form = event.target.parentNode.parentNode;
 
         for (let child of form) {
           if (child.type === "radio" && child.checked) {
@@ -171,9 +171,8 @@
           }
         }
 
-        console.log("answeredCorrectly:", answeredCorrectly); // DEBUG
-
         let result = form.querySelector(".form-result");
+
         if (answeredCorrectly === "yes") {
           result.className = "form-result correct-result";
           result.textContent = "Yep, that's a lie!";
