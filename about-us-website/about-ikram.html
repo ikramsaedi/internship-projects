@@ -4,6 +4,24 @@
     <meta charset="utf-8" />
     <title>About Ikram</title>
     <link rel="stylesheet" href="./default.css" />
+    <style>
+      .form-result {
+        display: none;
+      }
+      .correct {
+        background-color: rgb(199, 235, 199);
+        color: black;
+        width: fit-content;
+        border-radius: 5px;
+      }
+
+      .incorrect {
+        background-color: rgb(179, 0, 59);
+        color: white;
+        width: fit-content;
+        border-radius: 5px;
+      }
+    </style>
   </head>
 
   <body>
@@ -42,29 +60,45 @@
       />
 
       <div id="truths-lies">
-        <form>
-          <input type="radio" name="test" value="true" />
+        <form id="form-cats">
+          <input type="radio" name="test" value="incorrect" />
+          <!-- need to use inputs specifically -->
           <label>I love cats</label><br />
 
-          <input type="radio" name="test" value="true" />
+          <input type="radio" name="test" value="incorrect" />
+          <!-- lies are correct -->
           <label>I love tea</label><br />
 
-          <input type="radio" name="test" value="false" />
+          <input type="radio" name="test" id="coffee" value="correct" />
           <label>I love coffee</label><br />
 
-          <input type="submit" /><br />
+          <input type="button" id="submit-cats" value="Submit" /><br />
+
+          <p class="form-result no-answer">
+            Hellooooo are you there? Pick something!
+          </p>
+          <p class="form-result correct">You're right, coffee is lame.</p>
+          <p class="form-result incorrect">Wrong! Try again.</p>
         </form>
 
-        <form>
-          <input type="radio" name="test" value="true" />
+        <form id="form-makeup">
+          <input type="radio" name="test" value="incorrect" />
           <label>I love eye makeup on myself</label><br />
 
-          <input type="radio" name="test" value="false" />
+          <input type="radio" id="fullFace" name="test" value="correct" />
           <label>I love full face makeup on myself</label><br />
 
-          <input type="radio" name="test" value="true" />
+          <input type="radio" name="test" value="incorrect" />
           <label>I love lip gloss</label><br />
-          <input type="submit" /><br />
+          <input type="button" id="submit-makeup" value="Submit" /><br />
+          <p class="form-result no-answer">
+            Hellooooo are you there? Pick something!
+          </p>
+          <!-- specifying, the class is not defined in css -->
+          <p class="form-result correct">
+            You're right, I'm too lazy and pretty for full face.
+          </p>
+          <p class="form-result incorrect">Wrong! Try again.</p>
         </form>
       </div>
     </div>
@@ -75,5 +109,49 @@
       <h4>Dev's Theme</h4>
       <h4><a href="https://stileeducation.com/" target="_blank">Stile</a></h4>
     </div>
+
+    <script>
+      function formCheck() {
+        let formDesired = event.target.parentNode;
+        let noAnswer = formDesired.querySelector(".no-answer"); //not entered class
+        let correctResult = formDesired.querySelector(".correct");
+        let incorrectResult = formDesired.querySelector(".incorrect");
+
+        correctResult.style.display = "none";
+        incorrectResult.style.display = "none";
+        noAnswer.style.display = "none";
+
+        let isSelected = false;
+
+        for (childIndex = 0; childIndex < formDesired.length; childIndex++) {
+          if (formDesired[childIndex].type === "radio") {
+            if (
+              formDesired[childIndex].checked &&
+              formDesired[childIndex].value === "correct"
+            ) {
+              correctResult.style.display = "block";
+              isSelected = true;
+              break;
+            } else if (
+              formDesired[childIndex].checked &&
+              formDesired[childIndex].value === "incorrect"
+            ) {
+              incorrectResult.style.display = "block";
+              isSelected = true;
+              break;
+              console.log("incorrect");
+            }
+          }
+        }
+
+        if (!isSelected) {
+          noAnswer.style.display = "block";
+        }
+      }
+      let submitCats = document.getElementById("submit-cats");
+      let submitMakeup = document.getElementById("submit-makeup");
+      submitCats.addEventListener("click", formCheck); //passing it in as an obj
+      submitMakeup.addEventListener("click", formCheck);
+    </script>
   </body>
 </html>
