@@ -74,7 +74,9 @@
 
           <input type="button" id="submit-cats" value="Submit" /><br />
 
-          <p class="form-result">Hellooooo are you there? Pick something!</p>
+          <p class="form-result no-answer">
+            Hellooooo are you there? Pick something!
+          </p>
           <p class="form-result correct">You're right, coffee is lame.</p>
           <p class="form-result incorrect">Wrong! Try again.</p>
         </form>
@@ -89,7 +91,10 @@
           <input type="radio" name="test" value="incorrect" />
           <label>I love lip gloss</label><br />
           <input type="button" id="submit-makeup" value="Submit" /><br />
-          <p class="form-result">Hellooooo are you there? Pick something!</p>
+          <p class="form-result no-answer">
+            Hellooooo are you there? Pick something!
+          </p>
+          <!-- specifying, the class is not defined in css -->
           <p class="form-result correct">
             You're right, I'm too lazy and pretty for full face.
           </p>
@@ -108,13 +113,15 @@
     <script>
       function formCheck() {
         let formDesired = event.target.parentNode;
-        let formResult = formDesired.querySelector(".form-result"); //the result of the form
+        let noAnswer = formDesired.querySelector(".no-answer"); //not entered class
         let correctResult = formDesired.querySelector(".correct");
         let incorrectResult = formDesired.querySelector(".incorrect");
 
-        console.log(correctResult);
-        console.log(incorrectResult);
-        console.log(formResult);
+        correctResult.style.display = "none";
+        incorrectResult.style.display = "none";
+        noAnswer.style.display = "none";
+
+        let isSelected = false;
 
         for (childIndex = 0; childIndex < formDesired.length; childIndex++) {
           if (formDesired[childIndex].type === "radio") {
@@ -123,24 +130,22 @@
               formDesired[childIndex].value === "correct"
             ) {
               correctResult.style.display = "block";
-              incorrectResult.style.display = "none";
-              formResult.style.display = "none";
+              isSelected = true;
               break;
             } else if (
               formDesired[childIndex].checked &&
               formDesired[childIndex].value === "incorrect"
             ) {
               incorrectResult.style.display = "block";
-              correctResult.style.display = "none";
-              formResult.style.display = "none";
+              isSelected = true;
               break;
               console.log("incorrect");
-            } else {
-              incorrectResult.style.display = "none";
-              correctResult.style.display = "none";
-              formResult.style.display = "block";
             }
           }
+        }
+
+        if (!isSelected) {
+          noAnswer.style.display = "block";
         }
       }
       let submitCats = document.getElementById("submit-cats");
