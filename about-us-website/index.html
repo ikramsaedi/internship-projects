@@ -39,10 +39,42 @@
     </div>
 
     <div class="footer-div">
-      <h4>Default Theme</h4>
-      <h4>Ikram's Theme</h4>
-      <h4>Dev's Theme</h4>
+      <h4 id="default-theme">Default Theme</h4>
+      <h4 id="ikram-theme">Ikram's Theme</h4>
+      <h4 id="dev-theme">Dev's Theme</h4>
       <h4><a href="https://stileeducation.com/" target="_blank">Stile</a></h4>
     </div>
+
+    <script>
+      function switchIkramStyle() {
+        //think of event listeners somewhat like if statements... if event is happening, only then will sth happen
+        let styleSheet = document.getElementsByTagName("link")[0];
+        console.log(styleSheet);
+        styleSheet.setAttribute("href", "./ikram.css");
+      }
+
+      function switchDevStyle() {
+        //think of event listeners somewhat like if statements... if event is happening, only then will sth happen
+        let styleSheet = document.getElementsByTagName("link")[0];
+        console.log(styleSheet);
+        styleSheet.setAttribute("href", "./dev.css");
+      }
+
+      function switchDefaultStyle() {
+        //think of event listeners somewhat like if statements... if event is happening, only then will sth happen
+        let styleSheet = document.getElementsByTagName("link")[0];
+        console.log(styleSheet);
+        styleSheet.setAttribute("href", "./default.css");
+      }
+
+      let ikramsTheme = document.getElementById("ikram-theme");
+      ikramsTheme.addEventListener("click", switchIkramStyle);
+
+      let devsTheme = document.getElementById("dev-theme");
+      devsTheme.addEventListener("click", switchDevStyle);
+
+      let defaultTheme = document.getElementById("default-theme");
+      defaultTheme.addEventListener("click", switchDefaultStyle);
+    </script>
   </body>
 </html>

@@ -1,0 +1,97 @@
+body {
+  background-color: rgb(231, 252, 231);
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+.header-div,
+.footer-div {
+  background-color: blue;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 10px;
+  padding-right: 10px;
+  color: yellow;
+  line-height: 80%;
+  border-radius: 4px;
+  clear: both;
+}
+
+.header-text {
+  margin-left: 70px;
+}
+
+.header-div h1 {
+  margin-top: 10px;
+}
+
+.header-div img {
+  float: left;
+  height: 3.5em;
+}
+
+.header-div h3,
+.footer-div h4 {
+  display: inline;
+  padding-left: 5px;
+  padding-right: 5px;
+  background-color: red;
+  border-radius: 4px;
+  color: rgb(231, 252, 231);
+}
+
+.header-div h3 a,
+.footer-div h4 a {
+  text-decoration: none;
+  color: rgb(231, 252, 231);
+}
+
+.header-div h3 a:visited,
+.footer-div h4 a:visited {
+  color: rgb(231, 252, 231);
+}
+
+.header-div h3 a:hover,
+.footer-div h4 a:hover {
+  color: rgb(190, 241, 190);
+}
+
+.body-div {
+  color: rgb(66, 178, 66);
+}
+
+#dev-2t1l {
+  background-color: rgb(105, 207, 105);
+  color: rgb(231, 252, 231);
+  padding-left: 8px;
+  width: 60%;
+  margin: auto;
+  margin-bottom: 10px;
+  border-radius: 4px;
+}
+
+#dev-2t1l p {
+  padding-top: 3px;
+  margin-bottom: 3px;
+}
+
+#dev-2t1l label {
+  display: block;
+  padding-bottom: 3px;
+}
+
+#rainforest {
+  float: right;
+  height: 184px;
+}
+
+#truths-lies {
+  background-color: rgb(66, 178, 66);
+  color: rgb(231, 252, 231);
+  border-radius: 6px;
+  width: 300px;
+  padding: 8px;
+  margin: 5px;
+  border-style: dashed;
+  border-color: antiquewhite;
+  border-width: 3px;
+}
