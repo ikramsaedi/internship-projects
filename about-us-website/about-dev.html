@@ -4,6 +4,64 @@
     <meta charset="utf-8" />
     <title>About Dev</title>
     <link rel="stylesheet" href="./default.css" />
+    <style>
+      form {
+        padding-bottom: 3px;
+      }
+
+      #dev-2t1l .form-result {
+        margin: 0px;
+        padding: 3px;
+        width: fit-content;
+        border-radius: 5px;
+      }
+
+      #dev-2t1l .correct-result {
+        background-color: rgb(231, 252, 231);
+        color: rgb(105, 207, 105);
+      }
+
+      #dev-2t1l .incorrect-result {
+        background-color: rgb(255, 206, 206);
+        color: red;
+      }
+
+      #dev-2t1l .no-result {
+        background-color: rgb(158, 221, 255);
+        color: blue;
+      }
+
+      #dev-2t1l .invisible {
+        display: none;
+      }
+
+      #vinyl-music-player {
+        float: right;
+      }
+
+      #vinyl-music-player img {
+        width: 150px;
+        margin-left: 20px;
+        display: inline-block;
+      }
+
+      #vinyl-music-player .vinyl-disk {
+        margin-right: -130px;
+        transition: margin-right, 0.3s;
+      }
+
+      #vinyl-music-player .vinyl-disk.hover {
+        margin-right: -90px;
+      }
+
+      #vinyl-music-player audio {
+        display: none;
+      }
+
+      #dev-2t1l {
+        clear: right;
+      }
+    </style>
   </head>
 
   <body>
@@ -25,6 +83,11 @@
     </div>
 
     <div class="body-div">
+      <div id="vinyl-music-player">
+        <img src="./resources/vinyl-disk.png" class="vinyl-disk" />
+        <img src="./resources/cherry-bomb-image.jpeg" />
+        <audio id="cherry-bomb" src="./resources/cherry-bomb-audio.mp3"></audio>
+      </div>
       <div id="dev-about-info">
         <h3>Who am I?</h3>
         <p>
@@ -46,19 +109,57 @@
           you guess which one's the lie?
         </p>
         <form>
-          <label
-            ><input type="radio" name="2t1l" value="true" />I've had surgery on
-            my nose</label
+          <label>
+            <input type="radio" name="medical-2t1l" value="incorrect" />I've had
+            surgery on my nose</label
+          >
+          <label>
+            <input type="radio" name="medical-2t1l" value="correct" />I've
+            broken my arm twice</label
+          >
+          <label>
+            <input type="radio" name="medical-2t1l" value="incorrect" />I'm
+            allergic to aloe vera</label
           >
           <label
-            ><input type="radio" name="2t1l" value="false" />I've broken my arm
-            twice</label
+            ><input type="button" id="medical-submit" value="Submit"
+          /></label>
+          <p class="form-result incorrect-result invisible">
+            Nope, that's the truth
+          </p>
+          <p class="form-result correct-result invisible">
+            Yes! That's a lie, I've never broken a bone
+          </p>
+          <p class="form-result no-result invisible">
+            You need to pick <em>something</em>!
+          </p>
+        </form>
+
+        <form>
+          <label>
+            <input type="radio" name="school-2t1l" value="incorrect" />I've been
+            to 4 schools since starting primary school</label
+          >
+          <label>
+            <input type="radio" name="school-2t1l" value="incorrect" />I already
+            have credits at university</label
+          >
+          <label>
+            <input type="radio" name="school-2t1l" value="correct" />I did two
+            maths subjects in year 11</label
           >
           <label
-            ><input type="radio" name="2t1l" value="true" />I don't like peanut
-            butter</label
-          >
-          <label><input type="submit" /></label>
+            ><input type="button" id="school-submit" value="Submit"
+          /></label>
+          <p class="form-result incorrect-result invisible">
+            Nope, that's the truth
+          </p>
+          <p class="form-result correct-result invisible">
+            Yes! That's a lie, I only did one (but I did two in year 12!)
+          </p>
+          <p class="form-result no-result invisible">
+            You need to pick <em>something</em>!
+          </p>
         </form>
       </div>
     </div>
@@ -69,5 +170,69 @@
       <h4>Dev's Theme</h4>
       <h4><a href="https://stileeducation.com/" target="_blank">Stile</a></h4>
     </div>
+
+    <script>
+      // this script manages the two forms on this page
+      let medicalSubmit = document.getElementById("medical-submit");
+      let schoolSubmit = document.getElementById("school-submit");
+
+      function singleCorrectChecker(event) {
+        let answeredCorrectly = "not answered";
+
+        let form = event.target.parentNode.parentNode;
+
+        for (let child of form) {
+          if (child.type === "radio" && child.checked) {
+            if (child.value === "correct") {
+              answeredCorrectly = "yes";
+            } else if (child.value === "incorrect") {
+              answeredCorrectly = "no";
+            }
+          }
+        }
+
+        let correctResult = form.querySelector(".correct-result");
+        let incorrectResult = form.querySelector(".incorrect-result");
+        let noResult = form.querySelector(".no-result");
+
+        if (answeredCorrectly === "yes") {
+          correctResult.classList.remove("invisible");
+          incorrectResult.classList.add("invisible");
+          noResult.classList.add("invisible");
+        } else if (answeredCorrectly === "no") {
+          correctResult.classList.add("invisible");
+          incorrectResult.classList.remove("invisible");
+          noResult.classList.add("invisible");
+        } else {
+          correctResult.classList.add("invisible");
+          incorrectResult.classList.add("invisible");
+          noResult.classList.remove("invisible");
+        }
+      }
+
+      medicalSubmit.addEventListener("click", singleCorrectChecker);
+      schoolSubmit.addEventListener("click", singleCorrectChecker);
+    </script>
+
+    <script>
+      // this script manages my vinyl disk pop up
+      let musicComponent = document.getElementById("vinyl-music-player");
+
+      function playPauseSong(event) {
+        if (event.target.parentNode.children[2].paused) {
+          event.target.parentNode.children[2].play();
+        } else {
+          event.target.parentNode.children[2].pause();
+        }
+      }
+
+      function slideDisk(event) {
+        event.target.querySelector(".vinyl-disk").classList.toggle("hover");
+      }
+
+      musicComponent.addEventListener("click", playPauseSong);
+      musicComponent.addEventListener("mouseenter", slideDisk);
+      musicComponent.addEventListener("mouseleave", slideDisk);
+    </script>
   </body>
 </html>
