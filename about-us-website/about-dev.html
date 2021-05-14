@@ -196,17 +196,17 @@
         let noResult = form.querySelector(".no-result");
 
         if (answeredCorrectly === "yes") {
-          correctResult.className = "form-result correct-result";
-          incorrectResult.className = "form-result incorrect-result invisible";
-          noResult.className = "form-result no-result invisible";
+          correctResult.classList.remove("invisible");
+          incorrectResult.classList.add("invisible");
+          noResult.classList.add("invisible");
         } else if (answeredCorrectly === "no") {
-          correctResult.className = "form-result correct-result invisible";
-          incorrectResult.className = "form-result incorrect-result";
-          noResult.className = "form-result no-result invisible";
+          correctResult.classList.add("invisible");
+          incorrectResult.classList.remove("invisible");
+          noResult.classList.add("invisible");
         } else {
-          correctResult.className = "form-result correct-result invisible";
-          incorrectResult.className = "form-result incorrect-result invisible";
-          noResult.className = "form-result no-result";
+          correctResult.classList.add("invisible");
+          incorrectResult.classList.add("invisible");
+          noResult.classList.remove("invisible");
         }
       }
 
