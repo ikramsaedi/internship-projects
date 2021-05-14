@@ -1,16 +1,16 @@
 body {
-  background-color: rgb(231, 252, 231);
+  background-color: rgb(254, 234, 239);
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
 
 .header-div,
 .footer-div {
-  background-color: blue;
+  background-color: rgb(249, 197, 211);
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 10px;
   padding-right: 10px;
-  color: yellow;
+  color: rgb(206, 78, 112);
   line-height: 80%;
   border-radius: 4px;
   clear: both;
@@ -34,29 +34,29 @@ body {
   display: inline;
   padding-left: 5px;
   padding-right: 5px;
-  background-color: red;
+  background-color: rgb(234, 119, 150);
   border-radius: 4px;
-  color: rgb(231, 252, 231);
+  color: rgb(254, 234, 239);
 }
 
 .header-div h3 a,
 .footer-div h4 a {
   text-decoration: none;
-  color: rgb(231, 252, 231);
+  color: rgb(254, 234, 239);
 }
 
 .header-div h3 a:visited,
 .footer-div h4 a:visited {
-  color: rgb(231, 252, 231);
+  color: rgb(254, 234, 239);
 }
 
 .header-div h3 a:hover,
 .footer-div h4 a:hover {
-  color: rgb(190, 241, 190);
+  color: rgb(249, 197, 211);
 }
 
 .body-div {
-  color: rgb(66, 178, 66);
+  color: rgb(234, 119, 150);
 }
 
 #dev-2t1l {
@@ -85,8 +85,8 @@ body {
 }
 
 #truths-lies {
-  background-color: rgb(66, 178, 66);
-  color: rgb(231, 252, 231);
+  background-color: rgb(234, 119, 150);
+  color: rgb(254, 234, 239);
   border-radius: 6px;
   width: 300px;
   padding: 8px;
