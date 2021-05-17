@@ -93,8 +93,11 @@ class Game extends React.Component {
     });
 
     let status;
+
     if (winner) {
       status = winner + " is the winner!";
+    } else if (!winner && this.state.stepNumber >= 9) {
+      status = "This game is a tie!";
     } else {
       status = "Next player: " + (this.state.xIsNext ? "X" : "O");
     }
