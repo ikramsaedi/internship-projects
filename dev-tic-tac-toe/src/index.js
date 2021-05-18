@@ -161,17 +161,3 @@ function calculateWinner(squares) {
   }
   return { winner: null, cells: null };
 }
-
-/*
-things needed
-- a way to get the three winning cells 
-  - return an object with squares[a] and [a,b,c]
-  - use [a,b,c] to find the winning cells
-  - apply the class to them?
-    - can i use .add?
-    - don't need to maybe? if the status is reset when time traveling, we can also just += the class 
-      when it is a winning cell, and have a default case for when it isn't
-      see https://reactjs.org/docs/faq-styling.html 
-- a way to add a class on those cells
-- a way to remove that class when time traveling
-*/
