@@ -4,7 +4,7 @@ import "./index.css";
 
 function Square(props) {
   return (
-    <button className="square" onClick={props.onClick}>
+    <button className={props.className} onClick={props.onClick}>
       {props.value}
     </button>
   );
@@ -12,12 +12,19 @@ function Square(props) {
 
 class Board extends React.Component {
   renderSquare(i) {
+    let squareClass = "square";
+
+    if (this.props.winningCells && this.props.winningCells.includes(i)) {
+      squareClass += " winning-cell";
+    }
+
     return (
       <Square
         value={this.props.squares[i]}
         onClick={() => {
           this.props.onClick(i);
         }}
+        className={squareClass}
       />
     );
   }
@@ -58,11 +65,15 @@ class Game extends React.Component {
   handleClick(i) {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
+
     const squares = current.squares.slice();
-    if (calculateWinner(squares) || squares[i]) {
+
+    if (calculateWinner(squares).winner || squares[i]) {
       return;
     }
+
     squares[i] = this.state.xIsNext ? "X" : "O";
+
     this.setState({
       history: history.concat([{ squares: squares }]),
       xIsNext: !this.state.xIsNext,
@@ -80,8 +91,6 @@ class Game extends React.Component {
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
-    const winner = calculateWinner(current.squares);
-
     const moves = history.map((step, move) => {
       const desc = move ? "Go to move #" + move : "Go to game start";
 
@@ -92,6 +101,9 @@ class Game extends React.Component {
       );
     });
 
+    const result = calculateWinner(current.squares);
+
+    const winner = result.winner;
     let status;
 
     if (winner) {
@@ -108,6 +120,7 @@ class Game extends React.Component {
           <Board
             squares={current.squares}
             onClick={(i) => this.handleClick(i)}
+            winningCells={result.cells}
           />
         </div>
         <div className="game-info">
@@ -137,8 +150,23 @@ function calculateWinner(squares) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c] = lines[i];
     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+      //
+      return { winner: squares[a], cells: [a, b, c] };
     }
   }
-  return null;
+  return { winner: null, cells: null };
 }
+
+/*
+things needed
+- a way to get the three winning cells 
+  - return an object with squares[a] and [a,b,c]
+  - use [a,b,c] to find the winning cells
+  - apply the class to them?
+    - can i use .add?
+    - don't need to maybe? if the status is reset when time traveling, we can also just += the class 
+      when it is a winning cell, and have a default case for when it isn't
+      see https://reactjs.org/docs/faq-styling.html 
+- a way to add a class on those cells
+- a way to remove that class when time traveling
+*/
