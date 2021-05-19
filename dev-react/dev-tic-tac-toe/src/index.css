@@ -2,7 +2,7 @@
   --cell-size: 125px;
   --font-height: 20px;
   --cell-font-height: 50px;
-  --cell-rounding: 70px;
+  --cell-rounding: 10px;
 }
 
 body {
@@ -39,9 +39,9 @@ ul {
 .square {
   background: #fff;
   border: 1px solid #999;
-  border-radius: var(--cell-rounding);
   float: left;
   font-size: var(--cell-font-height);
+  border-radius: var(--cell-rounding);
   font-weight: bold;
   line-height: var(--cell-size);
   height: var(--cell-size);
@@ -50,6 +50,7 @@ ul {
   padding: 0;
   text-align: center;
   width: var(--cell-size);
+  z-index: 0;
 }
 
 .square:hover {
@@ -67,6 +68,7 @@ ul {
 
 .winning-cell {
   background-color: rgb(190, 255, 187);
+  color: rgb(70, 133, 67);
 }
 
 .time-travel-button {
