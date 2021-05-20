@@ -25,34 +25,47 @@ function LetterButton(props) {
 }
 
 export class Game extends React.Component {
-  constructor(props) {
-    super(props);
-    console.log("this.props:", this.props); // DEBUG
-    this.state = {
-      lettersActive: { a: true, b: true, c: true },
-      lettersGuessed: [],
-    };
-  }
   renderLetterButton(value) {
-    const isActive = this.state.lettersActive[value];
+    const isActive = this.props.lettersActive[value];
     return (
       <LetterButton
         value={value}
-        onClick={(i) => this.submitLetter(i)}
+        onClick={(i) => this.props.letterSubmit(i)}
         isActive={isActive}
       />
     );
   }
-  submitLetter(event) {
-    const letterValue = event.target.innerText;
-    const lettersGuessed = this.state.lettersGuessed.concat(letterValue);
-    this.setState({
-      lettersActive: { [letterValue]: false },
-      lettersGuessed: lettersGuessed,
-    });
-  }
 
   render() {
-    return this.renderLetterButton("a");
+    return (
+      <div>
+        {this.renderLetterButton("a")}
+        {this.renderLetterButton("b")}
+        {this.renderLetterButton("c")}
+        {this.renderLetterButton("d")}
+        {this.renderLetterButton("e")}
+        {this.renderLetterButton("f")}
+        {this.renderLetterButton("g")}
+        {this.renderLetterButton("h")}
+        {this.renderLetterButton("i")}
+        {this.renderLetterButton("j")}
+        {this.renderLetterButton("k")}
+        {this.renderLetterButton("l")}
+        {this.renderLetterButton("m")}
+        {this.renderLetterButton("n")}
+        {this.renderLetterButton("o")}
+        {this.renderLetterButton("p")}
+        {this.renderLetterButton("q")}
+        {this.renderLetterButton("r")}
+        {this.renderLetterButton("s")}
+        {this.renderLetterButton("t")}
+        {this.renderLetterButton("u")}
+        {this.renderLetterButton("v")}
+        {this.renderLetterButton("w")}
+        {this.renderLetterButton("x")}
+        {this.renderLetterButton("y")}
+        {this.renderLetterButton("z")}
+      </div>
+    );
   }
 }

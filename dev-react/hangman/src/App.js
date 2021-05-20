@@ -5,7 +5,39 @@ class GameBox extends React.Component {
   constructor(props) {
     super(props);
     this.words = ["test"];
-    this.state = { gameState: "unstarted" };
+    this.state = {
+      gameState: "unstarted",
+      gameWord: null,
+      lettersActive: {
+        a: true,
+        b: true,
+        c: true,
+        d: true,
+        e: true,
+        f: true,
+        g: true,
+        h: true,
+        i: true,
+        j: true,
+        k: true,
+        l: true,
+        m: true,
+        n: true,
+        o: true,
+        p: true,
+        q: true,
+        r: true,
+        s: true,
+        t: true,
+        u: true,
+        v: true,
+        w: true,
+        x: true,
+        y: true,
+        z: true,
+      },
+      lettersGuessed: [],
+    };
   }
 
   startGame(i) {
@@ -13,12 +45,29 @@ class GameBox extends React.Component {
     this.setState({ gameState: "playing", gameWord: word });
   }
 
+  submitLetter(event) {
+    const letterValue = event.target.innerText;
+    const lettersGuessed = this.state.lettersGuessed.concat(letterValue);
+    const lettersActive = this.state.lettersActive;
+    lettersActive[letterValue] = false;
+    this.setState({
+      lettersActive: lettersActive,
+      lettersGuessed: lettersGuessed,
+    });
+  }
+
   render() {
     switch (this.state.gameState) {
       case "playing":
         return (
           <div className={this.props.className}>
-            <Game />
+            <Game
+              gameWord={this.state.gameWord}
+              lettersActive={this.state.lettersActive}
+              lettersGuessed={this.state.lettersGuessed}
+              letterSubmit={(i) => this.submitLetter(i)}
+            />
+            <p>{this.state.lettersGuessed}</p>
           </div>
         );
       case "unstarted":
