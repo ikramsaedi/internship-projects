@@ -11,6 +11,12 @@ body {
   transform: translate(-50%, -50%);
 }
 
+.game {
+  border: 5px black solid;
+  margin: auto;
+  width: fit-content;
+}
+
 .new-game-button {
   border: 5px red solid;
   border-radius: 10px;
@@ -31,4 +37,16 @@ body {
 
 .small {
   width: 200px;
+}
+
+.letter-button {
+  border: none;
+  font-family: inherit;
+  font-size: 40px;
+  background: none;
+  padding: 0 10px;
+}
+
+.display-letter {
+  display: inline;
 }

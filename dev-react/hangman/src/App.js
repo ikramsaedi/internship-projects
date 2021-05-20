@@ -24,13 +24,13 @@ function LetterButton(props) {
   }
 }
 
-class Game extends React.Component {
+class LetterSelectors extends React.Component {
   renderLetterButton(value) {
     const isActive = this.props.lettersActive[value];
     return (
       <LetterButton
         value={value}
-        onClick={(i) => this.props.letterSubmit(i)}
+        onClick={(i) => this.props.clickFunction(i)}
         isActive={isActive}
       />
     );
@@ -65,6 +65,58 @@ class Game extends React.Component {
         {this.renderLetterButton("x")}
         {this.renderLetterButton("y")}
         {this.renderLetterButton("z")}
+      </div>
+    );
+  }
+}
+
+class WordDisplay extends React.Component {
+  constructor(props) {
+    super(props);
+    this.wordArray = this.createWordArray(this.props.gameWord);
+    this.blankArray = this.createBlankArray(this.props.gameWord);
+  }
+
+  createWordArray(word) {
+    let output = [];
+    for (let letter of word) {
+      output.push(letter);
+    }
+    return output;
+  }
+
+  createBlankArray(word) {
+    let output = [];
+    for (let letter in word) {
+      output.push("_ ");
+    }
+    return output;
+  }
+
+  render() {
+    for (let element in this.wordArray) {
+      if (this.props.lettersGuessed.includes(this.wordArray[element])) {
+        this.blankArray[element] = this.wordArray[element];
+      }
+    }
+    return <div className={this.props.className}>{this.blankArray}</div>;
+  }
+}
+
+class Game extends React.Component {
+  render() {
+    return (
+      <div className={this.props.className}>
+        <WordDisplay
+          className="word-display"
+          gameWord={this.props.gameWord}
+          lettersGuessed={this.props.lettersGuessed}
+          renderLetter={(i) => this.props.letterRender(i)}
+        />
+        <LetterSelectors
+          lettersActive={this.props.lettersActive}
+          clickFunction={(i) => this.props.letterSubmit(i)}
+        />
       </div>
     );
   }
@@ -125,16 +177,22 @@ class App extends React.Component {
     });
   }
 
+  renderLetter(value) {
+    return <h1 className="display-letter">{value}</h1>;
+  }
+
   render() {
     switch (this.state.gameState) {
       case "playing":
         return (
           <div className={this.props.className}>
             <Game
+              className="game"
               gameWord={this.state.gameWord}
               lettersActive={this.state.lettersActive}
               lettersGuessed={this.state.lettersGuessed}
               letterSubmit={(i) => this.submitLetter(i)}
+              letterRender={(i) => this.renderLetter(i)}
             />
             <p>{this.state.lettersGuessed}</p>
           </div>
