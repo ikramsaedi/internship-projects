@@ -50,3 +50,12 @@ body {
 .display-letter {
   display: inline;
 }
+
+.word-display {
+  display: inline-block;
+}
+
+.score {
+  display: inline-block;
+  margin: 10px;
+}
