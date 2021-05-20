@@ -70,7 +70,7 @@ class Game extends React.Component {
   }
 }
 
-class GameBox extends React.Component {
+class App extends React.Component {
   constructor(props) {
     super(props);
     this.words = ["test"];
@@ -166,10 +166,6 @@ class GameBox extends React.Component {
         return <h1 id="game-error">Sorry, something's gone wrong :(</h1>;
     }
   }
-}
-
-function App() {
-  return <GameBox className="game-box" />;
 }
 
 export default App;
