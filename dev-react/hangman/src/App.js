@@ -1,4 +1,17 @@
 import React from "react";
+import img0 from "./resources/0-lives-left.png";
+import img1 from "./resources/1-lives-left.png";
+import img2 from "./resources/2-lives-left.png";
+import img3 from "./resources/3-lives-left.png";
+import img4 from "./resources/4-lives-left.png";
+import img5 from "./resources/5-lives-left.png";
+import img6 from "./resources/6-lives-left.png";
+import img7 from "./resources/7-lives-left.png";
+import img8 from "./resources/8-lives-left.png";
+import img9 from "./resources/9-lives-left.png";
+import img10 from "./resources/10-lives-left.png";
+import img11 from "./resources/11-lives-left.png";
+import img12 from "./resources/12-lives-left.png";
 
 function NewGameButton(props) {
   return (
@@ -76,18 +89,60 @@ class WordDisplay extends React.Component {
       <div className={this.props.className}>{this.props.displayArray}</div>
     );
   }
-  }
+}
 
 class Score extends React.Component {
   render() {
+    let image;
+    switch (this.props.livesRemaining) {
+      case 0:
+        image = img0;
+        break;
+      case 1:
+        image = img1;
+        break;
+      case 2:
+        image = img2;
+        break;
+      case 3:
+        image = img3;
+        break;
+      case 4:
+        image = img4;
+        break;
+      case 5:
+        image = img5;
+        break;
+      case 6:
+        image = img6;
+        break;
+      case 7:
+        image = img7;
+        break;
+      case 8:
+        image = img8;
+        break;
+      case 9:
+        image = img9;
+        break;
+      case 10:
+        image = img10;
+        break;
+      case 11:
+        image = img11;
+        break;
+      case 12:
+        image = img12;
+        break;
+      default:
+        image = "pls don't come to this";
+    }
     return (
       <div className={this.props.className}>
-    for (let element in this.wordArray) {
-      if (this.props.lettersGuessed.includes(this.wordArray[element])) {
-        this.blankArray[element] = this.wordArray[element];
-      }
-    }
-    return <div className={this.props.className}>{this.blankArray}</div>;
+        <h4 className="score-text">
+          {"Lives remaining: " + this.props.livesRemaining}
+        </h4>
+        <img src={image} alt="hangman" className="score-image" />
       </div>
     );
   }
@@ -117,7 +172,7 @@ class Game extends React.Component {
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.words = ["test"];
+    this.words = ["test", "banana"];
     this.state = {
       gameState: "unstarted",
       gameWord: null,
@@ -159,6 +214,7 @@ class App extends React.Component {
     const word = this.words[Math.floor(Math.random() * this.words.length)];
 
     let array = [];
+    // eslint-disable-next-line
     for (let letter in word) {
       array.push("_ ");
     }
@@ -166,7 +222,7 @@ class App extends React.Component {
     this.setState({
       gameState: "playing",
       gameWord: word,
-      livesRemaining: 15,
+      livesRemaining: 12,
       displayArray: array,
     });
   }
@@ -175,8 +231,10 @@ class App extends React.Component {
     const letterValue = event.target.innerText;
     const lettersGuessed = this.state.lettersGuessed.concat(letterValue);
     const lettersActive = this.state.lettersActive;
+
     let displayArray = this.state.displayArray;
     let livesRemaining = this.state.livesRemaining;
+    let gameState = this.state.gameState;
 
     lettersActive[letterValue] = false;
 
@@ -195,6 +253,7 @@ class App extends React.Component {
       lettersGuessed: lettersGuessed,
       displayArray: displayArray,
       livesRemaining: livesRemaining,
+      gameState: gameState,
     });
   }
 

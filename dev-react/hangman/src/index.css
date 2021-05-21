@@ -1,5 +1,6 @@
 body {
-  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-family: American Typewriter, Impact, Haettenschweiler,
+    "Arial Narrow Bold", sans-serif;
 }
 
 .app {
@@ -13,6 +14,7 @@ body {
 
 .game {
   border: 5px black solid;
+  border-radius: 5px;
   margin: auto;
   width: fit-content;
 }
@@ -36,7 +38,7 @@ body {
 }
 
 .small {
-  width: 200px;
+  width: 100px;
 }
 
 .letter-button {
@@ -53,9 +55,23 @@ body {
 
 .word-display {
   display: inline-block;
+  vertical-align: top;
+  text-align: center;
+  height: max-content;
+  font-size: 40px;
+  margin: 25% 10%;
 }
 
 .score {
   display: inline-block;
   margin: 10px;
+}
+
+.score-image {
+  border: 2px black solid;
+  border-radius: 10px;
+}
+
+.score-text {
+  text-align: center;
 }
