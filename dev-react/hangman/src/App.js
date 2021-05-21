@@ -137,9 +137,14 @@ class Score extends React.Component {
       default:
         image = "pls don't come to this";
     }
+
+    let textClass = "score-text";
+    if (this.props.livesRemaining <= 5) {
+      textClass += " colour-text";
+    }
     return (
       <div className={this.props.className}>
-        <h4 className="score-text">
+        <h4 className={textClass}>
           {"Lives remaining: " + this.props.livesRemaining}
         </h4>
         <img src={image} alt="hangman" className="score-image" />
@@ -152,6 +157,12 @@ class Game extends React.Component {
   render() {
     return (
       <div className={this.props.className}>
+        <NewGameButton
+          size="small"
+          onClick={(i) => {
+            this.props.startGame(i);
+          }}
+        />
         <Score className="score" livesRemaining={this.props.livesRemaining} />
         <WordDisplay
           className="word-display"
@@ -172,7 +183,28 @@ class Game extends React.Component {
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.words = ["test", "banana"];
+    this.words = [
+      "frozen",
+      "locate",
+      "butterfly",
+      "marine",
+      "reflection",
+      "resort",
+      "ceiling",
+      "convict",
+      "barrier",
+      "confrontation",
+      "behave",
+      "appeal",
+      "ignore",
+      "opinion",
+      "cheque",
+      "mature",
+      "cylinder",
+      "strain",
+      "accurate",
+      "conversation",
+    ];
     this.state = {
       gameState: "unstarted",
       gameWord: null,
@@ -211,6 +243,7 @@ class App extends React.Component {
   }
 
   startGame(i) {
+    console.log("new game");
     const word = this.words[Math.floor(Math.random() * this.words.length)];
 
     let array = [];
@@ -224,6 +257,34 @@ class App extends React.Component {
       gameWord: word,
       livesRemaining: 12,
       displayArray: array,
+      lettersActive: {
+        a: true,
+        b: true,
+        c: true,
+        d: true,
+        e: true,
+        f: true,
+        g: true,
+        h: true,
+        i: true,
+        j: true,
+        k: true,
+        l: true,
+        m: true,
+        n: true,
+        o: true,
+        p: true,
+        q: true,
+        r: true,
+        s: true,
+        t: true,
+        u: true,
+        v: true,
+        w: true,
+        x: true,
+        y: true,
+        z: true,
+      },
     });
   }
 
@@ -248,6 +309,14 @@ class App extends React.Component {
       livesRemaining -= 1;
     }
 
+    if (!displayArray.includes("_ ")) {
+      gameState = "win";
+    }
+
+    if (livesRemaining === 0) {
+      gameState = "lose";
+    }
+
     this.setState({
       lettersActive: lettersActive,
       lettersGuessed: lettersGuessed,
@@ -270,7 +339,7 @@ class App extends React.Component {
               lettersActive={this.state.lettersActive}
               lettersGuessed={this.state.lettersGuessed}
               letterSubmit={(i) => this.submitLetter(i)}
-              loseLife={() => this.loseLife()}
+              startGame={() => this.startGame()}
             />
           </div>
         );
@@ -288,13 +357,31 @@ class App extends React.Component {
       case "win":
         return (
           <div className={this.props.className}>
-            <h1>temp</h1>
+            <h1 style={{ textAlign: "center" }}>Yay, you won!</h1>
+            <h1 className="emoji">😄</h1>
+            <NewGameButton
+              size="medium"
+              onClick={() => {
+                this.startGame();
+              }}
+            />
           </div>
         );
       case "lose":
         return (
           <div className={this.props.className}>
-            <h1>temp</h1>
+            <h1 style={{ textAlign: "center" }}>Sorry, you lost!</h1>
+            <h1 className="emoji">😞</h1>
+            <h2 style={{ textAlign: "center" }}>
+              The word was{" "}
+              <span className="colour-text">{this.state.gameWord}</span>
+            </h2>
+            <NewGameButton
+              size="medium"
+              onClick={() => {
+                this.startGame();
+              }}
+            />
           </div>
         );
       default:

@@ -1,10 +1,11 @@
 body {
   font-family: American Typewriter, Impact, Haettenschweiler,
     "Arial Narrow Bold", sans-serif;
+  font-size: 20px;
 }
 
 .app {
-  width: 75%;
+  max-width: 80%;
   margin: auto 0;
   position: absolute;
   top: 50%;
@@ -20,7 +21,9 @@ body {
 }
 
 .new-game-button {
-  border: 5px red solid;
+  border: 5px pink solid;
+  background-color: rgb(255, 221, 226);
+  color: rgb(216, 99, 119);
   border-radius: 10px;
   font-family: inherit;
 }
@@ -28,38 +31,48 @@ body {
 .large {
   width: 500px;
   height: 100px;
-  font-size: 50px;
+  font-size: 2.5em;
   margin: auto;
   display: block;
 }
 
 .medium {
   width: 300px;
+  height: 60px;
+  font-size: 1.2em;
+  margin-left: calc(50% - 150px);
 }
 
 .small {
   width: 100px;
+  vertical-align: top;
+  margin-top: 20px;
+  margin-right: 20px;
+  float: right;
 }
 
 .letter-button {
   border: none;
   font-family: inherit;
-  font-size: 40px;
+  font-size: 2em;
   background: none;
   padding: 0 10px;
 }
 
 .display-letter {
   display: inline;
+  width: 10%;
 }
 
 .word-display {
   display: inline-block;
+  box-sizing: border-box;
   vertical-align: top;
   text-align: center;
-  height: max-content;
-  font-size: 40px;
-  margin: 25% 10%;
+  font-size: 2em;
+  padding: 25% 0;
+  margin-left: 10px;
+  width: 300px;
 }
 
 .score {
@@ -74,4 +87,14 @@ body {
 
 .score-text {
   text-align: center;
+}
+
+.emoji {
+  font-size: 10em;
+  text-align: center;
+  margin: 10px;
+}
+
+.colour-text {
+  color: rgb(216, 99, 119);
 }
