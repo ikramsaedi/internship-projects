@@ -1,6 +1,6 @@
 body {
-  font-family: American Typewriter, Impact, Haettenschweiler,
-    "Arial Narrow Bold", sans-serif;
+  font-family: American Typewriter, Haettenschweiler, "Arial Narrow Bold",
+    sans-serif;
   font-size: 20px;
 }
 
@@ -78,15 +78,19 @@ body {
 .score {
   display: inline-block;
   margin: 10px;
+  margin-left: 20px;
 }
 
 .score-image {
-  border: 2px black solid;
+  border: 3px black solid;
   border-radius: 10px;
 }
 
 .score-text {
-  text-align: center;
+  text-align: right;
+  font-weight: normal;
+  margin-bottom: 5px;
+  margin-top: 10px;
 }
 
 .emoji {
