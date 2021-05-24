@@ -155,13 +155,14 @@ class Score extends React.Component {
 
 class Game extends React.Component {
   componentDidMount() {
-    document.addEventListener("keydown", this.props.keyListener);
+    this.boundEventListener = (a) => this.props.keyListener(a);
+    document.addEventListener("keydown", this.boundEventListener);
   }
+
   componentWillUnmount() {
-    console.log(
-      document.removeEventListener("keydown", this.props.keyListener)
-    );
-    console.log("removed the event listener");
+    if (this.boundEventListener) {
+      document.removeEventListener("keydown", this.boundEventListener);
+    }
   }
 
   render() {
@@ -252,7 +253,6 @@ class App extends React.Component {
   }
 
   startGame(i) {
-    console.log("new game");
     const word = this.words[Math.floor(Math.random() * this.words.length)];
 
     let array = [];
@@ -360,6 +360,7 @@ class App extends React.Component {
           }
         }
       } else {
+        console.log(letterValue, "lose a life");
         livesRemaining -= 1;
       }
 
