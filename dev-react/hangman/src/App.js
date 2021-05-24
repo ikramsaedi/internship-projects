@@ -154,6 +154,16 @@ class Score extends React.Component {
 }
 
 class Game extends React.Component {
+  componentDidMount() {
+    document.addEventListener("keydown", this.props.keyListener);
+  }
+  componentWillUnmount() {
+    console.log(
+      document.removeEventListener("keydown", this.props.keyListener)
+    );
+    console.log("removed the event listener");
+  }
+
   render() {
     return (
       <div className={this.props.className}>
@@ -169,7 +179,6 @@ class Game extends React.Component {
           gameWord={this.props.gameWord}
           displayArray={this.props.displayArray}
           lettersGuessed={this.props.lettersGuessed}
-          loseLife={() => this.props.loseLife()}
         />
         <LetterSelectors
           lettersActive={this.props.lettersActive}
@@ -326,6 +335,52 @@ class App extends React.Component {
     });
   }
 
+  keyListener(event) {
+    if (event.repeat) {
+      return;
+    }
+
+    const regex = /^[a-z]$/;
+
+    if (regex.test(event.key)) {
+      const letterValue = event.key;
+      const lettersGuessed = this.state.lettersGuessed.concat(letterValue);
+      const lettersActive = this.state.lettersActive;
+
+      let displayArray = this.state.displayArray;
+      let livesRemaining = this.state.livesRemaining;
+      let gameState = this.state.gameState;
+
+      lettersActive[letterValue] = false;
+
+      if (this.state.gameWord.includes(letterValue)) {
+        for (let index in this.state.gameWord) {
+          if (this.state.gameWord[index] === letterValue) {
+            displayArray[index] = letterValue;
+          }
+        }
+      } else {
+        livesRemaining -= 1;
+      }
+
+      if (!displayArray.includes("_ ")) {
+        gameState = "win";
+      }
+
+      if (livesRemaining === 0) {
+        gameState = "lose";
+      }
+
+      this.setState({
+        lettersActive: lettersActive,
+        lettersGuessed: lettersGuessed,
+        displayArray: displayArray,
+        livesRemaining: livesRemaining,
+        gameState: gameState,
+      });
+    }
+  }
+
   render() {
     switch (this.state.gameState) {
       case "playing":
@@ -339,6 +394,7 @@ class App extends React.Component {
               lettersActive={this.state.lettersActive}
               lettersGuessed={this.state.lettersGuessed}
               letterSubmit={(i) => this.submitLetter(i)}
+              keyListener={(i) => this.keyListener(i)}
               startGame={() => this.startGame()}
             />
           </div>
