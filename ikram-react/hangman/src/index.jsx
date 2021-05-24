@@ -7,9 +7,16 @@ class Game extends React.Component {
     super(props);
     this.word = this.wordGenerator();
     this.handleKey = this.handleKey.bind(this);
-    this.chosenLetters = [];
+    /*     this.chosenLetters = [];
     this.correctLetters = [];
-    this.incorrectLetters = [];
+    this.incorrectLetters = []; */
+
+    this.state = {
+      chosenLetters: [],
+      correctLetters: [],
+      incorrectLetters: [],
+      //alreadyPressed: false,
+    };
   }
   wordGenerator() {
     let wordList = ["fish", "rudesdsfjksk", "hello", "teehee"];
@@ -31,37 +38,68 @@ class Game extends React.Component {
 
   handleKey(event) {
     let letter = event.key;
+
     if (
       //correct letter
       letter.match(/[a-z]/) &&
       letter.length === 1 &&
-      !this.chosenLetters.includes(letter) &&
+      !this.state.chosenLetters.includes(letter) &&
       this.word.includes(letter)
     ) {
-      this.chosenLetters.push(letter);
-      this.correctLetters.push(letter);
+      /* this.state.chosenLetters.push(letter);
+      this.state.correctLetters.push(letter); */
 
-      console.log(this.correctLetters);
+      this.setState({
+        correctLetters: [].push(letter),
+        chosenLetters: [].push(letter),
+      });
+
+      console.log(this.state.correctLetters);
     } else if (
       letter.match(/[a-z]/) && //if its wrong
       letter.length === 1 &&
-      !this.chosenLetters.includes(letter) &&
+      !this.state.chosenLetters.includes(letter) &&
       !this.word.includes(letter)
     ) {
-      this.chosenLetters.push(letter);
-      this.incorrectLetters.push(letter);
+      /*  this.state.chosenLetters.push(letter);
+      this.state.incorrectLetters.push(letter); */
 
-      console.log(this.incorrectLetters);
+      /*  this.setState({
+        incorrectLetters: this.incorrectLetters,
+      }); */
+
+      this.setState({
+        incorrectLetters: [].push(letter),
+      });
+      console.log(this.state.incorrectLetters);
     } else if (
       //alr chosen letter
       letter.match(/[a-z]/) &&
       letter.length === 1 &&
-      this.chosenLetters.includes(letter)
+      this.state.chosenLetters.includes(letter)
     ) {
       console.log("You've already chosen this letter!");
+      /* this.setState({
+        alreadyPressed: true,
+      });
+      if (alreadyPressed["true"]) {
+        return "You've already chosen this letter";
+      } */
     }
-    return this.chosenLetters;
+    return this.state.chosenLetters;
   }
+
+  /* stringifyIncorrect() {
+    let stringifiedIncorrect = this.incorrectLetters.join(" ");
+    console.log(stringifiedIncorrect);
+    return stringifiedIncorrect;
+  } */
+
+  /*   counter() {
+    if (this.incorrectLetters.length === this.incorrectLetters + 1) {
+    }
+    for (lives = 9; lives > 0; lives--) {}
+  } */
 
   //underscoreNumber = wordList[wordIndex].length
   //using that number, make an underscore
@@ -72,6 +110,7 @@ class Game extends React.Component {
         <h1 className="hangman-header">HANGMAN</h1>
         <p>{this.word}</p>
         <p>{this.underscoreGenerator()}</p>
+        <p> {this.state.incorrectLetters}</p>
         <form>
           <input type="text" onKeyPress={this.handleKey} />
         </form>
