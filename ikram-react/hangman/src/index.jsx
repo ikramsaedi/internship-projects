@@ -38,7 +38,9 @@ class Game extends React.Component {
 
   handleKey(event) {
     let letter = event.key;
-
+    let incorrectLettersArray = this.state.incorrectLetters.slice();
+    let correctLettersArray = this.state.correctLetters.slice();
+    let chosenLettersArray = this.state.chosenLetters.slice();
     if (
       //correct letter
       letter.match(/[a-z]/) &&
@@ -46,12 +48,9 @@ class Game extends React.Component {
       !this.state.chosenLetters.includes(letter) &&
       this.word.includes(letter)
     ) {
-      /* this.state.chosenLetters.push(letter);
-      this.state.correctLetters.push(letter); */
-
       this.setState({
-        correctLetters: [].push(letter),
-        chosenLetters: [].push(letter),
+        correctLetters: correctLettersArray,
+        chosenLetters: chosenLettersArray,
       });
 
       console.log(this.state.correctLetters);
@@ -61,15 +60,12 @@ class Game extends React.Component {
       !this.state.chosenLetters.includes(letter) &&
       !this.word.includes(letter)
     ) {
-      /*  this.state.chosenLetters.push(letter);
-      this.state.incorrectLetters.push(letter); */
-
-      /*  this.setState({
-        incorrectLetters: this.incorrectLetters,
-      }); */
+      chosenLettersArray.push(letter);
+      incorrectLettersArray.push(letter);
 
       this.setState({
-        incorrectLetters: [].push(letter),
+        chosenLetters: chosenLettersArray,
+        incorrectLetters: incorrectLettersArray,
       });
       console.log(this.state.incorrectLetters);
     } else if (
