@@ -134,7 +134,7 @@ class Game extends React.Component {
   }
 
   componentDidMount() {
-    this.boundEventListener = (a) => this.keyListener(a);
+    this.boundEventListener = (event) => this.handleKey(event);
     document.addEventListener("keydown", this.boundEventListener);
 
     let array = [];
@@ -152,8 +152,11 @@ class Game extends React.Component {
     }
   }
 
-  submitLetter(event) {
-    const letterValue = event.target.innerText;
+  handleClick(event) {
+    this.submitLetter(event.target.innerText);
+  }
+
+  submitLetter(letterValue) {
     const lettersGuessed = this.state.lettersGuessed.concat(letterValue);
 
     let displayArray = this.state.displayArray;
@@ -184,7 +187,7 @@ class Game extends React.Component {
     });
   }
 
-  keyListener(event) {
+  handleKey(event) {
     if (event.repeat) {
       return;
     }
@@ -196,35 +199,7 @@ class Game extends React.Component {
     const singleLetterRegex = /^[a-z]$/;
 
     if (singleLetterRegex.test(event.key)) {
-      const letterValue = event.key;
-      const lettersGuessed = this.state.lettersGuessed.concat(letterValue);
-
-      let displayArray = this.state.displayArray;
-      let livesRemaining = this.state.livesRemaining;
-
-      if (this.props.gameWord.includes(letterValue)) {
-        for (let index in this.props.gameWord) {
-          if (this.props.gameWord[index] === letterValue) {
-            displayArray[index] = letterValue;
-          }
-        }
-      } else {
-        livesRemaining -= 1;
-      }
-
-      if (!displayArray.includes("_ ")) {
-        this.props.changeGameState("win");
-      }
-
-      if (livesRemaining === 0) {
-        this.props.changeGameState("lose");
-      }
-
-      this.setState({
-        lettersGuessed: lettersGuessed,
-        displayArray: displayArray,
-        livesRemaining: livesRemaining,
-      });
+      this.submitLetter(event.key);
     }
   }
 
@@ -245,7 +220,7 @@ class Game extends React.Component {
         />
         <LetterSelectors
           lettersGuessed={this.state.lettersGuessed}
-          clickFunction={(i) => this.submitLetter(i)}
+          clickFunction={(i) => this.handleClick(i)}
         />
       </div>
     );
