@@ -22,19 +22,15 @@ function NewGameButton(props) {
 }
 
 function LetterButton(props) {
-  if (props.isActive) {
-    return (
-      <button className="letter-button" onClick={props.onClick}>
-        {props.value}
-      </button>
-    );
-  } else {
-    return (
-      <button className="letter-button" onClick={props.onClick} disabled>
-        {props.value}
-      </button>
-    );
-  }
+  return (
+    <button
+      className="letter-button"
+      onClick={props.onClick}
+      disabled={!props.isActive}
+    >
+      {props.value}
+    </button>
+  );
 }
 
 class LetterSelectors extends React.Component {
@@ -45,49 +41,23 @@ class LetterSelectors extends React.Component {
         value={value}
         onClick={(i) => this.props.clickFunction(i)}
         isActive={isActive}
+        key={value}
       />
     );
   }
 
   render() {
+    const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+
     return (
-      <div>
-        {this.renderLetterButton("a")}
-        {this.renderLetterButton("b")}
-        {this.renderLetterButton("c")}
-        {this.renderLetterButton("d")}
-        {this.renderLetterButton("e")}
-        {this.renderLetterButton("f")}
-        {this.renderLetterButton("g")}
-        {this.renderLetterButton("h")}
-        {this.renderLetterButton("i")}
-        {this.renderLetterButton("j")}
-        {this.renderLetterButton("k")}
-        {this.renderLetterButton("l")}
-        {this.renderLetterButton("m")}
-        {this.renderLetterButton("n")}
-        {this.renderLetterButton("o")}
-        {this.renderLetterButton("p")}
-        {this.renderLetterButton("q")}
-        {this.renderLetterButton("r")}
-        {this.renderLetterButton("s")}
-        {this.renderLetterButton("t")}
-        {this.renderLetterButton("u")}
-        {this.renderLetterButton("v")}
-        {this.renderLetterButton("w")}
-        {this.renderLetterButton("x")}
-        {this.renderLetterButton("y")}
-        {this.renderLetterButton("z")}
-      </div>
+      <div>{alphabet.map((letter) => this.renderLetterButton(letter))}</div>
     );
   }
 }
 
 class WordDisplay extends React.Component {
   render() {
-    return (
-      <div className={this.props.className}>{this.props.displayArray}</div>
-    );
+    return <div className="word-display">{this.props.displayArray}</div>;
   }
 }
 
@@ -138,13 +108,13 @@ class Score extends React.Component {
         image = "pls don't come to this";
     }
 
-    let textClass = "score-text";
-    if (this.props.livesRemaining <= 5) {
-      textClass += " colour-text";
-    }
     return (
       <div className={this.props.className}>
-        <h4 className={textClass}>
+        <h4
+          className={`score-text${
+            this.props.livesRemaining <= 5 ? " colour-text" : ""
+          }`}
+        >
           {"Lives remaining: " + this.props.livesRemaining}
         </h4>
         <img src={image} alt="hangman" className="score-image" />
@@ -205,7 +175,6 @@ class Game extends React.Component {
   }
 
   componentWillUnmount() {
-    console.log("destroying the game");
     if (this.boundEventListener) {
       document.removeEventListener("keydown", this.boundEventListener);
     }
@@ -256,9 +225,9 @@ class Game extends React.Component {
       return;
     }
 
-    const regex = /^[a-z]$/;
+    const singleLetterRegex = /^[a-z]$/;
 
-    if (regex.test(event.key)) {
+    if (singleLetterRegex.test(event.key)) {
       const letterValue = event.key;
       const lettersGuessed = this.state.lettersGuessed.concat(letterValue);
       const lettersActive = this.state.lettersActive;
@@ -275,7 +244,6 @@ class Game extends React.Component {
           }
         }
       } else {
-        console.log(letterValue, "lose a life");
         livesRemaining -= 1;
       }
 
@@ -307,7 +275,6 @@ class Game extends React.Component {
         />
         <Score className="score" livesRemaining={this.state.livesRemaining} />
         <WordDisplay
-          className="word-display"
           gameWord={this.props.gameWord}
           displayArray={this.state.displayArray}
           lettersGuessed={this.state.lettersGuessed}
