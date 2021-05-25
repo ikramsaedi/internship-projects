@@ -252,6 +252,10 @@ class Game extends React.Component {
       return;
     }
 
+    if (this.state.lettersGuessed.includes(event.key)) {
+      return;
+    }
+
     const regex = /^[a-z]$/;
 
     if (regex.test(event.key)) {
