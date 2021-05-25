@@ -7,14 +7,13 @@ class Game extends React.Component {
     super(props);
     this.word = this.wordGenerator();
     this.handleKey = this.handleKey.bind(this);
-    /*     this.chosenLetters = [];
-    this.correctLetters = [];
-    this.incorrectLetters = []; */
 
     this.state = {
       chosenLetters: [],
       correctLetters: [],
       incorrectLetters: [],
+      remainingLives: 9,
+      underscoreArray: this.underscoreGenerator(),
       //alreadyPressed: false,
     };
   }
@@ -29,11 +28,16 @@ class Game extends React.Component {
 
   underscoreGenerator() {
     let underscoreNumber = this.word.length;
-    console.log(underscoreNumber + "number");
-    let underscoreArray = Array(underscoreNumber).fill("_");
-    let underscore = underscoreArray.join(" ");
-    console.log(underscore);
-    return underscore;
+    let underscoreArray = [];
+    console.log(underscoreArray);
+    let newUnderScoreArray = underscoreArray.concat(
+      Array(underscoreNumber).fill("_ ")
+    );
+    //this.setState({ underscoreArray: Array(underscoreNumber).fill("_ ") });
+    //let underscoreArray = underscoreArray(underscoreNumber).fill("_ ");
+    //let underscore = underscoreArray.join(" ");
+
+    return newUnderScoreArray;
   }
 
   handleKey(event) {
@@ -41,6 +45,8 @@ class Game extends React.Component {
     let incorrectLettersArray = this.state.incorrectLetters.slice();
     let correctLettersArray = this.state.correctLetters.slice();
     let chosenLettersArray = this.state.chosenLetters.slice();
+
+    let remainingLives = this.state.remainingLives;
     if (
       //correct letter
       letter.match(/[a-z]/) &&
@@ -48,26 +54,36 @@ class Game extends React.Component {
       !this.state.chosenLetters.includes(letter) &&
       this.word.includes(letter)
     ) {
+      let newUnderscoreArray = this.letterReplacer(
+        //returns undefined
+        letter,
+        this.word,
+        this.state.underscoreArray
+      );
       this.setState({
         correctLetters: correctLettersArray,
         chosenLetters: chosenLettersArray,
+        underscoreArray: newUnderscoreArray, //here it is getting undefined
       });
 
       console.log(this.state.correctLetters);
+      console.log(this.state.underscoreArray + "newArray");
     } else if (
       letter.match(/[a-z]/) && //if its wrong
       letter.length === 1 &&
       !this.state.chosenLetters.includes(letter) &&
-      !this.word.includes(letter)
+      !this.word.includes(letter) &&
+      remainingLives > 0
     ) {
       chosenLettersArray.push(letter);
       incorrectLettersArray.push(letter);
+      remainingLives -= 1;
 
       this.setState({
         chosenLetters: chosenLettersArray,
         incorrectLetters: incorrectLettersArray,
+        remainingLives: remainingLives,
       });
-      console.log(this.state.incorrectLetters);
     } else if (
       //alr chosen letter
       letter.match(/[a-z]/) &&
@@ -75,41 +91,40 @@ class Game extends React.Component {
       this.state.chosenLetters.includes(letter)
     ) {
       console.log("You've already chosen this letter!");
-      /* this.setState({
-        alreadyPressed: true,
-      });
-      if (alreadyPressed["true"]) {
-        return "You've already chosen this letter";
-      } */
+    } else if (remainingLives <= 0) {
+      console.log("Game over!");
     }
     return this.state.chosenLetters;
   }
 
-  /* stringifyIncorrect() {
-    let stringifiedIncorrect = this.incorrectLetters.join(" ");
-    console.log(stringifiedIncorrect);
-    return stringifiedIncorrect;
-  } */
+  letterReplacer(letter, word, underscoreArray) {
+    let underscoreArrayCopy = underscoreArray;
 
-  /*   counter() {
-    if (this.incorrectLetters.length === this.incorrectLetters + 1) {
+    for (let i = 0; i < word.length; i++) {
+      //iterating thru the indexes of the word (this needs to be string indexing)
+
+      if (word.charAt(i) === letter) {
+        console.log(word + "word");
+
+        underscoreArrayCopy[i] = letter;
+      }
     }
-    for (lives = 9; lives > 0; lives--) {}
-  } */
-
-  //underscoreNumber = wordList[wordIndex].length
-  //using that number, make an underscore
+    return underscoreArrayCopy;
+    //return (underscoreArray[letterIndex] = letter); // then change the underscore at the same index to be the letter
+  }
 
   render() {
     return (
       <div>
         <h1 className="hangman-header">HANGMAN</h1>
         <p>{this.word}</p>
-        <p>{this.underscoreGenerator()}</p>
+        <p>{this.state.underscoreArray}</p>
         <p> {this.state.incorrectLetters}</p>
         <form>
           <input type="text" onKeyPress={this.handleKey} />
         </form>
+        <p>{this.state.remainingLives}</p>
+        <p>{}</p>
       </div>
     );
   }
