@@ -35,7 +35,7 @@ function LetterButton(props) {
 
 class LetterSelectors extends React.Component {
   renderLetterButton(value) {
-    const isActive = this.props.lettersActive[value];
+    const isActive = !this.props.lettersGuessed.includes(value);
     return (
       <LetterButton
         value={value}
@@ -127,34 +127,6 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      lettersActive: {
-        a: true,
-        b: true,
-        c: true,
-        d: true,
-        e: true,
-        f: true,
-        g: true,
-        h: true,
-        i: true,
-        j: true,
-        k: true,
-        l: true,
-        m: true,
-        n: true,
-        o: true,
-        p: true,
-        q: true,
-        r: true,
-        s: true,
-        t: true,
-        u: true,
-        v: true,
-        w: true,
-        x: true,
-        y: true,
-        z: true,
-      },
       lettersGuessed: [],
       livesRemaining: 12,
       displayArray: null,
@@ -183,12 +155,9 @@ class Game extends React.Component {
   submitLetter(event) {
     const letterValue = event.target.innerText;
     const lettersGuessed = this.state.lettersGuessed.concat(letterValue);
-    const lettersActive = this.state.lettersActive;
 
     let displayArray = this.state.displayArray;
     let livesRemaining = this.state.livesRemaining;
-
-    lettersActive[letterValue] = false;
 
     if (this.props.gameWord.includes(letterValue)) {
       for (let index in this.props.gameWord) {
@@ -209,7 +178,6 @@ class Game extends React.Component {
     }
 
     this.setState({
-      lettersActive: lettersActive,
       lettersGuessed: lettersGuessed,
       displayArray: displayArray,
       livesRemaining: livesRemaining,
@@ -230,12 +198,9 @@ class Game extends React.Component {
     if (singleLetterRegex.test(event.key)) {
       const letterValue = event.key;
       const lettersGuessed = this.state.lettersGuessed.concat(letterValue);
-      const lettersActive = this.state.lettersActive;
 
       let displayArray = this.state.displayArray;
       let livesRemaining = this.state.livesRemaining;
-
-      lettersActive[letterValue] = false;
 
       if (this.props.gameWord.includes(letterValue)) {
         for (let index in this.props.gameWord) {
@@ -256,7 +221,6 @@ class Game extends React.Component {
       }
 
       this.setState({
-        lettersActive: lettersActive,
         lettersGuessed: lettersGuessed,
         displayArray: displayArray,
         livesRemaining: livesRemaining,
@@ -280,7 +244,7 @@ class Game extends React.Component {
           lettersGuessed={this.state.lettersGuessed}
         />
         <LetterSelectors
-          lettersActive={this.state.lettersActive}
+          lettersGuessed={this.state.lettersGuessed}
           clickFunction={(i) => this.submitLetter(i)}
         />
       </div>
@@ -316,34 +280,6 @@ class App extends React.Component {
     this.state = {
       gameState: "unstarted",
       gameWord: null,
-      lettersActive: {
-        a: true,
-        b: true,
-        c: true,
-        d: true,
-        e: true,
-        f: true,
-        g: true,
-        h: true,
-        i: true,
-        j: true,
-        k: true,
-        l: true,
-        m: true,
-        n: true,
-        o: true,
-        p: true,
-        q: true,
-        r: true,
-        s: true,
-        t: true,
-        u: true,
-        v: true,
-        w: true,
-        x: true,
-        y: true,
-        z: true,
-      },
       lettersGuessed: [],
       livesRemaining: null,
       displayArray: null,
