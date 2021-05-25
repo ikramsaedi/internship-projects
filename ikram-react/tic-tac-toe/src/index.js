@@ -83,8 +83,10 @@ class Game extends React.Component {
     console.log(this.state.history[0].squares + "yoohoo"); //this is undefined
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
+
     console.log(current);
     console.log(current.squares);
+
     const squares = current.squares.slice(); //new squares array
     console.log("game handleclick");
     console.log(squares[i] + "yoohoo");
