@@ -59,6 +59,7 @@ class LetterSelectors extends React.Component {
     const alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
 
     return (
+      //iterate through a list of all the letters in the alphabet, and create a button for each of them
       <div>{alphabet.map((letter) => this.renderLetterButton(letter))}</div>
     );
   }
@@ -66,8 +67,10 @@ class LetterSelectors extends React.Component {
 
 class WordDisplay extends React.Component {
   render() {
+    // dynamically calculating the display array of underscores and letters
     let displayArray = Array(this.props.gameWord.length).fill("_ ");
 
+    // this is done by iterating through all the letters guessed, and all the letters in the word, and if they match, replacing the correlating underscore with the letter itself
     for (let letter of this.props.lettersGuessed) {
       for (let index in this.props.gameWord) {
         if (this.props.gameWord[index] === letter) {
@@ -135,6 +138,7 @@ class Score extends React.Component {
     return (
       <div className={this.props.className}>
         <h4
+          // dynamically calculating if the text should be coloured based on props
           className={`score-text${
             this.props.livesRemaining <= 5 ? " colour-text" : ""
           }`}
@@ -158,16 +162,8 @@ class Game extends React.Component {
   }
 
   componentDidMount() {
-    this.boundEventListener = (event) => this.handleKey(event);
+    this.boundEventListener = (event) => this.handleKey(event); // we have to bind it like this to ensure the added and removed event listeners match, and are successful
     document.addEventListener("keydown", this.boundEventListener);
-
-    let array = [];
-    // eslint-disable-next-line
-    for (let letter in this.props.gameWord) {
-      array.push("_ ");
-    }
-
-    this.setState({ displayArray: array });
   }
 
   componentWillUnmount() {
@@ -183,7 +179,6 @@ class Game extends React.Component {
   submitLetter(letterValue) {
     const lettersGuessed = this.state.lettersGuessed.concat(letterValue);
 
-    let displayArray = this.state.displayArray;
     let livesRemaining = this.state.livesRemaining;
 
     if (!this.props.gameWord.includes(letterValue)) {
@@ -193,6 +188,7 @@ class Game extends React.Component {
     let gameWon = true;
     for (let letter of this.props.gameWord) {
       if (!lettersGuessed.includes(letter)) {
+        // iterate through each letter in the word, and if there's one they haven't guessed yet, they haven't won
         gameWon = false;
       }
     }
@@ -207,7 +203,6 @@ class Game extends React.Component {
 
     this.setState({
       lettersGuessed: lettersGuessed,
-      displayArray: displayArray,
       livesRemaining: livesRemaining,
     });
   }
@@ -217,11 +212,12 @@ class Game extends React.Component {
       return;
     }
 
+    // we want to make sure they haven't already guessed the letter, so they won't lose multiple lives guessing the same letter
     if (this.state.lettersGuessed.includes(event.key)) {
       return;
     }
 
-    const singleLetterRegex = /^[a-z]$/;
+    const singleLetterRegex = /^[a-z]$/; // this regex will only match a single lowercase letter, allowing us to check if they pressed a letter key
 
     if (singleLetterRegex.test(event.key)) {
       this.submitLetter(event.key);
