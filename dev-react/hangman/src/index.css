@@ -5,7 +5,7 @@ body {
 }
 
 .app {
-  width: 80%;
+  width: fit-content;
   margin: auto 0;
   position: absolute;
   top: 50%;
@@ -51,20 +51,12 @@ body {
   float: right;
 }
 
-.display-letter {
-  display: inline;
-  width: 10%;
-}
-
 .word-display {
   display: inline-block;
-  box-sizing: border-box;
   vertical-align: top;
-  text-align: center;
   font-size: 2em;
   padding: 25% 0;
   margin-left: 10px;
-  width: 300px;
 }
 
 .score {
