@@ -176,6 +176,23 @@ class Game extends React.Component {
     this.submitLetter(event.target.innerText);
   }
 
+  handleKey(event) {
+    if (event.repeat) {
+      return;
+    }
+
+    // we want to make sure they haven't already guessed the letter, so they won't lose multiple lives guessing the same letter
+    if (this.state.lettersGuessed.includes(event.key)) {
+      return;
+    }
+
+    const singleLetterRegex = /^[a-z]$/; // this regex will only match a single lowercase letter, allowing us to check if they pressed a letter key
+
+    if (singleLetterRegex.test(event.key)) {
+      this.submitLetter(event.key);
+    }
+  }
+
   submitLetter(letterValue) {
     const lettersGuessed = this.state.lettersGuessed.concat(letterValue);
 
@@ -207,23 +224,6 @@ class Game extends React.Component {
     });
   }
 
-  handleKey(event) {
-    if (event.repeat) {
-      return;
-    }
-
-    // we want to make sure they haven't already guessed the letter, so they won't lose multiple lives guessing the same letter
-    if (this.state.lettersGuessed.includes(event.key)) {
-      return;
-    }
-
-    const singleLetterRegex = /^[a-z]$/; // this regex will only match a single lowercase letter, allowing us to check if they pressed a letter key
-
-    if (singleLetterRegex.test(event.key)) {
-      this.submitLetter(event.key);
-    }
-  }
-
   render() {
     return (
       <div className={this.props.className}>
@@ -248,112 +248,4 @@ class Game extends React.Component {
   }
 }
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.words = [
-      "frozen",
-      "locate",
-      "butterfly",
-      "marine",
-      "reflection",
-      "resort",
-      "ceiling",
-      "convict",
-      "barrier",
-      "confrontation",
-      "behave",
-      "appeal",
-      "ignore",
-      "opinion",
-      "cheque",
-      "mature",
-      "cylinder",
-      "strain",
-      "accurate",
-      "conversation",
-    ];
-    this.state = {
-      gameState: "unstarted",
-      gameWord: null,
-      lettersGuessed: [],
-      livesRemaining: null,
-      displayArray: null,
-    };
-  }
-
-  startGame(i) {
-    const word = this.words[Math.floor(Math.random() * this.words.length)];
-
-    this.setState({
-      gameState: "playing",
-      gameWord: word,
-    });
-  }
-
-  changeGameState(state) {
-    this.setState({ gameState: state });
-  }
-
-  render() {
-    switch (this.state.gameState) {
-      case "playing":
-        return (
-          <div className={this.props.className}>
-            <Game
-              className="game"
-              gameWord={this.state.gameWord}
-              startGame={() => this.startGame()}
-              changeGameState={(s) => this.changeGameState(s)}
-              key={this.state.gameWord}
-            />
-          </div>
-        );
-      case "unstarted":
-        return (
-          <div className={this.props.className}>
-            <NewGameButton
-              type="start-screen-button"
-              onClick={(i) => {
-                this.startGame(i);
-              }}
-            />
-          </div>
-        );
-      case "win":
-        return (
-          <div className={this.props.className}>
-            <h1 style={{ textAlign: "center" }}>Yay, you won!</h1>
-            <h1 className="emoji">😄</h1>
-            <NewGameButton
-              type="end-screen-button"
-              onClick={() => {
-                this.startGame();
-              }}
-            />
-          </div>
-        );
-      case "lose":
-        return (
-          <div className={this.props.className}>
-            <h1 style={{ textAlign: "center" }}>Sorry, you lost!</h1>
-            <h1 className="emoji">😞</h1>
-            <h2 style={{ textAlign: "center" }}>
-              The word was{" "}
-              <span className="colour-text">{this.state.gameWord}</span>
-            </h2>
-            <NewGameButton
-              type="end-screen-button"
-              onClick={() => {
-                this.startGame();
-              }}
-            />
-          </div>
-        );
-      default:
-        return <h1 id="game-error">Sorry, something's gone wrong :(</h1>;
-    }
-  }
-}
-
-export default App;
+export { Game, NewGameButton };
