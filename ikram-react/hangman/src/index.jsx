@@ -2,11 +2,16 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 
+//assets
+import pic9 from "./assets/9.png";
+import pic8 from "./assets/8.png";
+
 class Game extends React.Component {
   constructor(props) {
     super(props);
     this.word = this.wordGenerator();
     this.handleKey = this.handleKey.bind(this);
+    //this.gameStatus = this.gameOutcome();
 
     this.state = {
       chosenLetters: [],
@@ -33,9 +38,7 @@ class Game extends React.Component {
     let newUnderScoreArray = underscoreArray.concat(
       Array(underscoreNumber).fill("_ ")
     );
-    //this.setState({ underscoreArray: Array(underscoreNumber).fill("_ ") });
-    //let underscoreArray = underscoreArray(underscoreNumber).fill("_ ");
-    //let underscore = underscoreArray.join(" ");
+    console.log("this is the underscore generator");
 
     return newUnderScoreArray;
   }
@@ -47,6 +50,7 @@ class Game extends React.Component {
     let chosenLettersArray = this.state.chosenLetters.slice();
 
     let remainingLives = this.state.remainingLives;
+
     if (
       //correct letter
       letter.match(/[a-z]/) &&
@@ -55,32 +59,27 @@ class Game extends React.Component {
       this.word.includes(letter)
     ) {
       let newUnderscoreArray = this.letterReplacer(
-        //returns undefined
         letter,
         this.word,
         this.state.underscoreArray
       );
+      correctLettersArray.push(letter);
       this.setState({
         correctLetters: correctLettersArray,
-        chosenLetters: chosenLettersArray,
-        underscoreArray: newUnderscoreArray, //here it is getting undefined
+        underscoreArray: newUnderscoreArray,
       });
-
-      console.log(this.state.correctLetters);
-      console.log(this.state.underscoreArray + "newArray");
-    } else if (
+    }
+    if (
       letter.match(/[a-z]/) && //if its wrong
       letter.length === 1 &&
       !this.state.chosenLetters.includes(letter) &&
       !this.word.includes(letter) &&
       remainingLives > 0
     ) {
-      chosenLettersArray.push(letter);
       incorrectLettersArray.push(letter);
       remainingLives -= 1;
 
       this.setState({
-        chosenLetters: chosenLettersArray,
         incorrectLetters: incorrectLettersArray,
         remainingLives: remainingLives,
       });
@@ -91,9 +90,11 @@ class Game extends React.Component {
       this.state.chosenLetters.includes(letter)
     ) {
       console.log("You've already chosen this letter!");
-    } else if (remainingLives <= 0) {
+    } else if (remainingLives === 0) {
       console.log("Game over!");
+      //redirect to losing.jsx
     }
+    this.gameOutcome(correctLettersArray);
     return this.state.chosenLetters;
   }
 
@@ -104,47 +105,100 @@ class Game extends React.Component {
       //iterating thru the indexes of the word (this needs to be string indexing)
 
       if (word.charAt(i) === letter) {
-        console.log(word + "word");
+        console.log("this is the letter replacer");
 
         underscoreArrayCopy[i] = letter;
       }
     }
+    console.log(underscoreArrayCopy + " this is the new underscoreArray");
+
     return underscoreArrayCopy;
-    //return (underscoreArray[letterIndex] = letter); // then change the underscore at the same index to be the letter
+  }
+
+  /* hangmanDrawing() {
+    if (this.remainingLives === 9) {
+    }
+  } */
+
+  gameOutcome(correctLettersArray) {
+    let gameStatus;
+    let wordArray = this.word.split("");
+    console.log(correctLettersArray + "correct letters");
+    console.log(
+      wordArray.every((arrayElement) =>
+        correctLettersArray.includes(arrayElement)
+      )
+    );
+
+    console.log(this.state.remainingLives);
+    if (
+      this.state.remainingLives === 0 &&
+      this.state.underscoreArray.includes("_ ")
+    ) {
+      gameStatus = "losing";
+      console.log("You've lost. </3");
+      //redirect to losing page
+    } else if (
+      this.state.remainingLives > 0 &&
+      wordArray.every((arrayElement) =>
+        correctLettersArray.includes(arrayElement)
+      )
+    ) {
+      gameStatus = "winning";
+      console.log("You've won! :D");
+      //redirect to winning page
+    } else {
+      gameStatus = "playing";
+      console.log("Keep playing");
+    }
+
+    return gameStatus;
   }
 
   render() {
     return (
       <div>
         <h1 className="hangman-header">HANGMAN</h1>
-        <p>{this.word}</p>
+        <img src={pic9}></img>
         <p>{this.state.underscoreArray}</p>
         <p> {this.state.incorrectLetters}</p>
         <form>
           <input type="text" onKeyPress={this.handleKey} />
         </form>
         <p>{this.state.remainingLives}</p>
-        <p>{}</p>
       </div>
     );
   }
 }
 
-class Word extends React.Component {
-  /*   render() {
-    this.props.wordGenerator();
-    return <p className={this.props.className}>_ _ _ _</p>; //replace this with actual amount of underscores for each character
-  } */
-}
-
-class Input extends React.Component {}
-
-class WrongLetters extends React.Component {
-  constructor(props) {
-    super(props);
+class Winning extends React.Component {
+  render() {
+    return (
+      <div>
+        <p>You won!</p>
+      </div>
+    );
   }
 }
 
-class HangmanDrawing extends React.Component {}
+class Losing extends React.Component {
+  render() {
+    return (
+      <div>
+        <p>You've lost!</p>
+      </div>
+    );
+  }
+}
+
+/* function ChangeGameState(props) {
+  if (props.gameStatus === "losing") {
+    return <Losing />;
+  } else if (props.gameStatus === "winning") {
+    return <Winning />;
+  } else {
+    return <Game />;
+  }
+} */
 
 ReactDOM.render(<Game />, document.getElementById("root"));
