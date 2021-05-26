@@ -21,6 +21,7 @@ class Game extends React.Component {
       underscoreArray: this.underscoreGenerator(),
       //alreadyPressed: false,
     };
+    this.gameStatus = this.gameOutcome(this.state.correctLetters);
   }
   wordGenerator() {
     let wordList = ["fish", "rudesdsfjksk", "hello", "teehee"];
