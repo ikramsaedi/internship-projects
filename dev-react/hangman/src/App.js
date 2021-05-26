@@ -57,7 +57,17 @@ class LetterSelectors extends React.Component {
 
 class WordDisplay extends React.Component {
   render() {
-    return <div className="word-display">{this.props.displayArray}</div>;
+    let displayArray = Array(this.props.gameWord.length).fill("_ ");
+
+    for (let letter of this.props.lettersGuessed) {
+      for (let index in this.props.gameWord) {
+        if (this.props.gameWord[index] === letter) {
+          displayArray[index] = letter;
+        }
+      }
+    }
+
+    return <div className="word-display">{displayArray}</div>;
   }
 }
 
@@ -162,17 +172,18 @@ class Game extends React.Component {
     let displayArray = this.state.displayArray;
     let livesRemaining = this.state.livesRemaining;
 
-    if (this.props.gameWord.includes(letterValue)) {
-      for (let index in this.props.gameWord) {
-        if (this.props.gameWord[index] === letterValue) {
-          displayArray[index] = letterValue;
-        }
-      }
-    } else {
+    if (!this.props.gameWord.includes(letterValue)) {
       livesRemaining -= 1;
     }
 
-    if (!displayArray.includes("_ ")) {
+    let gameWon = true;
+    for (let letter of this.props.gameWord) {
+      if (!lettersGuessed.includes(letter)) {
+        gameWon = false;
+      }
+    }
+
+    if (gameWon) {
       this.props.changeGameState("win");
     }
 
