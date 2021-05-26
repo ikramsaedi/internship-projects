@@ -51,14 +51,6 @@ body {
   float: right;
 }
 
-.letter-button {
-  border: none;
-  font-family: inherit;
-  font-size: 2em;
-  background: none;
-  padding: 0 10px;
-}
-
 .display-letter {
   display: inline;
   width: 10%;
@@ -79,11 +71,6 @@ body {
   display: inline-block;
   margin: 10px;
   margin-left: 20px;
-}
-
-.score-image {
-  border: 3px black solid;
-  border-radius: 10px;
 }
 
 .score-text {

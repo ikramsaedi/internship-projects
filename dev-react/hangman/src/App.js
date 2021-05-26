@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import img0 from "./resources/0-lives-left.png";
 import img1 from "./resources/1-lives-left.png";
 import img2 from "./resources/2-lives-left.png";
@@ -21,10 +22,18 @@ function NewGameButton(props) {
   );
 }
 
+const StyledLetterButton = styled(LetterButton)`
+  border: none;
+  font-family: inherit;
+  font-size: 2em;
+  background: none;
+  padding: 0 10px;
+`;
+
 function LetterButton(props) {
   return (
     <button
-      className="letter-button"
+      className={props.className}
       onClick={props.onClick}
       disabled={!props.isActive}
     >
@@ -37,7 +46,7 @@ class LetterSelectors extends React.Component {
   renderLetterButton(value) {
     const isActive = !this.props.lettersGuessed.includes(value);
     return (
-      <LetterButton
+      <StyledLetterButton
         value={value}
         onClick={(i) => this.props.clickFunction(i)}
         isActive={isActive}
@@ -70,6 +79,11 @@ class WordDisplay extends React.Component {
     return <div className="word-display">{displayArray}</div>;
   }
 }
+
+const ScoreImg = styled.img`
+  border: 3px black solid;
+  border-radius: 10px;
+`;
 
 class Score extends React.Component {
   render() {
@@ -127,7 +141,7 @@ class Score extends React.Component {
         >
           {"Lives remaining: " + this.props.livesRemaining}
         </h4>
-        <img src={image} alt="hangman" className="score-image" />
+        <ScoreImg src={image} alt="hangman" />
       </div>
     );
   }
