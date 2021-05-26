@@ -115,11 +115,6 @@ class Game extends React.Component {
     return underscoreArrayCopy;
   }
 
-  /* hangmanDrawing() {
-    if (this.remainingLives === 9) {
-    }
-  } */
-
   gameOutcome(correctLettersArray) {
     let gameStatus;
     let wordArray = this.word.split("");
@@ -132,7 +127,7 @@ class Game extends React.Component {
 
     console.log(this.state.remainingLives);
     if (
-      this.state.remainingLives === 0 &&
+      this.state.remainingLives === 1 &&
       this.state.underscoreArray.includes("_ ")
     ) {
       gameStatus = "losing";
@@ -151,7 +146,7 @@ class Game extends React.Component {
       gameStatus = "playing";
       console.log("Keep playing");
     }
-
+    this.props.onChangeGameState(gameStatus);
     return gameStatus;
   }
 
@@ -191,14 +186,31 @@ class Losing extends React.Component {
   }
 }
 
-/* function ChangeGameState(props) {
-  if (props.gameStatus === "losing") {
-    return <Losing />;
-  } else if (props.gameStatus === "winning") {
-    return <Winning />;
-  } else {
-    return <Game />;
+class ChangeGameState extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      gameState: "playing",
+    };
   }
-} */
 
-ReactDOM.render(<Game />, document.getElementById("root"));
+  onChangeGameState(i) {
+    console.log("this", this);
+    this.setState({
+      gameState: i,
+    });
+  }
+  render() {
+    if (this.state.gameState === "losing") {
+      return <Losing />;
+    }
+    if (this.state.gameState === "winning") {
+      return <Winning />;
+    }
+    if (this.state.gameState === "playing") {
+      return <Game onChangeGameState={(i) => this.onChangeGameState(i)} />;
+    }
+  }
+}
+
+ReactDOM.render(<ChangeGameState />, document.getElementById("root"));
