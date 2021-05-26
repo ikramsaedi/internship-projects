@@ -28,7 +28,7 @@ body {
   font-family: inherit;
 }
 
-.large {
+.start-screen-button {
   width: 500px;
   height: 100px;
   font-size: 2.5em;
@@ -36,14 +36,14 @@ body {
   display: block;
 }
 
-.medium {
+.end-screen-button {
   width: 300px;
   height: 60px;
   font-size: 1.2em;
   margin-left: calc(50% - 150px);
 }
 
-.small {
+.ingame-button {
   width: 100px;
   vertical-align: top;
   margin-top: 20px;

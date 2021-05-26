@@ -15,7 +15,7 @@ import img12 from "./resources/12-lives-left.png";
 
 function NewGameButton(props) {
   return (
-    <button className={"new-game-button " + props.size} onClick={props.onClick}>
+    <button className={"new-game-button " + props.type} onClick={props.onClick}>
       New Game
     </button>
   );
@@ -218,7 +218,7 @@ class Game extends React.Component {
     return (
       <div className={this.props.className}>
         <NewGameButton
-          size="small"
+          type="ingame-button"
           onClick={(i) => {
             this.props.startGame(i);
           }}
@@ -303,7 +303,7 @@ class App extends React.Component {
         return (
           <div className={this.props.className}>
             <NewGameButton
-              size="large"
+              type="start-screen-button"
               onClick={(i) => {
                 this.startGame(i);
               }}
@@ -316,7 +316,7 @@ class App extends React.Component {
             <h1 style={{ textAlign: "center" }}>Yay, you won!</h1>
             <h1 className="emoji">😄</h1>
             <NewGameButton
-              size="medium"
+              type="end-screen-button"
               onClick={() => {
                 this.startGame();
               }}
@@ -333,7 +333,7 @@ class App extends React.Component {
               <span className="colour-text">{this.state.gameWord}</span>
             </h2>
             <NewGameButton
-              size="medium"
+              type="end-screen-button"
               onClick={() => {
                 this.startGame();
               }}
