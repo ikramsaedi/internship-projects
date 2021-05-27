@@ -181,16 +181,16 @@ class Game extends React.Component {
   render() {
     return (
       <div className="centre">
-        <h1 className="hangman-header">HANGMAN</h1>
-        <p className="remaining-lives">
-          {this.state.remainingLives} lives remaining.
-        </p>
-        <img className="image" src={this.hangmanDrawing()}></img>
-        <p className="incorrect-letters"> {this.state.incorrectLetters}</p>
-        <p className="underscores">{this.state.underscoreArray}</p>
-        <form>
-          <input type="text" onKeyPress={this.handleKey} />
-        </form>
+        <div className="everything">
+          <h1>HANGMAN</h1>
+          <p>{this.state.remainingLives} lives remaining.</p>
+          <img className="image" src={this.hangmanDrawing()}></img>
+          <p> {this.state.incorrectLetters}</p>
+          <p>{this.state.underscoreArray}</p>
+          <form>
+            <input type="text" onKeyPress={this.handleKey} />
+          </form>
+        </div>
       </div>
     );
   }
@@ -200,7 +200,9 @@ class Winning extends React.Component {
   render() {
     return (
       <div>
-        <p>You won! The word is {this.props.word} :D</p>
+        <div className="everything">
+          <p>You won! The word is {this.props.word} :D</p>
+        </div>
       </div>
     );
   }
@@ -209,8 +211,10 @@ class Winning extends React.Component {
 class Losing extends React.Component {
   render() {
     return (
-      <div>
-        <p>You've lost! The word was {this.props.word} :( </p>
+      <div className="center">
+        <div className="everything">
+          <p>You've lost! The word was {this.props.word} :( </p>
+        </div>
       </div>
     );
   }
@@ -218,7 +222,11 @@ class Losing extends React.Component {
 
 class ResetGame extends React.Component {
   render() {
-    return <button onClick={this.props.onClick}>Reset Game</button>;
+    return (
+      <div className="center">
+        <button onClick={this.props.onClick}>Reset Game</button>
+      </div>
+    );
   }
 }
 
