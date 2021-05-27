@@ -17,7 +17,6 @@ import pic0 from "./assets/0.png";
 class Game extends React.Component {
   constructor(props) {
     super(props);
-    this.word = this.wordGenerator();
     this.handleKey = this.handleKey.bind(this);
     this.picturesArray = [
       pic0,
@@ -42,40 +41,10 @@ class Game extends React.Component {
     };
 
     this.gameStatus = this.gameOutcome(this.state.correctLetters);
-    this.renderedPicture = this.hangmanDrawing();
   }
-  wordGenerator() {
-    let wordList = [
-      "nymph",
-      "banjo",
-      "vixen",
-      "phlegm",
-      "zigzagging",
-      "wyvern",
-      "witchcraft",
-      "injury",
-      "ivory",
-      "agnostic",
-      "microwave",
-      "cobweb",
-      "conscience",
-      "conglomerate",
-      "socialist",
-      "accumulation",
-      "helicopter",
-      "dreary",
-      "apathetic",
-      "fallacious",
-    ];
-    let wordIndex = Math.floor(Math.random() * wordList.length); //randomly generates an index in the array
-    console.log(wordList[wordIndex]);
-
-    return wordList[wordIndex];
-  } //passing props
-  //non deterministic -> like wordGenerator vs deterministic
 
   underscoreGenerator() {
-    let underscoreNumber = this.word.length;
+    let underscoreNumber = this.props.word.length;
     let underscoreArray = [];
     console.log(underscoreArray);
     let newUnderScoreArray = underscoreArray.concat(
@@ -99,11 +68,11 @@ class Game extends React.Component {
       letter.match(/[a-z]/) &&
       letter.length === 1 &&
       !this.state.chosenLetters.includes(letter) &&
-      this.word.includes(letter)
+      this.props.word.includes(letter)
     ) {
       let newUnderscoreArray = this.letterReplacer(
         letter,
-        this.word,
+        this.props.word,
         this.state.underscoreArray
       );
       correctLettersArray.push(letter);
@@ -116,7 +85,7 @@ class Game extends React.Component {
       letter.match(/[a-z]/) && //if its wrong
       letter.length === 1 &&
       !this.state.chosenLetters.includes(letter) &&
-      !this.word.includes(letter) &&
+      !this.props.word.includes(letter) &&
       remainingLives > 0
     ) {
       incorrectLettersArray.push(letter);
@@ -160,7 +129,7 @@ class Game extends React.Component {
 
   gameOutcome(correctLettersArray) {
     let gameStatus;
-    let wordArray = this.word.split("");
+    let wordArray = this.props.word.split("");
     console.log(correctLettersArray + "correct letters");
     console.log(
       wordArray.every((arrayElement) =>
@@ -218,7 +187,7 @@ class Game extends React.Component {
         <form>
           <input type="text" onKeyPress={this.handleKey} />
         </form>
-        <p>{this.state.remainingLives}</p>
+        <p>{this.state.remainingLives} lives remaining.</p>
       </div>
     );
   }
@@ -228,7 +197,7 @@ class Winning extends React.Component {
   render() {
     return (
       <div>
-        <p>You won!</p>
+        <p>You won! The word is {this.props.word} :D</p>
       </div>
     );
   }
@@ -238,7 +207,7 @@ class Losing extends React.Component {
   render() {
     return (
       <div>
-        <p>You've lost!</p>
+        <p>You've lost! The word was {this.props.word} :( </p>
       </div>
     );
   }
@@ -247,6 +216,7 @@ class Losing extends React.Component {
 class ChangeGameState extends React.Component {
   constructor(props) {
     super(props);
+    this.word = this.wordGenerator();
     this.state = {
       gameState: "playing",
     };
@@ -258,15 +228,49 @@ class ChangeGameState extends React.Component {
       gameState: i,
     });
   }
+  wordGenerator() {
+    let wordList = [
+      "nymph",
+      "banjo",
+      "vixen",
+      "phlegm",
+      "zigzagging",
+      "wyvern",
+      "witchcraft",
+      "injury",
+      "ivory",
+      "agnostic",
+      "microwave",
+      "cobweb",
+      "conscience",
+      "conglomerate",
+      "socialist",
+      "accumulation",
+      "helicopter",
+      "dreary",
+      "apathetic",
+      "fallacious",
+    ];
+    let wordIndex = Math.floor(Math.random() * wordList.length); //randomly generates an index in the array
+    console.log(wordList[wordIndex]);
+
+    return wordList[wordIndex];
+  }
+
   render() {
     if (this.state.gameState === "losing") {
-      return <Losing />;
+      return <Losing word={this.word} />;
     }
     if (this.state.gameState === "winning") {
-      return <Winning />;
+      return <Winning word={this.word} />;
     }
     if (this.state.gameState === "playing") {
-      return <Game onChangeGameState={(i) => this.onChangeGameState(i)} />;
+      return (
+        <Game
+          onChangeGameState={(i) => this.onChangeGameState(i)}
+          word={this.word}
+        />
+      );
     }
   }
 }
