@@ -213,6 +213,12 @@ class Losing extends React.Component {
   }
 }
 
+class ResetGame extends React.Component {
+  render() {
+    return <button onClick={this.props.onClick}>Reset Game</button>;
+  }
+}
+
 class ChangeGameState extends React.Component {
   constructor(props) {
     super(props);
@@ -257,12 +263,27 @@ class ChangeGameState extends React.Component {
     return wordList[wordIndex];
   }
 
+  clickHandler(event) {
+    this.setState({
+      gameState: "playing",
+    });
+  }
   render() {
     if (this.state.gameState === "losing") {
-      return <Losing word={this.word} />;
+      return (
+        <div>
+          <Losing word={this.word} />
+          <ResetGame onClick={(event) => this.clickHandler(event)} />
+        </div>
+      );
     }
     if (this.state.gameState === "winning") {
-      return <Winning word={this.word} />;
+      return (
+        <div>
+          <Winning word={this.word} />
+          <ResetGame onClick={(event) => this.clickHandler(event)} />
+        </div>
+      );
     }
     if (this.state.gameState === "playing") {
       return (
