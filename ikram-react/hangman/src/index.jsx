@@ -5,13 +5,32 @@ import "./index.css";
 //assets
 import pic9 from "./assets/9.png";
 import pic8 from "./assets/8.png";
+import pic7 from "./assets/7.png";
+import pic6 from "./assets/6.png";
+import pic5 from "./assets/5.png";
+import pic4 from "./assets/4.png";
+import pic3 from "./assets/3.png";
+import pic2 from "./assets/2.png";
+import pic1 from "./assets/1.png";
+import pic0 from "./assets/0.png";
 
 class Game extends React.Component {
   constructor(props) {
     super(props);
     this.word = this.wordGenerator();
     this.handleKey = this.handleKey.bind(this);
-    //this.gameStatus = this.gameOutcome();
+    this.picturesArray = [
+      pic0,
+      pic1,
+      pic2,
+      pic3,
+      pic4,
+      pic5,
+      pic6,
+      pic7,
+      pic8,
+      pic9,
+    ];
 
     this.state = {
       chosenLetters: [],
@@ -21,10 +40,33 @@ class Game extends React.Component {
       underscoreArray: this.underscoreGenerator(),
       //alreadyPressed: false,
     };
+
     this.gameStatus = this.gameOutcome(this.state.correctLetters);
+    this.renderedPicture = this.hangmanDrawing();
   }
   wordGenerator() {
-    let wordList = ["fish", "rudesdsfjksk", "hello", "teehee"];
+    let wordList = [
+      "nymph",
+      "banjo",
+      "vixen",
+      "phlegm",
+      "zigzagging",
+      "wyvern",
+      "witchcraft",
+      "injury",
+      "ivory",
+      "agnostic",
+      "microwave",
+      "cobweb",
+      "conscience",
+      "conglomerate",
+      "socialist",
+      "accumulation",
+      "helicopter",
+      "dreary",
+      "apathetic",
+      "fallacious",
+    ];
     let wordIndex = Math.floor(Math.random() * wordList.length); //randomly generates an index in the array
     console.log(wordList[wordIndex]);
 
@@ -51,7 +93,7 @@ class Game extends React.Component {
     let chosenLettersArray = this.state.chosenLetters.slice();
 
     let remainingLives = this.state.remainingLives;
-
+    console.log(remainingLives, "remaining lives");
     if (
       //correct letter
       letter.match(/[a-z]/) &&
@@ -128,7 +170,7 @@ class Game extends React.Component {
 
     console.log(this.state.remainingLives);
     if (
-      this.state.remainingLives === 1 &&
+      this.state.remainingLives === 0 &&
       this.state.underscoreArray.includes("_ ")
     ) {
       gameStatus = "losing";
@@ -151,11 +193,26 @@ class Game extends React.Component {
     return gameStatus;
   }
 
+  hangmanDrawing() {
+    let renderedPicture;
+    console.log(this.state.remainingLives);
+    for (let picIndex = 9; picIndex >= 0; picIndex--) {
+      if (picIndex === this.state.remainingLives) {
+        console.log(picIndex, "picIndex");
+        renderedPicture = this.picturesArray[picIndex];
+        console.log("this is the rendered picture", renderedPicture);
+      } else {
+        console.log(renderedPicture, "cryyy");
+      }
+    }
+    return renderedPicture;
+  }
+
   render() {
     return (
       <div>
         <h1 className="hangman-header">HANGMAN</h1>
-        <img src={pic9}></img>
+        <img className="image" src={this.hangmanDrawing()}></img>
         <p>{this.state.underscoreArray}</p>
         <p> {this.state.incorrectLetters}</p>
         <form>
