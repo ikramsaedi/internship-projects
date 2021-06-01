@@ -4,7 +4,7 @@ import "./App.css";
 
 import pacman from "./resources/pacman.png";
 
-class Pacman extends React.Component {
+class UnstyledPacman extends React.Component {
   componentDidUpdate() {
     if (this.props.isMoving) {
       this.timer = setInterval(() => this.move(), 1000);
@@ -34,22 +34,29 @@ class Pacman extends React.Component {
 
     return (
       <img
+        className={this.props.className}
         src={this.props.img}
         alt="pacman sprite"
-        height={this.props.size}
-        width={this.props.size}
-        style={{ transform: "rotate(" + this.props.dir + ")" }}
       />
     );
   }
 }
 
+const Pacman = styled(UnstyledPacman)`
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: ${(props) => props.size + "px"};
+  width: ${(props) => props.size + "px"};
+  transform: ${(props) => "rotate(" + props.dir + ")"};
+`;
+
 class UnstyledGame extends React.Component {
   constructor(props) {
     super(props);
-    this.validKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
+    this.arrowKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
     this.gridSize = 32;
-    this.state = { currentDirection: 0, isPacmanMoving: false };
+    this.state = { /* currentDirection: "0deg", */ isPacmanMoving: false };
   }
 
   handleKey(event) {
@@ -64,7 +71,7 @@ class UnstyledGame extends React.Component {
       this.setState({ isPacmanMoving: !this.state.isPacmanMoving });
     }
 
-    // if (this.validKeys.includes(event.key)) {
+    // if (this.arrowKeys.includes(event.key)) {
     //   console.log("valid");
     //   let dir;
     //   switch (event.key) {
@@ -111,13 +118,14 @@ class UnstyledGame extends React.Component {
 }
 
 const Game = styled(UnstyledGame)`
-  box-sizing: border-box;
   background-color: black;
   color: white;
   width: 60%;
   height: 800px;
   margin: 0 auto;
-  padding: 10px;
+  position: relative;
+  border: 10px black solid;
+  border-radius: 5px;
 `;
 
 export default Game;
