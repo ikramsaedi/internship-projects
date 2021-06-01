@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import "./App.css";
 
-import pacman from "./resources/pacman.png";
+import pacman from "./resources/pacman.gif";
 
 class UnstyledPacman extends React.Component {
   componentDidUpdate() {
