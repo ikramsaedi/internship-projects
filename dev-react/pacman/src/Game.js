@@ -43,7 +43,7 @@ const Pacman = styled(UnstyledPacman)`
   left: ${(props) => props.currentLocation[0] * props.size + "px"};
   height: ${(props) => props.size + "px"};
   width: ${(props) => props.size + "px"};
-  transform: ${(props) => "rotate(" + props.dir + ")"};
+  transform: ${(props) => "rotate(" + props.calcAngle(props.dir) + "deg)"};
 `;
 
 class UnstyledGame extends React.Component {
@@ -52,7 +52,8 @@ class UnstyledGame extends React.Component {
     this.arrowKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
     this.gridSize = 32;
     this.state = {
-      /* currentDirection: "0deg", */ isPacmanMoving: false,
+      currentDirection: [1, 0],
+      isPacmanMoving: false,
       currentLocation: [0, 0],
     };
   }
@@ -65,46 +66,68 @@ class UnstyledGame extends React.Component {
     console.log(event.key);
 
     if (event.key === " ") {
-      console.log("space bar");
-      if (this.state.currentLocation[0] < 23) {
-        this.setState({ isPacmanMoving: !this.state.isPacmanMoving });
-      }
+      this.setState({ isPacmanMoving: false });
     }
 
-    // if (this.arrowKeys.includes(event.key)) {
-    //   console.log("valid");
-    //   let dir;
-    //   switch (event.key) {
-    //     case "ArrowUp":
-    //       dir = "270deg";
-    //       break;
-    //     case "ArrowDown":
-    //       dir = "90deg";
-    //       break;
-    //     case "ArrowLeft":
-    //       dir = "180deg";
-    //       break;
-    //     case "ArrowRight":
-    //       dir = "0deg";
-    //       break;
-    //     default: // pass
-    //   }
+    if (this.arrowKeys.includes(event.key)) {
+      console.log("valid direction");
+      let dir;
+      switch (event.key) {
+        case "ArrowUp":
+          dir = [0, -1];
+          break;
+        case "ArrowDown":
+          dir = [0, 1];
+          break;
+        case "ArrowLeft":
+          dir = [-1, 0];
+          break;
+        case "ArrowRight":
+          dir = [1, 0];
+          break;
+        default: // pass
+      }
 
-    //   this.setState({ currentDirection: dir });
-    // }
+      if (
+        this.state.currentLocation[0] >= 0 &&
+        this.state.currentLocation[0] <= 23 &&
+        this.state.currentLocation[1] >= 0 &&
+        this.state.currentLocation[1] <= 23
+      ) {
+        this.setState({ isPacmanMoving: true, currentDirection: dir });
+      }
+    }
   }
 
   movePacman() {
     console.log("moving!");
-    let nextLocation = this.state.currentLocation;
-    nextLocation[0] += 1;
+    let nextLocation = this.state.currentLocation.slice(); // always make copies!! arrays are stored in the heap!!
 
-    if (nextLocation[0] < 23 /* magic number here lads */) {
+    nextLocation[0] += this.state.currentDirection[0];
+    nextLocation[1] += this.state.currentDirection[1];
+
+    if (
+      !(nextLocation[0] < 0) &&
+      !(nextLocation[0] > 23) &&
+      !(nextLocation[1] < 0) &&
+      !(nextLocation[1] > 23)
+    ) {
       console.log(nextLocation);
       this.setState({ currentLocation: nextLocation });
     } else {
+      console.log("he's not goin");
       this.setState({ isPacmanMoving: false });
     }
+  }
+
+  calcAngle(dir) {
+    let angle = Math.atan2(dir[1], dir[0]) / (Math.PI / 180);
+
+    if (angle < 0) {
+      angle += 360;
+    }
+
+    return angle;
   }
 
   componentDidMount() {
@@ -126,6 +149,7 @@ class UnstyledGame extends React.Component {
           isMoving={this.state.isPacmanMoving}
           currentLocation={this.state.currentLocation}
           move={() => this.movePacman()}
+          calcAngle={(dir) => this.calcAngle(dir)}
         />
       </div>
     );
