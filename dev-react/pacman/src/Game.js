@@ -6,12 +6,13 @@ import pacman from "./resources/pacman.png";
 
 class UnstyledPacman extends React.Component {
   componentDidUpdate() {
-    if (this.props.isMoving) {
-      this.timer = setInterval(() => this.move(), 1000);
+    if (this.props.isMoving && !this.timer) {
+      this.timer = setInterval(() => this.props.move(), 100);
     }
 
     if (!this.props.isMoving) {
       clearInterval(this.timer);
+      this.timer = undefined;
     }
   }
 
@@ -19,12 +20,6 @@ class UnstyledPacman extends React.Component {
     if (this.timer) {
       clearInterval(this.timer);
     }
-  }
-
-  move() {
-    console.log("moving!");
-
-    // inside this, will need to run my collision checker and update pacmans position
   }
 
   render() {
@@ -44,8 +39,8 @@ class UnstyledPacman extends React.Component {
 
 const Pacman = styled(UnstyledPacman)`
   position: absolute;
-  top: 0px;
-  left: 0px;
+  top: ${(props) => props.currentLocation[1] * props.size + "px"};
+  left: ${(props) => props.currentLocation[0] * props.size + "px"};
   height: ${(props) => props.size + "px"};
   width: ${(props) => props.size + "px"};
   transform: ${(props) => "rotate(" + props.dir + ")"};
@@ -56,7 +51,10 @@ class UnstyledGame extends React.Component {
     super(props);
     this.arrowKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
     this.gridSize = 32;
-    this.state = { /* currentDirection: "0deg", */ isPacmanMoving: false };
+    this.state = {
+      /* currentDirection: "0deg", */ isPacmanMoving: false,
+      currentLocation: [0, 0],
+    };
   }
 
   handleKey(event) {
@@ -68,7 +66,9 @@ class UnstyledGame extends React.Component {
 
     if (event.key === " ") {
       console.log("space bar");
-      this.setState({ isPacmanMoving: !this.state.isPacmanMoving });
+      if (this.state.currentLocation[0] < 23) {
+        this.setState({ isPacmanMoving: !this.state.isPacmanMoving });
+      }
     }
 
     // if (this.arrowKeys.includes(event.key)) {
@@ -94,6 +94,19 @@ class UnstyledGame extends React.Component {
     // }
   }
 
+  movePacman() {
+    console.log("moving!");
+    let nextLocation = this.state.currentLocation;
+    nextLocation[0] += 1;
+
+    if (nextLocation[0] < 23 /* magic number here lads */) {
+      console.log(nextLocation);
+      this.setState({ currentLocation: nextLocation });
+    } else {
+      this.setState({ isPacmanMoving: false });
+    }
+  }
+
   componentDidMount() {
     this.boundEventListener = (event) => this.handleKey(event);
     document.addEventListener("keydown", this.boundEventListener);
@@ -111,6 +124,8 @@ class UnstyledGame extends React.Component {
           dir={this.state.currentDirection}
           size={this.gridSize}
           isMoving={this.state.isPacmanMoving}
+          currentLocation={this.state.currentLocation}
+          move={() => this.movePacman()}
         />
       </div>
     );
@@ -120,9 +135,10 @@ class UnstyledGame extends React.Component {
 const Game = styled(UnstyledGame)`
   background-color: black;
   color: white;
-  width: 60%;
-  height: 800px;
-  margin: 0 auto;
+  width: ${24 * 32 + "px" /* damn magic numbers */};
+  height: ${24 * 32 + "px"};
+  margin: auto;
+  margin-top: 10px;
   position: relative;
   border: 10px black solid;
   border-radius: 5px;
