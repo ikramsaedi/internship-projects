@@ -39,13 +39,13 @@ class Game extends React.Component {
 class Grid extends React.Component {
   constructor(props) {
     super(props);
-    this.xCoordArray = [0, 1, 2];
-    this.yCoordArray = this.xCoordArray;
-    this.coordinatesArray = [
-      [0, 0],
-      [0, 1],
-      [0, 2],
+    this.grid = [
+      [0, 1, 2], //first row & associated y coordinates
+      [0, 1, 2], //second row & associated y coordinates
+      [0, 1, 2], //third row
     ];
+
+    this.renderedGrid = this.renderCellType(this.grid);
   }
 
   /* renderCellCoordinates() {
@@ -63,36 +63,45 @@ class Grid extends React.Component {
     return this.coordinatesArray;
   } */
 
-  renderCellType(coordinatesArray) {
-    //renders cells based off their cell coords and displays their coin or pacman sstatus
-    //shld actually be sth like coordinatesArray[unknown][0]
-    if (
-      coordinatesArray[0][0] === this.props.pacmanLocation[0] &&
-      coordinatesArray[0][1] === this.props.pacmanLocation[1]
-    ) {
-      //if the x coordinate = the location
-      return "pacman";
+  renderCellType(grid) {
+    //using the grid, itll iterate thru the grid and grab the coordinates
+    //then itll render each cell with these coordinates and pass it the cell type and its coordinates
+    console.log("the function is getting called");
+    let cellType;
+
+    for (let x = 0; x < grid.length; x++) {
+      console.log("x array for loop has been entered");
+      let xArray = grid[x]; //iterate thru xArray
+
+      for (let y = 0; y < xArray.length; y++) {
+        console.log("y array for loop getting entered");
+        let cellCoordinates = grid[x][y];
+        console.log(cellCoordinates);
+        if (cellCoordinates === this.props.pacmanLocation[(x, y)]) {
+          console.log("first if");
+          cellType = "pacman";
+        }
+        if (this.props.coinLocations.includes(cellCoordinates)) {
+          console.log("second if");
+          cellType = "coin";
+        } else {
+          console.log("else");
+          cellType = "blank";
+        }
+      }
     }
-    if (this.props.coinLocations.includes(coordinatesArray)) {
-      return "coin";
-    } else {
-      return "blank";
-    }
+    return cellType;
   }
 
   render() {
-    console.log(this.coordinatesArray);
+    console.log(this.grid);
+
     return (
       //make a row here
-      <div>
-        <p>{this.renderCellType(this.coordinatesArray)}</p>
-
-        <div className="grid">
-          <p className="cell"> dskfjdls </p>
-          <p className="cell"> heyooo </p>
-          <p className="cell"> sjfkdfj </p>
-        </div>
-        <Cell coordinates={this.coordinatesArray} />
+      <div className="grid-container">
+        <Cell cellType={this.renderedGrid} />
+        <Cell cellType={this.renderedGrid} />
+        <Cell cellType={this.renderedGrid} />
       </div>
       //the p is temporary
       //pass x coords and y coords down to cell
@@ -107,7 +116,7 @@ class Cell extends React.Component {
     this.coordinates = this.props.coordinates;
 
     this.state = {
-      cellContents: "blank",
+      cellContents: this.props.cellType,
     };
   }
 
@@ -124,7 +133,8 @@ class Cell extends React.Component {
   }
 
   render() {
-    return <p>{this.display()}</p>;
+    console.log(this.coordinates, "cell");
+    return <div className="cell"></div>;
   }
 }
 
