@@ -3,7 +3,7 @@ import styled from "styled-components";
 import "./App.css";
 
 import pacman from "./resources/pacman.gif";
-import coin from "./resources/coin.png";
+import coin from "./resources/coin-v3.png";
 
 class UnstyledPacman extends React.Component {
   componentDidUpdate() {
@@ -57,6 +57,15 @@ const Coin = styled(UnstyledCoin)`
   display: ${(props) => (props.eaten ? "none" : "initial")};
 `;
 
+const Score = styled.h1`
+  font-size: 20px;
+  font-family: monospace;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  right: 32px;
+  z-index: 5;
+`;
+
 class UnstyledGame extends React.Component {
   constructor(props) {
     super(props);
@@ -67,6 +76,7 @@ class UnstyledGame extends React.Component {
       isPacmanMoving: false,
       currentLocation: [0, 0],
       coins: this.generateCoins(), // this will be an array of objects with the form {location: [x, y], eaten: bool}
+      score: 0,
     };
   }
 
@@ -111,6 +121,7 @@ class UnstyledGame extends React.Component {
   movePacman() {
     let nextLocation = this.state.currentLocation.slice(); // always make copies!! arrays are stored in the heap!!
     let coins = this.state.coins.slice();
+    let score = this.state.score;
 
     nextLocation[0] += this.state.currentDirection[0];
     nextLocation[1] += this.state.currentDirection[1];
@@ -131,13 +142,13 @@ class UnstyledGame extends React.Component {
         ) {
           coin.eaten = true;
           coins.coinNum = coin;
-      console.log(nextLocation);
-      this.setState({ currentLocation: nextLocation });
+          score += 1;
         }
       }
       this.setState({
         currentLocation: nextLocation,
         coins: coins,
+        score: score,
       });
     } else {
       this.setState({ isPacmanMoving: false });
@@ -177,6 +188,7 @@ class UnstyledGame extends React.Component {
   render() {
     return (
       <div id="game" className={this.props.className}>
+        <Score>Score: {this.state.score}</Score>
         {this.state.coins.map((coin) => {
           return (
             <Coin
