@@ -4,6 +4,7 @@ import "./App.css";
 
 import pacman from "./resources/pacman.gif";
 import coin from "./resources/coin-v3.png";
+import wall from "./resources/wall.png";
 
 class UnstyledPacman extends React.Component {
   componentDidUpdate() {
@@ -57,6 +58,16 @@ const Coin = styled(UnstyledCoin)`
   display: ${(props) => (props.eaten ? "none" : "initial")};
 `;
 
+function UnstyledWall(props) {
+  return <img className={props.className} src={wall} alt="wall sprit" />;
+}
+
+const Wall = styled(UnstyledWall)`
+  position: absolute;
+  top: ${(props) => props.currentLocation[1] * props.size + "px"};
+  left: ${(props) => props.currentLocation[0] * props.size + "px"};
+`;
+
 const Score = styled.h1`
   font-size: 20px;
   font-family: monospace;
@@ -75,6 +86,7 @@ class UnstyledGame extends React.Component {
       currentDirection: [1, 0],
       isPacmanMoving: false,
       currentLocation: [0, 0],
+      walls: this.generateWalls(),
       coins: this.generateCoins(), // this will be an array of objects with the form {location: [x, y], eaten: bool}
       score: 0,
     };
@@ -132,6 +144,12 @@ class UnstyledGame extends React.Component {
       !(nextLocation[1] < 0) &&
       !(nextLocation[1] > 23)
     ) {
+      let nextLocationString = `${nextLocation[0]}, ${nextLocation[1]}`;
+      if (this.state.walls[nextLocationString]) {
+        this.setState({ isPacmanMoving: false });
+        return;
+      }
+
       for (const coinNum in coins) {
         let coin = coins[coinNum];
 
@@ -143,6 +161,7 @@ class UnstyledGame extends React.Component {
           coin.eaten = true;
           coins.coinNum = coin;
           score += 1;
+          break;
         }
       }
       this.setState({
@@ -163,6 +182,19 @@ class UnstyledGame extends React.Component {
     }
 
     return angle;
+  }
+
+  generateWalls() {
+    let output = {};
+
+    for (let i = 1; i <= 10; i++) {
+      const xval = Math.round(Math.random() * 22);
+      const yval = Math.round(Math.random() * 22);
+
+      output[`${xval}, ${yval}`] = "wall";
+    }
+
+    return output;
   }
 
   generateCoins() {
@@ -196,6 +228,11 @@ class UnstyledGame extends React.Component {
               eaten={coin.eaten}
               size={this.gridSize}
             />
+          );
+        })}
+        {Object.keys(this.state.walls).map((wall) => {
+          return (
+            <Wall currentLocation={wall.split(", ")} size={this.gridSize} />
           );
         })}
         <Pacman
