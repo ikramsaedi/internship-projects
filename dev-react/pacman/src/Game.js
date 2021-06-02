@@ -3,6 +3,7 @@ import styled from "styled-components";
 import "./App.css";
 
 import pacman from "./resources/pacman.gif";
+import coin from "./resources/coin.png";
 
 class UnstyledPacman extends React.Component {
   componentDidUpdate() {
@@ -24,7 +25,6 @@ class UnstyledPacman extends React.Component {
 
   render() {
     if (this.props.isMoving) {
-      console.log("it's alIVE");
     }
 
     return (
@@ -46,6 +46,17 @@ const Pacman = styled(UnstyledPacman)`
   transform: ${(props) => "rotate(" + props.calcAngle(props.dir) + "deg)"};
 `;
 
+function UnstyledCoin(props) {
+  return <img className={props.className} src={coin} alt="coin sprite" />;
+}
+
+const Coin = styled(UnstyledCoin)`
+  position: absolute;
+  top: ${(props) => props.currentLocation[1] * props.size + "px"};
+  left: ${(props) => props.currentLocation[0] * props.size + "px"};
+  display: ${(props) => (props.eaten ? "none" : "initial")};
+`;
+
 class UnstyledGame extends React.Component {
   constructor(props) {
     super(props);
@@ -55,6 +66,7 @@ class UnstyledGame extends React.Component {
       currentDirection: [1, 0],
       isPacmanMoving: false,
       currentLocation: [0, 0],
+      coins: this.generateCoins(), // this will be an array of objects with the form {location: [x, y], eaten: bool}
     };
   }
 
@@ -63,14 +75,11 @@ class UnstyledGame extends React.Component {
       return;
     }
 
-    console.log(event.key);
-
     if (event.key === " ") {
       this.setState({ isPacmanMoving: false });
     }
 
     if (this.arrowKeys.includes(event.key)) {
-      console.log("valid direction");
       let dir;
       switch (event.key) {
         case "ArrowUp":
@@ -100,8 +109,8 @@ class UnstyledGame extends React.Component {
   }
 
   movePacman() {
-    console.log("moving!");
     let nextLocation = this.state.currentLocation.slice(); // always make copies!! arrays are stored in the heap!!
+    let coins = this.state.coins.slice();
 
     nextLocation[0] += this.state.currentDirection[0];
     nextLocation[1] += this.state.currentDirection[1];
@@ -112,10 +121,25 @@ class UnstyledGame extends React.Component {
       !(nextLocation[1] < 0) &&
       !(nextLocation[1] > 23)
     ) {
+      for (const coinNum in coins) {
+        let coin = coins[coinNum];
+
+        if (
+          nextLocation[0] === coin.location[0] &&
+          nextLocation[1] === coin.location[1] &&
+          !coin.eaten
+        ) {
+          coin.eaten = true;
+          coins.coinNum = coin;
       console.log(nextLocation);
       this.setState({ currentLocation: nextLocation });
+        }
+      }
+      this.setState({
+        currentLocation: nextLocation,
+        coins: coins,
+      });
     } else {
-      console.log("he's not goin");
       this.setState({ isPacmanMoving: false });
     }
   }
@@ -130,6 +154,17 @@ class UnstyledGame extends React.Component {
     return angle;
   }
 
+  generateCoins() {
+    let output = [];
+    for (let i = 1; i <= 20; i++) {
+      const xval = Math.round(Math.random() * 22);
+      const yval = Math.round(Math.random() * 22);
+
+      output.push({ location: [xval, yval], eaten: false });
+    }
+    return output;
+  }
+
   componentDidMount() {
     this.boundEventListener = (event) => this.handleKey(event);
     document.addEventListener("keydown", this.boundEventListener);
@@ -142,6 +177,15 @@ class UnstyledGame extends React.Component {
   render() {
     return (
       <div id="game" className={this.props.className}>
+        {this.state.coins.map((coin) => {
+          return (
+            <Coin
+              currentLocation={coin.location}
+              eaten={coin.eaten}
+              size={this.gridSize}
+            />
+          );
+        })}
         <Pacman
           img={pacman}
           dir={this.state.currentDirection}
