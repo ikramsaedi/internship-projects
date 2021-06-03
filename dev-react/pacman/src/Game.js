@@ -82,12 +82,13 @@ class UnstyledGame extends React.Component {
     super(props);
     this.arrowKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
     this.gridSize = 32;
+    this.walls = { level1: this.generateWalls() };
     this.state = {
       currentDirection: [1, 0],
       isPacmanMoving: false,
       currentLocation: [0, 0],
-      walls: this.generateWalls(),
-      coins: this.generateCoins(),
+      level: 1,
+      coins: this.generateCoins(1),
       score: 0,
     };
   }
@@ -145,7 +146,7 @@ class UnstyledGame extends React.Component {
       !(nextLocation[1] > 23)
     ) {
       let nextLocationString = `${nextLocation[0]}, ${nextLocation[1]}`;
-      if (this.state.walls[nextLocationString]) {
+      if (this.walls[`level${this.state.level}`][nextLocationString]) {
         this.setState({ isPacmanMoving: false });
         return;
       }
@@ -182,7 +183,7 @@ class UnstyledGame extends React.Component {
   generateWalls() {
     let output = {};
 
-    for (let i = 1; i <= 10; i++) {
+    for (let i = 1; i <= 50; i++) {
       const xval = Math.round(Math.random() * 22);
       const yval = Math.round(Math.random() * 22);
 
@@ -192,15 +193,22 @@ class UnstyledGame extends React.Component {
     return output;
   }
 
-  generateCoins() {
+  generateCoins(level) {
     let output = {};
-    for (let i = 1; i <= 20; i++) {
+    for (let i = 1; i <= 30; i++) {
       const xval = Math.round(Math.random() * 22);
       const yval = Math.round(Math.random() * 22);
 
       const locationString = `${xval}, ${yval}`;
 
-      output[locationString] = false; // the boolean represents whether or not pacman has eaten the coin yet
+      if (
+        !this.walls[`level${level}`][locationString] &&
+        output[locationString] === undefined
+      ) {
+        output[locationString] = false; // the boolean represents whether or not pacman has eaten the coin yet
+      } else {
+        i--;
+      }
     }
     return output;
   }
@@ -227,7 +235,7 @@ class UnstyledGame extends React.Component {
             />
           );
         })}
-        {Object.keys(this.state.walls).map((wall) => {
+        {Object.keys(this.walls[`level${this.state.level}`]).map((wall) => {
           return (
             <Wall currentLocation={wall.split(", ")} size={this.gridSize} />
           );
