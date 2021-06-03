@@ -183,11 +183,27 @@ class UnstyledGame extends React.Component {
   generateWalls() {
     let output = {};
 
-    for (let i = 1; i <= 50; i++) {
-      const xval = Math.round(Math.random() * 22);
-      const yval = Math.round(Math.random() * 22);
+    const verticalDensity = 0.9;
+    const horizontalDensity = 0.5;
 
-      output[`${xval}, ${yval}`] = "wall"; // the string is just a stand-in value, since in an object a key must have a value
+    for (let i = 1; i <= 23; i += 2) {
+      const offset = Math.round(Math.random());
+      for (let j = 0; j < 23; j++) {
+        const chance = Math.random();
+        if (chance > verticalDensity) {
+          output[`${i}, ${j + offset}`] = "wall";
+        }
+      }
+    }
+
+    for (let i = 1; i <= 23; i += 2) {
+      const offset = Math.round(Math.random());
+      for (let j = 0; j < 23; j++) {
+        const chance = Math.random();
+        if (chance > horizontalDensity) {
+          output[`${j + offset}, ${i}`] = "wall";
+        }
+      }
     }
 
     return output;
@@ -195,7 +211,7 @@ class UnstyledGame extends React.Component {
 
   generateCoins(level) {
     let output = {};
-    for (let i = 1; i <= 30; i++) {
+    for (let i = 1; i <= 60; i++) {
       const xval = Math.round(Math.random() * 22);
       const yval = Math.round(Math.random() * 22);
 
@@ -203,7 +219,8 @@ class UnstyledGame extends React.Component {
 
       if (
         !this.walls[`level${level}`][locationString] &&
-        output[locationString] === undefined
+        output[locationString] === undefined &&
+        locationString !== "0, 0"
       ) {
         output[locationString] = false; // the boolean represents whether or not pacman has eaten the coin yet
       } else {
