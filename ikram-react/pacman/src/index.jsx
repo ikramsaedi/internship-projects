@@ -4,6 +4,7 @@ import "./index.css";
 
 import pacman from "./assets/pacman.png";
 import coin from "./assets/coin.png";
+import blank from "./assets/blank.png";
 
 class Game extends React.Component {
   constructor(props) {
@@ -44,8 +45,6 @@ class Grid extends React.Component {
       [0, 1, 2], //second row & associated y coordinates
       [0, 1, 2], //third row
     ];
-
-    this.renderedGrid = this.renderCellType(this.grid);
   }
 
   /* renderCellCoordinates() {
@@ -62,36 +61,22 @@ class Grid extends React.Component {
     console.log(this.coordinatesArray, "render cell coords");
     return this.coordinatesArray;
   } */
-
-  renderCellType(grid) {
-    //using the grid, itll iterate thru the grid and grab the coordinates
-    //then itll render each cell with these coordinates and pass it the cell type and its coordinates
-    console.log("the function is getting called");
-    let cellType;
-
+  /* 
+  assignCellCoordinates(grid) {
+    let cellCoordinates;
     for (let x = 0; x < grid.length; x++) {
       console.log("x array for loop has been entered");
       let xArray = grid[x]; //iterate thru xArray
 
       for (let y = 0; y < xArray.length; y++) {
-        console.log("y array for loop getting entered");
-        let cellCoordinates = grid[x][y];
-        console.log(cellCoordinates);
-        if (cellCoordinates === this.props.pacmanLocation[(x, y)]) {
-          console.log("first if");
-          cellType = "pacman";
-        }
-        if (this.props.coinLocations.includes(cellCoordinates)) {
-          console.log("second if");
-          cellType = "coin";
-        } else {
-          console.log("else");
-          cellType = "blank";
-        }
+        let cellXCoordinate = grid.indexOf(grid[x]);
+        let cellYCoordinate = xArray.indexOf(xArray[y]);
+        cellCoordinates = [cellXCoordinate, cellYCoordinate];
       }
     }
-    return cellType;
-  }
+    console.log(cellCoordinates, "cellCoordinates");
+    return cellCoordinates;
+  } */
 
   render() {
     console.log(this.grid);
@@ -99,12 +84,48 @@ class Grid extends React.Component {
     return (
       //make a row here
       <div className="grid-container">
-        <Cell cellType={this.renderedGrid} />
-        <Cell cellType={this.renderedGrid} />
-        <Cell cellType={this.renderedGrid} />
+        {(() => {
+          let cellType;
+          let cellCoordinates;
+          let coordinatesArray = [];
+          for (let x = 0; x < this.grid.length; x++) {
+            console.log("x array for loop has been entered");
+            let xArray = this.grid[x]; //iterate thru xArray
+
+            for (let y = 0; y < xArray.length; y++) {
+              console.log("y array for loop getting entered");
+
+              console.log(x, y, "xy");
+              console.log(this.props.pacmanLocation, "location");
+              cellCoordinates = [x, y];
+
+              coordinatesArray.push([x, y]);
+              if (
+                x === this.props.pacmanLocation[0] &&
+                y === this.props.pacmanLocation[1]
+              ) {
+                console.log("first if");
+                cellType = "pacman";
+                //is pacman location = to x & y
+              } else if (this.props.coinLocations.includes(x, y)) {
+                console.log("second if");
+                cellType = "coin";
+              } else {
+                console.log("else");
+                cellType = "blank";
+              }
+            }
+          }
+          console.log(coordinatesArray, "coordinatesArray");
+
+          let cells = coordinatesArray.map((coord) => (
+            <Cell key={coord} coordinates={coord} cellType={cellType} />
+          ));
+
+          console.log(cells);
+          return cells;
+        })()}
       </div>
-      //the p is temporary
-      //pass x coords and y coords down to cell
     );
   }
 }
@@ -121,20 +142,29 @@ class Cell extends React.Component {
   }
 
   display() {
+    let image;
+    console.log(this.props.cellType, "cellType");
+
     if (this.state.cellContents === "pacman") {
-      return <img src={pacman}> </img>;
+      image = pacman;
     }
     if (this.state.cellContents === "coin") {
-      return <img src={coin}></img>;
+      image = coin;
     }
     if (this.state.cellContents === "blank") {
-      return "blank";
+      image = blank;
     }
+
+    return image;
   }
 
   render() {
     console.log(this.coordinates, "cell");
-    return <div className="cell"></div>;
+    return (
+      <div className="cell">
+        <img src={this.display()}></img>
+      </div>
+    );
   }
 }
 
