@@ -87,7 +87,7 @@ class UnstyledGame extends React.Component {
       isPacmanMoving: false,
       currentLocation: [0, 0],
       walls: this.generateWalls(),
-      coins: this.generateCoins(), // this will be an array of objects with the form {location: [x, y], eaten: bool}
+      coins: this.generateCoins(),
       score: 0,
     };
   }
@@ -132,7 +132,7 @@ class UnstyledGame extends React.Component {
 
   movePacman() {
     let nextLocation = this.state.currentLocation.slice(); // always make copies!! arrays are stored in the heap!!
-    let coins = this.state.coins.slice();
+    let coins = Object.assign({}, this.state.coins);
     let score = this.state.score;
 
     nextLocation[0] += this.state.currentDirection[0];
@@ -150,20 +150,15 @@ class UnstyledGame extends React.Component {
         return;
       }
 
-      for (const coinNum in coins) {
-        let coin = coins[coinNum];
-
-        if (
-          nextLocation[0] === coin.location[0] &&
-          nextLocation[1] === coin.location[1] &&
-          !coin.eaten
-        ) {
-          coin.eaten = true;
-          coins.coinNum = coin;
-          score += 1;
-          break;
-        }
+      if (
+        coins[nextLocationString] === false
+        /* we don't want it to succeed on a falsy value (such as undefined) 
+        so we need to specifically check for false, rather than using !coins[nextLocationString] */
+      ) {
+        coins[nextLocationString] = true;
+        score += 1;
       }
+
       this.setState({
         currentLocation: nextLocation,
         coins: coins,
@@ -191,19 +186,21 @@ class UnstyledGame extends React.Component {
       const xval = Math.round(Math.random() * 22);
       const yval = Math.round(Math.random() * 22);
 
-      output[`${xval}, ${yval}`] = "wall";
+      output[`${xval}, ${yval}`] = "wall"; // the string is just a stand-in value, since in an object a key must have a value
     }
 
     return output;
   }
 
   generateCoins() {
-    let output = [];
+    let output = {};
     for (let i = 1; i <= 20; i++) {
       const xval = Math.round(Math.random() * 22);
       const yval = Math.round(Math.random() * 22);
 
-      output.push({ location: [xval, yval], eaten: false });
+      const locationString = `${xval}, ${yval}`;
+
+      output[locationString] = false; // the boolean represents whether or not pacman has eaten the coin yet
     }
     return output;
   }
@@ -221,11 +218,11 @@ class UnstyledGame extends React.Component {
     return (
       <div id="game" className={this.props.className}>
         <Score>Score: {this.state.score}</Score>
-        {this.state.coins.map((coin) => {
+        {Object.keys(this.state.coins).map((coin) => {
           return (
             <Coin
-              currentLocation={coin.location}
-              eaten={coin.eaten}
+              currentLocation={coin.split(", ")}
+              eaten={this.state.coins[coin]}
               size={this.gridSize}
             />
           );
