@@ -1,0 +1,17 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.cell {
+  border: 1px;
+  height: 40px;
+  width: 40px;
+  border-style: solid;
+  border-color: black;
+}
+
+.grid-container {
+  display: flex;
+}
