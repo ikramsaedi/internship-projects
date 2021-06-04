@@ -157,14 +157,22 @@ class UnstyledGame extends React.Component {
         so we need to specifically check for false, rather than using !coins[nextLocationString] */
       ) {
         coins[nextLocationString] = true;
+        const newCoinsNum = coins.coinsRemaining - 1;
+        coins.coinsRemaining = newCoinsNum;
         score += 1;
       }
 
-      this.setState({
-        currentLocation: nextLocation,
-        coins: coins,
-        score: score,
-      });
+      if (coins.coinsRemaining > 0) {
+        this.setState({
+          currentLocation: nextLocation,
+          coins: coins,
+          score: score,
+        });
+        return;
+      } else {
+        this.props.changeGameState("won");
+        return;
+      }
     } else {
       this.setState({ isPacmanMoving: false });
     }
@@ -227,6 +235,9 @@ class UnstyledGame extends React.Component {
         i--;
       }
     }
+
+    output.coinsRemaining = Object.keys(output).length;
+
     return output;
   }
 
@@ -280,7 +291,7 @@ const Game = styled(UnstyledGame)`
   margin-top: 10px;
   position: relative;
   border: 10px black solid;
-  border-radius: 5px;
+  border-radius: 8px;
 `;
 
 export default Game;
