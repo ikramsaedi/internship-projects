@@ -9,6 +9,20 @@ import blank from "./assets/blank.png";
 class Game extends React.Component {
   constructor(props) {
     super(props);
+    this.grid = [
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], //first row & associated y coordinates
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], //second row & associated y coordinates
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], //third row
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+    ];
 
     this.state = {
       pacmanLocation: [0, 0],
@@ -25,21 +39,65 @@ class Game extends React.Component {
     this.coordinatesArray = this.coordinatesArray;
   }
 
-  movementKeyHandler() {
-    //if they press the right arrow key
-    //add 1 to pacmans x coordinate
-    //if they press left arrow key, -1 to the pacman location
-    //then set limits on how they can move -> like cant move out too far left or too far right (like less than zero or more than 3)
+  coinCollisionChecker() {
+    for (let coordinates in this.state.coinLocations) {
+      if (this.state.pacmanLocation == coordinates) {
+        this.state.coinLocations[coordinates] = false;
+      }
+    }
   }
+
+  movementKeyHandler(event) {
+    let arrow = event.key;
+    if (arrow === "ArrowLeft" && !(this.state.pacmanLocation[0] === 0)) {
+      this.setState({
+        pacmanLocation: [
+          this.state.pacmanLocation[0] - 1,
+          this.state.pacmanLocation[1],
+        ],
+      });
+    } else if (
+      arrow === "ArrowRight" &&
+      !(this.state.pacmanLocation[0] === this.grid.length - 1)
+    ) {
+      //&& not = to grid.length
+      this.setState({
+        pacmanLocation: [
+          this.state.pacmanLocation[0] + 1,
+          this.state.pacmanLocation[1],
+        ],
+      });
+    } else if (arrow === "ArrowUp" && !(this.state.pacmanLocation[1] === 0)) {
+      this.setState({
+        pacmanLocation: [
+          this.state.pacmanLocation[0],
+          this.state.pacmanLocation[1] - 1,
+        ],
+      });
+    } else if (
+      arrow === "ArrowDown" &&
+      !(this.state.pacmanLocation[1] === this.grid.length - 1)
+    ) {
+      this.setState({
+        pacmanLocation: [
+          this.state.pacmanLocation[0],
+          this.state.pacmanLocation[1] + 1,
+        ],
+      });
+    }
+    this.coinCollisionChecker();
+  }
+
   render() {
+    console.log(this.state.pacmanLocation);
     return (
       <div>
         <h1> PACMAN </h1>
-        <input onKeyDown={this.movementKeyHandler}></input>
-
+        <input onKeyDown={this.movementKeyHandler.bind(this)}></input>
         <Grid
           pacmanLocation={this.state.pacmanLocation}
           coinLocations={this.state.coinLocations}
+          grid={this.grid}
         />
       </div>
     );
@@ -49,11 +107,7 @@ class Game extends React.Component {
 class Grid extends React.Component {
   constructor(props) {
     super(props);
-    this.grid = [
-      [0, 1, 2], //first row & associated y coordinates
-      [0, 1, 2], //second row & associated y coordinates
-      [0, 1, 2], //third row
-    ];
+    this.grid = this.props.grid;
   }
 
   renderCells() {
@@ -137,7 +191,6 @@ class Cell extends React.Component {
   }
 
   render() {
-    console.log(this.coordinates, "cell");
     return (
       <div className="cell">
         <img src={this.display()}></img>
