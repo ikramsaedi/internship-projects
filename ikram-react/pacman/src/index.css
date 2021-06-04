@@ -8,10 +8,16 @@
   border: 1px;
   height: 40px;
   width: 40px;
+  background-color: black;
   border-style: solid;
-  border-color: black;
+  border-color: white;
 }
 
 .grid-container {
+  flex-direction: column;
+}
+
+.row {
+  background-color: green;
   display: flex;
 }

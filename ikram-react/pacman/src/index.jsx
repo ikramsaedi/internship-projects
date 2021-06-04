@@ -12,8 +12,9 @@ class Game extends React.Component {
 
     this.state = {
       pacmanLocation: [0, 0],
-      coinLocations: [], //coin location will need work
+      coinLocations: [[0, 1]], //coin location will need work
     };
+    this.coordinatesArray = this.coordinatesArray;
   }
 
   movementKeyHandler() {
@@ -47,84 +48,138 @@ class Grid extends React.Component {
     ];
   }
 
-  /* renderCellCoordinates() {
-    let coordinatesArray = this.coordinatesArray;
-    for (let xCoord = 0; xCoord <= this.xCoordArray.length; xCoord++) { //replace this with mappping
-      for (let yCoord = 0; yCoord <= this.yCoordArray.length; yCoord++) {
-        coordinatesArray[xCoord] = yCoord;
-      }
-      //for every x coord, assign all the y coords
-    }
-    //make a coords array
-
-    this.coordinatesArray.concat(coordinatesArray);
-    console.log(this.coordinatesArray, "render cell coords");
-    return this.coordinatesArray;
-  } */
-  /* 
-  assignCellCoordinates(grid) {
+  renderCells() {
+    let cellType;
     let cellCoordinates;
-    for (let x = 0; x < grid.length; x++) {
-      console.log("x array for loop has been entered");
-      let xArray = grid[x]; //iterate thru xArray
+    //let ogCoordinatesArray = this.coordinatesArray;
+    let coordinatesArray = [];
+    let cellObject = {};
+    for (let x = 0; x < this.grid.length; x++) {
+      let xArray = this.grid[x]; //iterate thru xArray
 
       for (let y = 0; y < xArray.length; y++) {
-        let cellXCoordinate = grid.indexOf(grid[x]);
-        let cellYCoordinate = xArray.indexOf(xArray[y]);
-        cellCoordinates = [cellXCoordinate, cellYCoordinate];
+        console.log(this.props.pacmanLocation, "location");
+        cellCoordinates = [x, y];
+
+        coordinatesArray.push([x, y]);
+        if (
+          x === this.props.pacmanLocation[0] &&
+          y === this.props.pacmanLocation[1]
+        ) {
+          console.log("first if");
+          cellType = "pacman";
+          cellObject[cellCoordinates] = cellType;
+          //is pacman location = to x & y
+        } else if (
+          x === this.props.coinLocations[0][0] &&
+          y === this.props.coinLocations[0][1]
+        ) {
+          //coin location needs WORK
+          console.log("second if");
+          cellType = "coin";
+          cellObject[cellCoordinates] = cellType;
+        } else {
+          console.log("else");
+          cellType = "blank";
+          cellObject[cellCoordinates] = cellType;
+        }
       }
     }
-    console.log(cellCoordinates, "cellCoordinates");
-    return cellCoordinates;
-  } */
+    this.coordinatesArray = coordinatesArray;
+
+    return cellObject;
+  }
+
+  //   render() {
+  //     return (
+  //       //make a row here
+  //       <div className="grid-container">
+  //         <div className="row">
+  //           {(() => {
+  //             let cellObject = this.renderCell();
+  //             //extra for loop in here 2 make rows
+  //             //row 1 and all its cells etc
+  //             console.log(this.coordinatesArray, "coordinatesArray");
+  //             let cells = [];
+  //             for (let coordinate in cellObject) {
+  //               cells.push(
+  //                 <Cell
+  //                   key={coordinate}
+  //                   coordinates={coordinate}
+  //                   cellType={cellObject[coordinate]}
+  //                 />
+  //               );
+  //             }
+  // {/*             console.log(cells, "cellss");
+  //             let rowsArray = [];
+  //             let row = []; //this shld be redefined in every iteration of this loop
+  //             let newRow = "row" + rowsArray.length;
+  //             for (let cellIndex = 0; cellIndex < cells.length; cellIndex++) {
+  //               console.log("if condition", !(row.length === this.grid.length)); //currently is always true
+  //               console.log("grid length", this.grid.length); //is correctly evaluating to 3
+  //               if (!(row.length === this.grid.length)) {
+  //                 row.push(cells[cellIndex]); //satisfies the condition of pushing onto a row until it hits max number of cells
+  //                 rowsArray.push(row);
+  //               } else {
+  //                 console.log(newRow);
+  //               }
+  //               console.log(row, "row");
+  //               console.log(rowsArray, "rowArray");
+  //             }
+  //             return cells; */}
+  //           })()}
+  //         </div>
+  //       </div>
+  //     );
+  //   }
 
   render() {
-    console.log(this.grid);
-
     return (
-      //make a row here
       <div className="grid-container">
-        {(() => {
-          let cellType;
-          let cellCoordinates;
-          let coordinatesArray = [];
+        {/* {(() => {
+          let cellsObject = this.renderCells();
+          //get x and y coordinates
+          let rowsArray = [];
+          let cellsArray = []; //in the row??
+
           for (let x = 0; x < this.grid.length; x++) {
-            console.log("x array for loop has been entered");
-            let xArray = this.grid[x]; //iterate thru xArray
+            console.log(this.grid.length, "grid length");
 
-            for (let y = 0; y < xArray.length; y++) {
-              console.log("y array for loop getting entered");
-
-              console.log(x, y, "xy");
-              console.log(this.props.pacmanLocation, "location");
-              cellCoordinates = [x, y];
-
-              coordinatesArray.push([x, y]);
-              if (
-                x === this.props.pacmanLocation[0] &&
-                y === this.props.pacmanLocation[1]
-              ) {
-                console.log("first if");
-                cellType = "pacman";
-                //is pacman location = to x & y
-              } else if (this.props.coinLocations.includes(x, y)) {
-                console.log("second if");
-                cellType = "coin";
-              } else {
-                console.log("else");
-                cellType = "blank";
-              }
-            }
+            rowsArray.push(
+              <div className="row">
+                {(() => {
+                  for (let y = 0; y < this.grid.length; y++) {
+                    let cellCoordinates = [x, y];
+                    cellsArray.push(
+                      <Cell
+                        cellCoordinates={cellCoordinates}
+                        cellType={cellsObject[cellCoordinates]}
+                      />
+                    );
+                  }
+                  return cellsArray;
+                })()}
+              </div>
+            );
           }
-          console.log(coordinatesArray, "coordinatesArray");
+          console.log(rowsArray);
+          return rowsArray;
+        })()} */}
 
-          let cells = coordinatesArray.map((coord) => (
-            <Cell key={coord} coordinates={coord} cellType={cellType} />
-          ));
-
-          console.log(cells);
-          return cells;
-        })()}
+        {[...Array(this.grid.length).keys()].map((x) => {
+          return (
+            <div className="row">
+              {[...Array(this.grid.length).keys()].map((y) => {
+                return (
+                  <Cell
+                    cellCoordinates={[x, y]}
+                    cellType={this.renderCells()[[x, y]]}
+                  />
+                );
+              })}
+            </div>
+          );
+        })}
       </div>
     );
   }
@@ -169,3 +224,5 @@ class Cell extends React.Component {
 }
 
 ReactDOM.render(<Game />, document.getElementById("root"));
+
+// for eaach row create a new row
