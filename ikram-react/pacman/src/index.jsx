@@ -12,7 +12,15 @@ class Game extends React.Component {
 
     this.state = {
       pacmanLocation: [0, 0],
-      coinLocations: [[0, 1]], //coin location will need work
+      coinLocations: {
+        [[0, 1]]: true,
+        [[0, 5]]: true,
+        [[5, 0]]: true,
+        [[7, 4]]: true,
+        [[3, 4]]: true,
+        [[10, 11]]: true,
+        [[8, 9]]: true,
+      }, //coin location will need work
     };
     this.coordinatesArray = this.coordinatesArray;
   }
