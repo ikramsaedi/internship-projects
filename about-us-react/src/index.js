@@ -1,17 +1,30 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import Content from "./Content";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+function Header(props) {
+  return <h2>temp</h2>;
+}
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+function Footer(props) {
+  return <h2>more temp</h2>;
+}
+
+class Page extends React.Component {
+  render() {
+    return (
+      <div>
+        <Header />
+        <Content />
+        <Footer />
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<Page />, document.getElementById("root"));
+
+/*
+in here we can have the header and footer and import the content component?
+*/
