@@ -1,0 +1,17 @@
+.everything {
+  font-family: monospace;
+  font-size: 20px;
+  text-align: center;
+}
+
+.centre {
+  width: 30%;
+  right: 50%;
+}
+
+.image {
+  border-style: solid;
+  border-color: black;
+  border-radius: 8px;
+  border-width: 1px;
+}
