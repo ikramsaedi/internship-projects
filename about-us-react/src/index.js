@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
 import Content from "./Content";
 
 function MenuButton(props) {
@@ -16,6 +15,13 @@ function Header(props) {
     <div>
       <h2>{props.pageName}</h2>
       <div>
+        <a href="https://stileeducation.com/">
+          <img
+            src="https://www.google.com/s2/favicons?sz=64&domain_url=stileeducation.com"
+            alt=""
+          />
+        </a>
+
         <MenuButton
           content="Home"
           value="home"
@@ -44,7 +50,6 @@ function Header(props) {
 function Footer(props) {
   return (
     <div>
-      <h2>more temp</h2>
       <MenuButton
         content="Default Theme"
         onClick={(i) => props.changeTheme()}
@@ -54,7 +59,9 @@ function Footer(props) {
         onClick={(i) => props.changeTheme()}
       />
       <MenuButton content="Dev's theme" onClick={(i) => props.changeTheme()} />
-      <a href="https://stileeducation.com/">Stile</a>
+      <a href="https://stileeducation.com/">
+        <button>Stile</button>
+      </a>
     </div>
   );
 }
@@ -80,7 +87,15 @@ class Page extends React.Component {
     return (
       <div>
         <Header
-          pageName="temporary name"
+          pageName={this.state.pageContent
+            .split("-")
+            .map((word) => {
+              let working = word.split("");
+              working[0] = working[0].toUpperCase();
+              console.log(working);
+              return working.join("");
+            })
+            .join(" ")}
           changePage={(i) => this.changePage(i)}
         />
         <Content currentPage={this.state.pageContent} />
