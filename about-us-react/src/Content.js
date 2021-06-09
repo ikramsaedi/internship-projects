@@ -1,4 +1,6 @@
 import React from "react";
+import styled from "styled-components";
+
 import vinylDisk from "./resources/vinyl-disk.png";
 
 import foreverFallsApartCover from "./resources/till-forever-falls-apart-cover.jpeg";
@@ -9,7 +11,7 @@ import transparentSoulCover from "./resources/transparent-soul-cover.jpeg";
 
 function HomeContent(props) {
   return (
-    <div>
+    <div id="content" className={props.className}>
       <h2>About this internship</h2>
       <p>
         We are working as full time software engineering interns at Stile
@@ -27,7 +29,7 @@ function HomeContent(props) {
 
 function ProjectContent(props) {
   return (
-    <div>
+    <div id="content" className={props.className}>
       <h2>Our projects so far :D</h2>
       <ol>
         <li> This website in vanilla HTML and JavaScript </li>
@@ -39,7 +41,7 @@ function ProjectContent(props) {
   );
 }
 
-class TwoTruthsOneLie extends React.Component {
+class UnstyledTwoTruthsOneLie extends React.Component {
   /*
   props looks something like this:
   formName: string
@@ -88,7 +90,7 @@ class TwoTruthsOneLie extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className={this.props.className + " truths-lies"}>
         <form>
           {this.props.options.map((option) => {
             return (
@@ -104,11 +106,27 @@ class TwoTruthsOneLie extends React.Component {
             onClick={this.verifySelection.bind(this)}
           />
         </form>
-        <p>{this.props.responseMessages[this.state.optionChosen]}</p>
+        <p
+          className={
+            "truths-lies-response" +
+            (this.state.optionChosen
+              ? this.state.correct
+                ? " correct-response"
+                : " incorrect-response"
+              : " no-response")
+          }
+        >
+          {this.props.responseMessages[this.state.optionChosen]}
+        </p>
       </div>
     );
   }
 }
+
+const TwoTruthsOneLie = styled(UnstyledTwoTruthsOneLie)`
+  background-color: ${(props) => props.theme.truthsLiesBg};
+  color: ${(props) => props.theme.truthsLiesText};
+`;
 
 class MusicBox extends React.Component {
   /* 
@@ -131,18 +149,25 @@ class MusicBox extends React.Component {
   }
 
   diskAnimation(event) {
-    console.log("move disk");
-    // the actual code will be written when we do the css
+    document
+      .getElementById(`${this.props.songName}-disk`)
+      .classList.toggle("hover");
   }
 
   render() {
     return (
       <div
+        className={this.props.className + " music-box"}
         onClick={this.playPauseMusic.bind(this)}
         onMouseEnter={this.diskAnimation.bind(this)}
         onMouseLeave={this.diskAnimation.bind(this)}
       >
-        <img src={vinylDisk} alt=" " id={this.props.songName + "-disk"} />
+        <img
+          src={vinylDisk}
+          alt=" "
+          id={this.props.songName + "-disk"}
+          className="music-disk"
+        />
         <img src={this.props.albumCover} alt=" " />
         <audio src={this.props.audioPath} id={this.props.songName + "-audio"} />
       </div>
@@ -154,7 +179,7 @@ class MusicBox extends React.Component {
 
 function IkramContent(props) {
   return (
-    <div>
+    <div id="content" className={props.className}>
       <h2>Who am I?</h2>
       <p>
         I’m Ikram Saedi, a 2020 graduate of Werribee Secondary College who has
@@ -172,6 +197,7 @@ function IkramContent(props) {
           "Wrong! Tea is amazing.",
           "Correct! Coffee is terrible, take that caffeine addicts!",
         ]}
+        theme={props.theme}
       />
       <TwoTruthsOneLie
         formName="ikram-makeup"
@@ -180,12 +206,13 @@ function IkramContent(props) {
           "I love wearing full face makeup",
           "I love wearing lip gloss",
         ]}
-        correctOption={2}
+        correctOption={1}
         responseMessages={[
           "Wrong, eyeliner is so fun!",
           "Correct! I am incredibly lazy.",
           "Wrong, it's hard to go wrong with lip gloss!",
         ]}
+        theme={props.theme}
       />
       <MusicBox
         songName="transparent-soul"
@@ -208,7 +235,12 @@ function IkramContent(props) {
 
 function DevContent(props) {
   return (
-    <div>
+    <div id="content" className={props.className}>
+      <MusicBox
+        songName="forever-falls-apart"
+        albumCover={foreverFallsApartCover}
+        audioPath={foreverFallsApartAudio}
+      />
       <h2>Who am I?</h2>
       <p>
         I graduated from John Monash Science School last year, and started here
@@ -226,11 +258,7 @@ function DevContent(props) {
         Here's some facts about me, but not all of them are actually true. Can
         you guess which one's the lie?
       </p>
-      <MusicBox
-        songName="cherry-bomb"
-        albumCover={foreverFallsApartCover}
-        audioPath={foreverFallsApartAudio}
-      />
+
       <TwoTruthsOneLie
         options={[
           "I've had surgery on my nose",
@@ -244,6 +272,7 @@ function DevContent(props) {
           "Correct! I've never broken a bone in my life (touch wood)",
           "Incorrect! I am allergic to aloe vera, so is my mum (it sucks when we get sunburnt)",
         ]}
+        theme={props.theme}
       />
       <TwoTruthsOneLie
         options={[
@@ -258,27 +287,28 @@ function DevContent(props) {
           "Incorrect! Algorithmics is a HESS subject, which means some universities (such as Melbourne and Monash) recognise your studies as credits",
           "Correct! I picked up Specialist Maths in year 12, because I apparently hate myself. I only did Methods in year 11",
         ]}
+        theme={props.theme}
       />
     </div>
   );
 }
 
-function Content(props) {
+function UnstyledContent(props) {
   switch (props.currentPage) {
     case "home":
-      return <HomeContent />;
+      return <HomeContent className={props.className} />;
     case "about-dev":
-      return <DevContent />;
+      return <DevContent className={props.className} theme={props.theme} />;
     case "about-ikram":
-      return <IkramContent />;
+      return <IkramContent className={props.className} theme={props.theme} />;
     case "our-projects":
-      return <ProjectContent />;
+      return <ProjectContent className={props.className} />;
     default: // pls don't get here
   }
 }
 
-export default Content;
+const Content = styled(UnstyledContent)`
+  color: ${(props) => props.theme.contentTextColor};
+`;
 
-/* 
-in here we can have the content component, as well as all our actual components
-*/
+export default Content;
