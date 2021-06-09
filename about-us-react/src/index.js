@@ -91,6 +91,10 @@ const StyledSelect = styled.select`
   font-family: inherit;
   font-size: 18px;
   font-weight: bold;
+
+  &:hover {
+    color: ${(props) => props.theme.buttonHoverColor};
+  }
 `;
 
 const StyledLabel = styled.label`
