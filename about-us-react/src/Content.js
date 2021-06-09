@@ -9,6 +9,8 @@ import foreverFallsApartAudio from "./resources/till-forever-falls-apart-audio.m
 import transparentSoulAudio from "./resources/transparent-soul-audio.mp3";
 import transparentSoulCover from "./resources/transparent-soul-cover.jpeg";
 
+import beaverImage from "./resources/beaver.png";
+
 function HomeContent(props) {
   return (
     <div id="content" className={props.className}>
@@ -281,17 +283,20 @@ function IkramContent(props) {
         ]}
         theme={props.theme}
       />
-
-      <iframe
-        className="youtube-embed"
-        width="560"
-        height="315"
-        src="https://www.youtube.com/embed/iyNA62FrKCE"
-        title="YouTube video player"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-      ></iframe>
+      <div className="beaver-div">
+        <img src={beaverImage} className="beaver" />
+        <iframe
+          className="youtube-embed"
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/iyNA62FrKCE"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+        <img src={beaverImage} className="beaver reversed-beaver" />
+      </div>
     </div>
   );
 }
