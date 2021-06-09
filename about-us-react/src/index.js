@@ -18,6 +18,24 @@ function UnstyledMenuButton(props) {
   );
 }
 
+const MenuButton = styled(UnstyledMenuButton)`
+  background-color: ${(props) => props.theme.buttonBgColor};
+  color: ${(props) => props.theme.buttonTextColor};
+
+  &:hover {
+    color: ${(props) => props.theme.buttonHoverColor};
+  }
+`;
+
+const StyledButton = styled.button`
+  background-color: ${(props) => props.theme.buttonBgColor};
+  color: ${(props) => props.theme.buttonTextColor};
+
+  &:hover {
+    color: ${(props) => props.theme.buttonHoverColor};
+  }
+`;
+
 function UnstyledHeader(props) {
   return (
     <div id="header" className={props.className}>
@@ -64,15 +82,6 @@ const Header = styled(UnstyledHeader)`
   background-color: ${(props) => props.theme.bgColor};
   color: ${(props) => props.theme.textColor};
 `;
-const MenuButton = styled(UnstyledMenuButton)`
-  background-color: ${(props) => props.theme.buttonBgColor};
-  color: ${(props) => props.theme.buttonTextColor};
-`;
-
-const StyledButton = styled.button`
-  background-color: ${(props) => props.theme.buttonBgColor};
-  color: ${(props) => props.theme.buttonTextColor};
-`;
 
 function UnstyledFooter(props) {
   return (
@@ -117,19 +126,21 @@ class Page extends React.Component {
         textColor: "rgb(66, 178, 66);",
         buttonBgColor: "rgb(105, 207, 105)",
         buttonTextColor: "rgb(231, 252, 231)",
+        buttonHoverColor: "rgb(190, 241, 190)",
         contentTextColor: "rgb(66, 178, 66)",
         truthsLiesBg: "rgb(105, 207, 105)",
         truthsLiesText: "rgb(231, 252, 231)",
       },
       dev: {
-        pageBg: "rgb(255, 209, 202)",
-        bgColor: "rgb(255, 170, 157)",
-        textColor: "rgb(243, 77, 50)",
-        buttonBgColor: "rgb(250, 199, 223, 1)",
-        buttonTextColor: "rgb(220, 74, 143, 1)",
-        contentTextColor: "rgb(243, 148, 50, 1)",
-        truthsLiesBg: "rgb(255, 187, 118, 1)",
-        truthsLiesText: "rgb(255, 242, 227)",
+        pageBg: "rgb(106 204 204)",
+        bgColor: "rgb(156 251 255)",
+        textColor: "rgb(0 155 156);",
+        buttonBgColor: "rgb(104 207 207)",
+        buttonTextColor: "rgb(241 255 254)",
+        buttonHoverColor: "rgb(16 138 158)",
+        contentTextColor: "rgb(241 255 254)",
+        truthsLiesBg: "rgb(156 251 255)",
+        truthsLiesText: "rgb(0 155 156)",
       },
       ikram: {
         pageBg: "rgb(254, 234, 239)",
@@ -137,6 +148,7 @@ class Page extends React.Component {
         textColor: "rgb(206, 78, 112)",
         buttonBgColor: "rgb(234, 119, 150)",
         buttonTextColor: "rgb(254, 234, 239)",
+        buttonHoverColor: "rgb(249, 197, 211)",
         contentTextColor: "rgb(234, 119, 150)",
         truthsLiesBg: "rgb(234, 119, 150)",
         truthsLiesText: "rgb(254, 234, 239)",

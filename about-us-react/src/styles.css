@@ -98,3 +98,8 @@
 .music-disk.hover {
   margin-right: -90px;
 }
+
+.youtube-embed {
+  display: block;
+  margin: auto;
+}

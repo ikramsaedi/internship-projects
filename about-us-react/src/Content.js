@@ -187,7 +187,12 @@ function IkramContent(props) {
         to delve into the coding world. My true love is nature documentaries
         though, specifically marine ones!
       </p>
-      <p>Guess which of these are a lie to get a hypothetical prize</p>
+      <h4>Guess which of these are a lie to get a hypothetical prize!</h4>
+      <MusicBox
+        songName="transparent-soul"
+        albumCover={transparentSoulCover}
+        audioPath={transparentSoulAudio}
+      />
       <TwoTruthsOneLie
         formName="ikram-coffee"
         options={["I love cats", "I love tea", "I love coffee"]}
@@ -214,16 +219,12 @@ function IkramContent(props) {
         ]}
         theme={props.theme}
       />
-      <MusicBox
-        songName="transparent-soul"
-        albumCover={transparentSoulCover}
-        audioPath={transparentSoulAudio}
-      />
 
       <iframe
+        className="youtube-embed"
         width="560"
         height="315"
-        src="https://www.youtube.com/embed/dSHjcbGMzwE"
+        src="https://www.youtube.com/embed/iyNA62FrKCE"
         title="YouTube video player"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
