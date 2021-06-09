@@ -83,29 +83,41 @@ const Header = styled(UnstyledHeader)`
   color: ${(props) => props.theme.textColor};
 `;
 
+const StyledSelect = styled.select`
+  background-color: ${(props) => props.theme.buttonBgColor};
+  color: ${(props) => props.theme.buttonTextColor};
+  border: none;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: bold;
+`;
+
+const StyledLabel = styled.label`
+  background-color: ${(props) => props.theme.buttonBgColor};
+  color: ${(props) => props.theme.buttonTextColor};
+  border-radius: 4px;
+  font-size: 18px;
+  font-weight: bold;
+`;
+
 function UnstyledFooter(props) {
   return (
     <div id="footer" className={props.className}>
-      <MenuButton
-        theme={props.theme}
-        content="Default Theme"
-        value="default"
-        onClick={(i) => props.changeTheme(i)}
-      />
-      <MenuButton
-        theme={props.theme}
-        content="Ikram's theme"
-        value="ikram"
-        onClick={(i) => props.changeTheme(i)}
-      />
-      <MenuButton
-        theme={props.theme}
-        content="Dev's theme"
-        value="dev"
-        onClick={(i) => props.changeTheme(i)}
-      />
+      <StyledLabel htmlFor="themes">
+        Select a theme: {""}
+        <StyledSelect
+          name="themes"
+          theme={props.theme}
+          onChange={props.changeTheme}
+        >
+          <option value="default">Default</option>
+          <option value="dev">Dev's</option>
+          <option value="ikram">Ikram's</option>
+        </StyledSelect>
+      </StyledLabel>
       <a href="https://stileeducation.com/">
-        <StyledButton theme={props.theme}>Stile</StyledButton>
+        <StyledButton theme={props.theme}>Stile's website</StyledButton>
       </a>
     </div>
   );
@@ -171,24 +183,7 @@ class Page extends React.Component {
   }
 
   changeTheme(event) {
-    console.log("this is a theme");
-    let newTheme = event.target.value;
-    console.log(newTheme, "newTHeme");
-    if (newTheme === "ikram") {
-      this.setState({
-        theme: "ikram",
-      });
-    }
-    if (newTheme === "dev") {
-      this.setState({
-        theme: "dev",
-      });
-    }
-    if (newTheme === "default") {
-      this.setState({
-        theme: "default",
-      });
-    }
+    this.setState({ theme: event.target.value });
   }
 
   render() {
@@ -206,6 +201,7 @@ class Page extends React.Component {
             })
             .join(" ")}
           changePage={(i) => this.changePage(i)}
+          changeTheme={(i) => this.changeTheme(i)}
         />
         <Content
           currentPage={this.state.pageContent}

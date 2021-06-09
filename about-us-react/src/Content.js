@@ -27,15 +27,77 @@ function HomeContent(props) {
   );
 }
 
+const StyledLink = styled.a`
+  color: ${(props) => props.theme.contentTextColor};
+
+  &:visited {
+    color: ${(props) => props.theme.contentTextColor};
+  }
+`;
+
 function ProjectContent(props) {
   return (
     <div id="content" className={props.className}>
       <h2>Our projects so far :D</h2>
       <ol>
-        <li> This website in vanilla HTML and JavaScript </li>
-        <li> Hangman game </li>
-        <li> Pacman game</li>
-        <li> This website in React </li>
+        <li>
+          <StyledLink
+            href="https://github.com/StileEducation/internship-2021/tree/main/about-us-website"
+            theme={props.theme}
+          >
+            This website in vanilla HTML and JavaScript
+          </StyledLink>
+        </li>
+        <li>
+          Hangman game in React
+          <ul>
+            <li>
+              <StyledLink
+                theme={props.theme}
+                href="https://github.com/StileEducation/internship-2021/tree/main/ikram-react/hangman"
+              >
+                Ikram's Hangman
+              </StyledLink>
+            </li>
+            <li>
+              <StyledLink
+                theme={props.theme}
+                href="https://github.com/StileEducation/internship-2021/tree/main/dev-react/hangman"
+              >
+                Dev's Hangman
+              </StyledLink>
+            </li>
+          </ul>
+        </li>
+
+        <li> Pacman game in React</li>
+        <ul>
+          <li>
+            <StyledLink
+              theme={props.theme}
+              href="https://github.com/StileEducation/internship-2021/tree/main/ikram-react/pacman/src"
+            >
+              Ikram's Pacman
+            </StyledLink>
+          </li>
+          <li>
+            <StyledLink
+              theme={props.theme}
+              href="https://github.com/StileEducation/internship-2021/tree/main/dev-react/pacman"
+            >
+              Dev's Pacman
+            </StyledLink>
+          </li>
+        </ul>
+
+        <li>
+          <StyledLink
+            href="https://github.com/StileEducation/internship-2021/tree/about-us-react/about-us-react"
+            theme={props.theme}
+          >
+            This website in React
+          </StyledLink>
+        </li>
       </ol>
     </div>
   );
@@ -303,7 +365,7 @@ function UnstyledContent(props) {
     case "about-ikram":
       return <IkramContent className={props.className} theme={props.theme} />;
     case "our-projects":
-      return <ProjectContent className={props.className} />;
+      return <ProjectContent className={props.className} theme={props.theme} />;
     default: // pls don't get here
   }
 }
