@@ -1,12 +1,30 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import deepClone from "deep-clone";
 import "./index.css";
 import { GameSetup, GameBoard } from "./GameComponents";
 
 class Player {
-  constructor() {
+  constructor(shipTypes, gridSize) {
     this.ships = {};
+    this.shipCells = {};
+    this.allCells = this.generateAllCells(gridSize);
     this.shipsRemaining = 5;
+  }
+
+  generateShips(shipTypes, gridSize, shipsSave, shipsCellsSave) {
+  }
+
+  generateAllCells(gridSize) {
+    let cells = {};
+
+    for (let i = 0; i < gridSize; i++) {
+      for (let j = 0; j < gridSize; j++) {
+        cells[`${i}, ${j}`] = " ";
+      }
+    }
+
+    return cells;
   }
 }
 
@@ -31,13 +49,28 @@ function SwitchScreen(props) {
 class GameController extends React.Component {
   constructor(props) {
     super(props);
+    this.shipTypes = [2, 2, 3, 3, 3, 4];
+    this.gridSize = 10;
     this.state = {
       gameState: "playing",
       currentPlayer: 1,
-      switching: true,
-      player1: new Player(),
-      player2: new Player(),
+      switching: false,
+      player1: new Player(this.shipTypes, this.gridSize),
+      player2: new Player(this.shipTypes, this.gridSize),
     };
+  }
+
+  inGameClickHandler(event) {
+    console.log("click");
+    const cellClicked = event.target.value;
+
+    console.log("cellClicked:", cellClicked); // DEBUG
+
+    let player = deepClone(this.state[`player${this.state.currentPlayer}`]);
+
+    player.allCells[cellClicked] = "x";
+
+    this.setState({ [`player${this.state.currentPlayer}`]: player });
   }
 
   render() {
@@ -53,12 +86,21 @@ class GameController extends React.Component {
       show win/lose screen
     */
     if (this.state.gameState === "setup") {
-      return <GameSetup player={this.state.currentPlayer} />;
+      return (
+        <GameSetup player={this.state.currentPlayer} gridSize={this.gridSize} />
+      );
     } else if (this.state.gameState === "playing") {
       if (this.state.switching) {
         return <SwitchScreen player={this.state.currentPlayer} />;
       } else {
-        return <GameBoard player={this.state.currentPlayer} />;
+        return (
+          <GameBoard
+            player={this.state.currentPlayer}
+            gridSize={this.gridSize}
+            allCells={this.state[`player${this.state.currentPlayer}`].allCells}
+            clickHandler={(i) => this.inGameClickHandler(i)}
+          />
+        );
       }
     } else if (this.state.gameState === "endgame") {
       return <EndScreen />;
