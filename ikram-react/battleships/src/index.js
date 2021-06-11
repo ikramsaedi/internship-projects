@@ -68,7 +68,6 @@ class GameReferee extends React.Component {
     return (
       <div>
         <Board />
-        <Board />
       </div>
     );
   }
@@ -77,6 +76,14 @@ class GameReferee extends React.Component {
 class Board extends React.Component {
   constructor(props) {
     super(props);
+    this.shipsObject = {
+      ship1: ["0, 1", "0, 2", "0, 3"],
+    };
+
+    this.state = {
+      shipsCurrentlyGuessed: {},
+      shipsGuessed: [],
+    };
   }
 
   onClickCellHandler() {}
@@ -86,23 +93,58 @@ class Board extends React.Component {
   render() {
     return (
       <div>
-        <Grid />
+        <Grid shipsObject={this.shipsObject} />
       </div>
     );
   }
 }
+
+// shipsGuessed ={
+//  ship1: [[0,1], [0,2]]
+//}
 
 class Grid extends React.Component {
   constructor(props) {
     super(props);
   }
 
-  renderCells() {}
+  renderCells() {
+    //this is just making the cells object & cell type
+    let cellType;
+    let cellsObject = {};
+    let rowArray = [];
+
+    for (let row = 0; row <= 10; row++) {
+      rowArray.push(rowArray[row]);
+      for (let column = 0; column < 10; column++) {
+        cellType = "blank";
+        cellsObject[[column, row]] = cellType;
+
+        if (this.props.shipsObject["ship1"].includes((column, row))) {
+          console.log("congrats this is the if statement");
+        }
+      }
+      return cellsObject;
+    }
+  }
 
   render() {
     return (
-      <div>
-        <Cell />
+      <div className="grid-container">
+        {[...Array(11).keys()].map((row) => {
+          return (
+            <div className="row">
+              {[...Array(11).keys()].map((column) => {
+                return (
+                  <Cell
+                    cellCoordinates={[column, row]}
+                    cellType={this.renderCells()}
+                  />
+                );
+              })}
+            </div>
+          );
+        })}
       </div>
     );
   }
@@ -111,6 +153,7 @@ class Grid extends React.Component {
 class Cell extends React.Component {
   constructor(props) {
     super(props);
+    this.cellType = this.props.cellType;
   }
 
   render() {

@@ -5,3 +5,17 @@
   border-style: solid;
   border-color: black;
 }
+
+.grid-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.ship {
+  background-color: lightblue;
+}
