@@ -78,22 +78,34 @@ class Board extends React.Component {
     super(props);
     this.shipsObject = {
       ship1: ["0, 1", "0, 2", "0, 3"],
+      ship2: ["3, 2", "4, 2", "5, 2"],
     };
 
     this.state = {
       shipsCurrentlyGuessed: {},
       shipsGuessed: [],
+      blankCellsGuessed: [],
     };
   }
 
-  onClickCellHandler() {}
+  onClickCellHandler() {
+    //needs work
+    console.log("this is a cell");
+    let className;
+    className = "selected-cell";
+    this.onGuessShip();
+    return className;
+  }
 
   onGuessShip() {}
 
   render() {
     return (
       <div>
-        <Grid shipsObject={this.shipsObject} />
+        <Grid
+          shipsObject={this.shipsObject}
+          onClickCellHandler={() => this.onClickCellHandler()}
+        />
       </div>
     );
   }
@@ -108,24 +120,13 @@ class Grid extends React.Component {
     super(props);
   }
 
-  renderCells() {
-    //this is just making the cells object & cell type
-    let cellType;
-    let cellsObject = {};
-    let rowArray = [];
-
-    for (let row = 0; row <= 10; row++) {
-      rowArray.push(rowArray[row]);
-      for (let column = 0; column < 10; column++) {
-        cellType = "blank";
-        cellsObject[[column, row]] = cellType;
-
-        if (this.props.shipsObject["ship1"].includes((column, row))) {
-          console.log("congrats this is the if statement");
-        }
+  isShip(column, row) {
+    for (let shipNumber in this.props.shipsObject) {
+      if (this.props.shipsObject[shipNumber].includes(`${column}, ${row}`)) {
+        return true;
       }
-      return cellsObject;
     }
+    return false;
   }
 
   render() {
@@ -138,7 +139,8 @@ class Grid extends React.Component {
                 return (
                   <Cell
                     cellCoordinates={[column, row]}
-                    cellType={this.renderCells()}
+                    onClick={this.props.onClickCellHandler}
+                    isShip={this.isShip(column, row)}
                   />
                 );
               })}
@@ -153,11 +155,15 @@ class Grid extends React.Component {
 class Cell extends React.Component {
   constructor(props) {
     super(props);
-    this.cellType = this.props.cellType;
+    this.isShip = this.props.isShip;
   }
 
   render() {
-    return <div className="cell"></div>;
+    let className = "cell";
+    if (this.isShip) {
+      className = "cell ship";
+    }
+    return <div className={className} onClick={this.props.onClick}></div>;
   }
 }
 
