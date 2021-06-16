@@ -67,6 +67,7 @@ class GameReferee extends React.Component {
   render() {
     return (
       <div>
+        <h1>Battleships!</h1>
         <Board />
       </div>
     );
@@ -79,6 +80,7 @@ class Board extends React.Component {
     this.shipsObject = {
       ship1: ["0, 1", "0, 2", "0, 3"],
       ship2: ["3, 2", "4, 2", "5, 2"],
+      ship3: ["5, 6", "5, 7", "5, 8"],
     };
 
     this.state = {
@@ -87,14 +89,9 @@ class Board extends React.Component {
       blankCellsGuessed: [],
     };
   }
-
-  onClickCellHandler() {
-    //needs work
-    console.log("this is a cell");
-    let className;
-    className = "selected-cell";
-    this.onGuessShip();
-    return className;
+  sendClickStatus(cellCoordinates) {
+    this.state.blankCellsGuessed.push(cellCoordinates);
+    console.log(this.state.blankCellsGuessed);
   }
 
   onGuessShip() {}
@@ -104,16 +101,14 @@ class Board extends React.Component {
       <div>
         <Grid
           shipsObject={this.shipsObject}
-          onClickCellHandler={() => this.onClickCellHandler()}
+          sendClickStatus={(isSelected, cellCoordinates) =>
+            this.sendClickStatus(isSelected, cellCoordinates)
+          }
         />
       </div>
     );
   }
 }
-
-// shipsGuessed ={
-//  ship1: [[0,1], [0,2]]
-//}
 
 class Grid extends React.Component {
   constructor(props) {
@@ -139,7 +134,7 @@ class Grid extends React.Component {
                 return (
                   <Cell
                     cellCoordinates={[column, row]}
-                    onClick={this.props.onClickCellHandler}
+                    sendClickStatus={this.props.sendClickStatus}
                     isShip={this.isShip(column, row)}
                   />
                 );
@@ -156,14 +151,37 @@ class Cell extends React.Component {
   constructor(props) {
     super(props);
     this.isShip = this.props.isShip;
+    this.cellCoordinates = this.props.cellCoordinates;
+
+    this.state = {
+      isSelected: false,
+    };
+  }
+  onClickCellHandler() {
+    this.setState({
+      isSelected: true,
+    });
+    this.props.sendClickStatus(this.props.cellCoordinates);
   }
 
   render() {
     let className = "cell";
-    if (this.isShip) {
+    if (this.isShip && !this.state.isSelected) {
       className = "cell ship";
     }
-    return <div className={className} onClick={this.props.onClick}></div>;
+    if (this.isShip && this.state.isSelected) {
+      className = "cell selected-ship";
+    }
+    if (!this.isShip && this.state.isSelected) {
+      className = "cell selected-cell";
+    }
+
+    return (
+      <div
+        className={className}
+        onClick={() => this.onClickCellHandler()}
+      ></div>
+    );
   }
 }
 

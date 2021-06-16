@@ -19,3 +19,11 @@
 .ship {
   background-color: lightblue;
 }
+
+.selected-cell {
+  background-color: lightgreen;
+}
+
+.selected-ship {
+  background-color: yellow;
+}
