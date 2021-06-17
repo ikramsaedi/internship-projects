@@ -21,9 +21,9 @@
 }
 
 .selected-cell {
-  background-color: lightgreen;
+  background-color: grey;
 }
 
 .selected-ship {
-  background-color: yellow;
+  background-color: lightgreen;
 }

@@ -16,19 +16,25 @@ class GameState extends React.Component {
       gameState: "playing",
     });
   }
-  onChangeGameState() {
+  onChangeGameState(gameState) {
+    this.setState({
+      gameState: gameState,
+    });
+  }
+  render() {
     if (this.state.gameState === "start") {
       return <Start onClick={(event) => this.onClickStartButton(event)} />;
     }
     if (this.state.gameState === "playing") {
-      return <GameReferee />;
+      return (
+        <GameReferee
+          onChangeGameState={(gameState) => this.onChangeGameState(gameState)}
+        />
+      );
     }
     if (this.state.gameState === "end") {
       return <End />;
     }
-  }
-  render() {
-    return this.onChangeGameState();
   }
 }
 
@@ -44,7 +50,7 @@ function Start(props) {
 function End(props) {
   return (
     <div>
-      <p> Winnner prop won</p>
+      <p> You've won! </p>
     </div>
   );
 }
@@ -60,15 +66,23 @@ class GameReferee extends React.Component {
 
   playerSwitch() {}
 
-  gameOutcome() {
-    //maybe not going to be in this
+  gameOutcome(shipsObject, shipsGuessed) {
+    let gameState;
+    if (Object.keys(shipsObject).length === shipsGuessed.length) {
+      gameState = "end";
+      this.props.onChangeGameState(gameState);
+    }
   }
 
   render() {
     return (
       <div>
         <h1>Battleships!</h1>
-        <Board />
+        <Board
+          gameOutcome={(shipsObject, shipsGuessed) =>
+            this.gameOutcome(shipsObject, shipsGuessed)
+          }
+        />
       </div>
     );
   }
@@ -84,7 +98,6 @@ class Board extends React.Component {
     };
 
     this.state = {
-      shipCellsGuessed: {},
       shipsGuessed: [],
       blankCellsGuessed: [],
     };
@@ -111,20 +124,12 @@ class Board extends React.Component {
         });
       }
     }
-
-    this.demo();
-  }
-
-  demo() {
-    if (
-      Object.keys(this.shipsObject).length === this.state.shipsGuessed.length
-    ) {
-      console.log("u won");
-    }
   }
 
   render() {
     console.log(this.state.shipsGuessed, "shiipsGuessed");
+
+    this.props.gameOutcome(this.shipsObject, this.state.shipsGuessed);
     return (
       <div>
         <Grid
@@ -197,7 +202,7 @@ class Cell extends React.Component {
   render() {
     let className = "cell";
     if (this.isShip && !this.state.isSelected) {
-      className = "cell ship";
+      className = "cell";
     }
     if (this.isShip && this.state.isSelected) {
       className = "cell selected-ship";
