@@ -84,27 +84,54 @@ class Board extends React.Component {
     };
 
     this.state = {
-      shipsCurrentlyGuessed: {},
+      shipCellsGuessed: {},
       shipsGuessed: [],
       blankCellsGuessed: [],
     };
   }
-  sendClickStatus(cellCoordinates) {
-    this.state.blankCellsGuessed.push(cellCoordinates);
-    console.log(this.state.blankCellsGuessed);
+  sendClickStatus(column, row) {
+    this.state.blankCellsGuessed.push(`${column}, ${row}`);
+    this.onGuessShip();
   }
 
-  onGuessShip() {}
+  onGuessShip() {
+    //compare the ship array with the
+    //want to make the arrays equal each other
+    //using blankCells for now
+
+    for (let shipNumber in this.shipsObject) {
+      if (
+        !this.state.shipsGuessed.includes(shipNumber) &&
+        this.shipsObject[shipNumber].every((shipArrayElement) =>
+          this.state.blankCellsGuessed.includes(shipArrayElement)
+        )
+      ) {
+        this.setState({
+          shipsGuessed: this.state.shipsGuessed.concat(shipNumber),
+        });
+      }
+    }
+
+    this.demo();
+  }
+
+  demo() {
+    if (
+      Object.keys(this.shipsObject).length === this.state.shipsGuessed.length
+    ) {
+      console.log("u won");
+    }
+  }
 
   render() {
+    console.log(this.state.shipsGuessed, "shiipsGuessed");
     return (
       <div>
         <Grid
           shipsObject={this.shipsObject}
-          sendClickStatus={(isSelected, cellCoordinates) =>
-            this.sendClickStatus(isSelected, cellCoordinates)
-          }
+          sendClickStatus={(column, row) => this.sendClickStatus(column, row)}
         />
+        <p>You've guessed {this.state.shipsGuessed.length} ships!</p>
       </div>
     );
   }
@@ -161,7 +188,10 @@ class Cell extends React.Component {
     this.setState({
       isSelected: true,
     });
-    this.props.sendClickStatus(this.props.cellCoordinates);
+    this.props.sendClickStatus(
+      this.props.cellCoordinates[0],
+      this.props.cellCoordinates[1]
+    );
   }
 
   render() {
