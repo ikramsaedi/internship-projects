@@ -1,0 +1,29 @@
+.cell {
+  height: 40px;
+  width: 40px;
+  border: 1px;
+  border-style: solid;
+  border-color: black;
+}
+
+.grid-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.ship {
+  background-color: lightblue;
+}
+
+.selected-cell {
+  background-color: grey;
+}
+
+.selected-ship {
+  background-color: lightgreen;
+}
