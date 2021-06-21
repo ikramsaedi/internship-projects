@@ -16,14 +16,16 @@ function UnstyledCell(props) {
 }
 
 const Cell = styled(UnstyledCell)`
-  min-width: 64px;
-  height: 64px;
-  border: 1px black solid;
   background-color: white;
-  margin-right: -1px;
-  margin-top: -3px;
+  border: 1px black solid;
+  font-size: 64px;
   font-weight: bold;
-  padding: 0px;
+  height: 64px;
+  line-height: 64px;
+  margin-right: -1px;
+  margin-top: -1px;
+  width: 64px;
+  padding: 0;
   vertical-align: top;
 
   &:hover {

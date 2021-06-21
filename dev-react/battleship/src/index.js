@@ -7,12 +7,50 @@ import { GameSetup, GameBoard } from "./GameComponents";
 class Player {
   constructor(shipTypes, gridSize) {
     this.ships = {};
-    this.shipCells = {};
+    this.shipCells = this.generateShips(gridSize);
     this.allCells = this.generateAllCells(gridSize);
     this.shipsRemaining = 5;
   }
 
-  generateShips(shipTypes, gridSize, shipsSave, shipsCellsSave) {
+  generateShips(gridSize) {
+    // const orientations = ["vertical", "horizontal"];
+    // let ships = {};
+    // let shipCells = {};
+    // for (let i in shipTypes) {
+    //   const orientation = orientations[Math.round(Math.random())];
+    //   const startCell = [Math.round(Math.random() * gridSize - 1)];
+    //   let ship = [];
+    //   for (let j = 1; j < shipTypes[i]; j++) {
+    //     if (orientation === "vertical") {
+    //       if (!shipCells[[startCell[0], startCell[1] + j]]) {
+    //         ship.push([startCell[0], startCell[1] + j]);
+    //       } else {
+    //         break;
+    //       }
+    //     } else if (orientation === "horizontal") {
+    //       if (!shipCells[[startCell[0] + j, startCell[1]]]) {
+    //         ship.push([startCell[0] + j, startCell[1]]);
+    //       } else {
+    //         break;
+    //       }
+    //     }
+    //   }
+    //   if (ship.length === shipTypes[i]) {
+    //     shipsSave = ships;
+    //     shipsCellsSave = shipCells;
+    //   }
+    //}
+
+    let shipsCells = {};
+
+    for (let i = 0; i < 20; i++) {
+      const x = Math.round(Math.random() * (gridSize - 1));
+      const y = Math.round(Math.random() * (gridSize - 1));
+
+      shipsCells[`${x}, ${y}`] = "ship";
+    }
+
+    return shipsCells;
   }
 
   generateAllCells(gridSize) {
@@ -64,11 +102,20 @@ class GameController extends React.Component {
     console.log("click");
     const cellClicked = event.target.value;
 
-    console.log("cellClicked:", cellClicked); // DEBUG
+    console.log("cellClicked:", cellClicked, typeof cellClicked); // DEBUG
 
     let player = deepClone(this.state[`player${this.state.currentPlayer}`]);
 
-    player.allCells[cellClicked] = "x";
+    console.log(
+      "player.shipCells[cellClicked]:",
+      player.shipCells[cellClicked]
+    ); // DEBUG
+
+    if (player.shipCells[cellClicked]) {
+      player.allCells[cellClicked] = "X";
+    } else {
+      player.allCells[cellClicked] = "·";
+    }
 
     this.setState({ [`player${this.state.currentPlayer}`]: player });
   }
