@@ -2,15 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 
-import rustySpottedCat from "./assets/rusty-spotted-cat.jpeg";
-import beaver from "./assets/beaver.jpeg";
-import blanketSquid from "./assets/blanket-squid.jpeg";
-import vogelkop from "./assets/vogelkop.png";
-
 class Website extends React.Component {
   constructor(props) {
     super(props);
-
+    this.buttonTexts = ["all habitats", "aquatic", "forest", "snowy"];
     this.state = {
       filter: "no filter",
     };
@@ -26,36 +21,61 @@ class Website extends React.Component {
     return (
       <div>
         <h1>Animal Gallery</h1>
-        <NavBar />
+        <NavBar buttonTexts={this.buttonTexts} />
         <Gallery />
-        <img src={require("./assets/rusty-spotted-cat.jpeg").default} alt="" />
+      </div>
+    );
+  }
+}
+class NavBar extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <div className="navbar">
+        {this.props.buttonTexts.map((element, index) => (
+          <NavBarButton text={element} />
+        ))}
       </div>
     );
   }
 }
 
+class NavBarButton extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <div>
+        <button>{this.props.text}</button>
+      </div>
+    );
+  }
+}
 class Gallery extends React.Component {
   constructor(props) {
     super(props);
 
     this.cellsArray = [
       {
-        imgSrc: rustySpottedCat,
+        imgSrc: "./assets/rusty-spotted-cat.jpeg",
         habitat: "forest",
         fact: "The rusty spotted cat is the smallest adult cat species in the world, weighing 1.4kg on average!",
       },
       {
-        imgSrc: beaver,
+        imgSrc: "./assets/beaver.jpeg",
         habitat: "aquatic",
         fact: "Beavers have orange teeth because of the iron present in them, allowing them to cut down trees!",
       },
       {
-        imgSrc: blanketSquid,
+        imgSrc: "./assets/blanket-squid.jpeg",
         habitat: "aquatic",
         fact: "Female blanket squid (as displayed) can be long as 1.8metres whereas their male counterparts are the size of a walnut!",
       },
       {
-        imgSrc: vogelkop,
+        imgSrc: "./assets/vogelkop.png",
         habitat: "forest",
         fact: "This is their courtship dance",
       },
@@ -77,54 +97,17 @@ class Grid extends React.Component {
     super(props);
   }
 
-  loopy() {
-    for (let x = 0; x < 3; x++) {
-      <div />;
-    }
-    return <div />;
-  }
   render() {
-    console.log(this.props.cellsArray[0]["imgSrc"]);
     return (
       <div className="grid-container">
-        {/*         {(() => {
-         for (let x = 0; x < Math.ceil(this.props.cellsArray / 3); x++) {
-            <div className="row">{(() => {})()}</div>;
-          }
-          return <div />;
-        })()} */}
-
-        {/* {(() => {
-          for (
-            let cellindex = 0;
-            cellindex < this.props.cellsArray.length;
-            cellindex++
-          ) {
-            if (cellindex % 3 === 0) {
-              return (
-                <div className="row" key={cellindex}>
-                  <Cell
-                    className="cell"
-                    imgSrc={this.props.cellsArray[cellindex]["imgSrc"]}
-                  />
-                  <Cell
-                    className="cell"
-                    imgSrc={this.props.cellsArray[cellindex]["imgSrc"]}
-                  />
-                </div>
-              );
-            }
-          }
-        })()} */}
-
         {this.props.cellsArray.map((element, cellindex) => {
           if (cellindex % 3 === 0) {
             return (
               <div className="row">
                 {[...Array(3).keys()].map((x) => {
-                  console.log(cellindex, "cellindex");
-                  console.log(cellindex + x, "+x");
+                  //iterating up until 3
                   if (this.props.cellsArray[cellindex + x] !== undefined) {
+                    //cellindex + x is cellindex + 0, +1, +2, and this number is used to access the objs in cellsArray
                     return (
                       <Cell
                         className="cell"
@@ -148,37 +131,13 @@ class Cell extends React.Component {
   }
 
   render() {
-    console.log(this.props.number);
+    console.log(this.props.number); //require("./assets/rusty-spotted-cat.jpeg").default is the syntax
     return (
       <div>
-        <img className={this.props.className} src={this.props.imgSrc}></img>
-      </div>
-    );
-  }
-}
-
-class NavBar extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    return (
-      <div>
-        <h2> NavBar</h2>
-        <NavBarButton />
-      </div>
-    );
-  }
-}
-
-class NavBarButton extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    return (
-      <div>
-        <button>Navbar button</button>
+        <img
+          className={this.props.className}
+          src={require(`${this.props.imgSrc}`).default}
+        ></img>
       </div>
     );
   }
