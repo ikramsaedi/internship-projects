@@ -100,26 +100,33 @@ class Grid extends React.Component {
   render() {
     return (
       <div className="grid-container">
-        {this.props.cellsArray.map((element, cellindex) => {
-          if (cellindex % 3 === 0) {
+        {(() => {
+          return [
+            ...Array(Math.ceil(this.props.cellsArray.length / 3)).keys(),
+          ].map((row) => {
             return (
               <div className="row">
-                {[...Array(3).keys()].map((x) => {
-                  //iterating up until 3
-                  if (this.props.cellsArray[cellindex + x] !== undefined) {
-                    //cellindex + x is cellindex + 0, +1, +2, and this number is used to access the objs in cellsArray
-                    return (
-                      <Cell
-                        className="cell"
-                        imgSrc={this.props.cellsArray[cellindex + x]["imgSrc"]}
-                      />
-                    );
-                  }
+                {[
+                  ...Array(
+                    Math.min(this.props.cellsArray.length - row * 3, 3)
+                  ).keys(),
+                ].map((column) => {
+                  console.log([
+                    ...Array(
+                      Math.min(this.props.cellsArray.length - row * 3, 3)
+                    ).keys(),
+                  ]);
+                  return (
+                    <Cell
+                      imgSrc={this.props.cellsArray[row * 3 + column]["imgSrc"]}
+                      className="cell"
+                    />
+                  );
                 })}
               </div>
             );
-          }
-        })}
+          });
+        })()}
       </div>
     );
   }
