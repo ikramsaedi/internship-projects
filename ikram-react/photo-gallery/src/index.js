@@ -79,6 +79,26 @@ class Gallery extends React.Component {
         habitat: "forest",
         fact: "This is their courtship dance",
       },
+      {
+        imgSrc: "./assets/bigfin-squid.jpeg",
+        habitat: "aquatic",
+        fact: "Up to 7 metres long",
+      },
+      {
+        imgSrc: "./assets/macgregor-bowerbird.jpeg",
+        habitat: "forest",
+        fact: "Male MacGregor's bowerbirds make towers of sticks, dead flowers of up to a metre tall that they maintain and decorate for up to 7 years to attract a mate.",
+      },
+      {
+        imgSrc: "./assets/vampire-squid.jpeg",
+        habitat: "aquatic",
+        fact: "Vampire squid are not threatening and are like the vaccuum of the ocean as they consume small particles like dead plankton and fecal pellets.",
+      },
+      {
+        imgSrc: "./assets/raccoon.jpeg",
+        habitat: "forest",
+        fact: "Raccoons wash their food before they eat it!",
+      },
     ];
   }
 
@@ -96,26 +116,23 @@ class Grid extends React.Component {
   constructor(props) {
     super(props);
   }
-
+  //this.props.cellsArray.length / 3 = row number
+  //Math.ceil -> rounds it up
   render() {
     return (
       <div className="grid-container">
         {(() => {
+          let cellsLength = this.props.cellsArray.length;
+          let rowsAmount = Math.ceil(cellsLength / 3);
+
+          //console.log(range(0, 10));
           return [
-            ...Array(Math.ceil(this.props.cellsArray.length / 3)).keys(),
+            ...Array(rowsAmount).keys(), //array.keys ->this just gives us the range of numbers that becomes ROWS
           ].map((row) => {
+            let rowLength = Math.min(cellsLength - row * 3, 3);
             return (
               <div className="row">
-                {[
-                  ...Array(
-                    Math.min(this.props.cellsArray.length - row * 3, 3)
-                  ).keys(),
-                ].map((column) => {
-                  console.log([
-                    ...Array(
-                      Math.min(this.props.cellsArray.length - row * 3, 3)
-                    ).keys(),
-                  ]);
+                {[...Array(rowLength).keys()].map((column) => {
                   return (
                     <Cell
                       imgSrc={this.props.cellsArray[row * 3 + column]["imgSrc"]}
@@ -138,7 +155,7 @@ class Cell extends React.Component {
   }
 
   render() {
-    console.log(this.props.number); //require("./assets/rusty-spotted-cat.jpeg").default is the syntax
+    //require("./assets/rusty-spotted-cat.jpeg").default is the syntax
     return (
       <div>
         <img
