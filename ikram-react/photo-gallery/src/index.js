@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
+import _, { range } from "underscore";
 
 class Website extends React.Component {
   constructor(props) {
@@ -31,6 +32,7 @@ class NavBar extends React.Component {
   constructor(props) {
     super(props);
   }
+
   render() {
     return (
       <div className="navbar">
@@ -116,23 +118,18 @@ class Grid extends React.Component {
   constructor(props) {
     super(props);
   }
-  //this.props.cellsArray.length / 3 = row number
-  //Math.ceil -> rounds it up
   render() {
+    let cellsLength = this.props.cellsArray.length;
+    let rowsAmount = Math.ceil(cellsLength / 3);
     return (
       <div className="grid-container">
         {(() => {
-          let cellsLength = this.props.cellsArray.length;
-          let rowsAmount = Math.ceil(cellsLength / 3);
-
-          //console.log(range(0, 10));
-          return [
-            ...Array(rowsAmount).keys(), //array.keys ->this just gives us the range of numbers that becomes ROWS
-          ].map((row) => {
+          return range(0, rowsAmount).map((row) => {
             let rowLength = Math.min(cellsLength - row * 3, 3);
+
             return (
               <div className="row">
-                {[...Array(rowLength).keys()].map((column) => {
+                {range(0, rowLength).map((column) => {
                   return (
                     <Cell
                       imgSrc={this.props.cellsArray[row * 3 + column]["imgSrc"]}
