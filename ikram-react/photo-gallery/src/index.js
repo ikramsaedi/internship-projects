@@ -6,15 +6,14 @@ import _, { range } from "underscore";
 class Website extends React.Component {
   constructor(props) {
     super(props);
-    this.buttonTexts = ["all habitats", "aquatic", "forest", "snowy"];
+    this.buttonTexts = ["all habitats", "aquatic", "forest", "snow"];
     this.updateFilter = this.updateFilter.bind(this);
     this.state = {
-      filter: "no filter",
+      filter: "all habitats",
     };
   }
 
   updateFilter(filterName) {
-    console.log(filterName, "in update filter");
     this.setState({
       filter: filterName,
     });
@@ -26,9 +25,9 @@ class Website extends React.Component {
         <h1>Animal Gallery</h1>
         <NavBar
           buttonTexts={this.buttonTexts}
-          updateFilter={this.updateFilter}
+          updateFilter={this.updateFilter.bind(this)}
         />
-        <Gallery filter={this.state.filter} />
+        <Gallery filter={this.state.filter} buttonTexts={this.buttonTexts} />
       </div>
     );
   }
@@ -37,13 +36,7 @@ class NavBar extends React.Component {
   constructor(props) {
     super(props);
   }
-  /*  onClickHabitat() {
-    if(){
-
-    }
-    this.props.updateFilter("aquatic");
-  }
- */
+  //this was supposed to have the onclick
 
   render() {
     return (
@@ -77,6 +70,7 @@ class NavBarButton extends React.Component {
     );
   }
 }
+
 class Gallery extends React.Component {
   constructor(props) {
     super(props);
@@ -121,48 +115,44 @@ class Gallery extends React.Component {
         habitat: "forest",
         fact: "Raccoons wash their food before they eat it!",
       },
+      {
+        imgSrc: "./assets/snowshoe-hare.jpeg",
+        habitat: "snow",
+        fact: "Snowshoe hares have hind feet that are 117 to 147 mm long, acting like snowshoes so they can stay on top of the snow.",
+      },
     ];
 
     this.state = {
-      cellsDisplayed: [],
+      cellsDisplayed: this.cellsArray,
     };
   }
 
   filterCells() {
     let cellsDisplayed = [];
-    for (let index = 0; index < this.cellsArray.length; index++) {
-      if (this.cellsArray[index]["habitat"] === "aquatic") {
-        cellsDisplayed.push(this.cellsArray[index]);
-      }
-    }
-    this.setState({
-      cellsDisplayed: cellsDisplayed,
-    });
 
-    console.log(cellsDisplayed);
-    return "hi";
+    if (this.props.filter === "all habitats") {
+      return this.cellsArray;
+    } else {
+      for (let index = 0; index < this.cellsArray.length; index++) {
+        if (this.cellsArray[index]["habitat"] === this.props.filter) {
+          cellsDisplayed.push(this.cellsArray[index]);
+        }
+      }
+      return cellsDisplayed;
+    }
   }
 
   render() {
-    console.log(this.props.filter, "in render");
+    console.log(this.props.filter, "in gallery render");
     return (
       <div>
         <h3>This is a gallery</h3>
-        <Grid cellsArray={this.cellsArray} />
-        <Button filterCells={this.filterCells.bind(this)} />
+        <Grid cellsArray={this.filterCells()} />
       </div>
     );
   }
 }
-class Button extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
-  render() {
-    return <button onClick={this.props.filterCells.bind(this)}>hii</button>;
-  }
-}
 class Grid extends React.Component {
   constructor(props) {
     super(props);
