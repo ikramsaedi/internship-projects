@@ -7,12 +7,14 @@ class Website extends React.Component {
   constructor(props) {
     super(props);
     this.buttonTexts = ["all habitats", "aquatic", "forest", "snowy"];
+    this.updateFilter = this.updateFilter.bind(this);
     this.state = {
       filter: "no filter",
     };
   }
 
   updateFilter(filterName) {
+    console.log(filterName, "in update filter");
     this.setState({
       filter: filterName,
     });
@@ -22,8 +24,11 @@ class Website extends React.Component {
     return (
       <div>
         <h1>Animal Gallery</h1>
-        <NavBar buttonTexts={this.buttonTexts} />
-        <Gallery />
+        <NavBar
+          buttonTexts={this.buttonTexts}
+          updateFilter={this.updateFilter}
+        />
+        <Gallery filter={this.state.filter} />
       </div>
     );
   }
@@ -32,12 +37,22 @@ class NavBar extends React.Component {
   constructor(props) {
     super(props);
   }
+  /*  onClickHabitat() {
+    if(){
+
+    }
+    this.props.updateFilter("aquatic");
+  }
+ */
 
   render() {
     return (
       <div className="navbar">
-        {this.props.buttonTexts.map((element, index) => (
-          <NavBarButton text={element} />
+        {this.props.buttonTexts.map((element) => (
+          <NavBarButton
+            text={element}
+            updateFilter={(filterName) => this.props.updateFilter(filterName)}
+          />
         ))}
       </div>
     );
@@ -48,10 +63,16 @@ class NavBarButton extends React.Component {
   constructor(props) {
     super(props);
   }
+
+  onClickHabitat() {
+    this.props.updateFilter(this.props.text);
+  }
   render() {
     return (
       <div>
-        <button>{this.props.text}</button>
+        <button onClick={this.onClickHabitat.bind(this)}>
+          {this.props.text}
+        </button>
       </div>
     );
   }
@@ -59,7 +80,6 @@ class NavBarButton extends React.Component {
 class Gallery extends React.Component {
   constructor(props) {
     super(props);
-
     this.cellsArray = [
       {
         imgSrc: "./assets/rusty-spotted-cat.jpeg",
@@ -102,18 +122,47 @@ class Gallery extends React.Component {
         fact: "Raccoons wash their food before they eat it!",
       },
     ];
+
+    this.state = {
+      cellsDisplayed: [],
+    };
+  }
+
+  filterCells() {
+    let cellsDisplayed = [];
+    for (let index = 0; index < this.cellsArray.length; index++) {
+      if (this.cellsArray[index]["habitat"] === "aquatic") {
+        cellsDisplayed.push(this.cellsArray[index]);
+      }
+    }
+    this.setState({
+      cellsDisplayed: cellsDisplayed,
+    });
+
+    console.log(cellsDisplayed);
+    return "hi";
   }
 
   render() {
+    console.log(this.props.filter, "in render");
     return (
       <div>
         <h3>This is a gallery</h3>
         <Grid cellsArray={this.cellsArray} />
+        <Button filterCells={this.filterCells.bind(this)} />
       </div>
     );
   }
 }
+class Button extends React.Component {
+  constructor(props) {
+    super(props);
+  }
 
+  render() {
+    return <button onClick={this.props.filterCells.bind(this)}>hii</button>;
+  }
+}
 class Grid extends React.Component {
   constructor(props) {
     super(props);
@@ -121,6 +170,7 @@ class Grid extends React.Component {
   render() {
     let cellsLength = this.props.cellsArray.length;
     let rowsAmount = Math.ceil(cellsLength / 3);
+
     return (
       <div className="grid-container">
         {(() => {
