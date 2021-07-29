@@ -24,6 +24,11 @@ class Parser
                 end
             }
             
+            opts.on("-a", "--add-events BUTTON,TIMESTAMP,DEVELOPER,REASON", Array, "This will insert an event into the events table") { |input|
+                results = @@client.query(
+                    "INSERT INTO events (button_id, timestamp, developers_id, reason_id) VALUES (#{input[0]}, '#{input[1]}', #{input[2]}, #{input[3]});"
+                )
+            }
         end
         opts.parse(args)
         options
