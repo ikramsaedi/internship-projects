@@ -3,6 +3,7 @@ GEM
   specs:
     diff-lcs (1.4.4)
     mysql2 (0.5.3)
+    optimist (3.0.1)
     rspec (3.10.0)
       rspec-core (~> 3.10.0)
       rspec-expectations (~> 3.10.0)
@@ -22,6 +23,7 @@ PLATFORMS
 
 DEPENDENCIES
   mysql2
+  optimist
   rspec
 
 BUNDLED WITH
