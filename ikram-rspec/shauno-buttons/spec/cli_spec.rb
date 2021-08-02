@@ -9,23 +9,28 @@ p $client
 describe 'running query functions' do
     #before hook
     before(:all) do
-        #test setup ->inserting into tables 
-        # p "this is file! #{"./data/buttons.sql".readlines.map(&:chomp)}"
-        # $client.query("./data/buttons.sql".readlines.map(&:chomp))
 
-        File.foreach("./data/buttons.sql") do |line|
-            $client.query(line)
+        result = $client.query(File.read("./data/buttons.sql"))
+
+        while $client.next_result #this checks if theres another result left to handle
+            # puts result
+            result = $client.store_result
         end
     end
 
     #after hook
     after(:all) do
-        #deleting test data
+
+        result = $client.query(File.read("./data/truncate.sql"))
+        while $client.next_result
+            result = $client.store_result
+        end
+
     end
     
     context 'list_buttons' do
         it "lists the correct buttons" do
-            #somethig
+            
         end
     end
 end
