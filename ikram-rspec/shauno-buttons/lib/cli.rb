@@ -10,6 +10,12 @@ if ENV["DB_NAME"]
 end
 $client = Mysql2::Client.new(:host => "intern-party-2.cpj2kqopsdsq.ap-southeast-2.rds.amazonaws.com", :username => "admin", :password => ENV["DB_PASSWORD"], :database => database_name, :flags => Mysql2::Client::MULTI_STATEMENTS)
 
+class NoPermissionError < StandardError
+    def initialize(msg="Please check your permissions and try again")
+        super
+    end
+end
+
 def list_buttons()
     return $client.query(
         "SELECT developer_pairings.button_id, reason, name FROM reason_pairings 

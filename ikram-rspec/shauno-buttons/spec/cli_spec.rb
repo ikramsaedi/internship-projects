@@ -7,7 +7,7 @@ require 'cli'
 describe 'subcommand' do
     before(:all) do
 
-        result = $client.query(File.read("./data/buttons.sql"))
+        result = $client.query(File.read("./data/setup.sql"))
 
         while $client.next_result #this checks if theres another result left to handle
             result = $client.store_result
@@ -102,6 +102,41 @@ describe 'subcommand' do
             reason_id = nil
 
             expect {add_event(button_id, timestamp, developer_id, reason_id)}.to raise_error(Mysql2::Error)
+        end
+    end
+    #functions we haven't written yet
+    
+    context "checking if a developer is an admin" do
+        xit "succeeds if the developer is an admin" do
+            expect(is_admin(3)).to be true
+        end
+
+        xit "errors if the developer is not an admin" do
+            expect(is_admin(2)).to raise_error(NoPermissionError) # we need to decide what our custom error will be
+        end
+    end
+
+    context "invalidate event" do
+        #we need to insert events before invalidating
+        xit "succeeds when supplied with an admin user" do
+            button_id = 6
+            timestamp = '2021-08-03 05:39:47'
+            developer_id = 3
+
+            invalidate_event(developer_id, button_id, timestamp)
+
+            result = $client.query("SELECT to_ignore FROM events WHERE button_id=#{button_id} AND timestamp=#{timestamp}")
+
+            expect(result.first).to eq({"to_ignore" => 1})
+        end
+        
+        xit "raises a custom error when the user is not a admin" do
+            button_id = 4
+            timestamp = "2021-6-12 03:22:43"
+            developer_id = 2
+            invalidate_event(developer_id, button_id, timestamp)
+
+            expect{invalidate_event(developer_id, button_id, timestamp)}.to raise_error(NoPermissionError)
         end
     end
 end
