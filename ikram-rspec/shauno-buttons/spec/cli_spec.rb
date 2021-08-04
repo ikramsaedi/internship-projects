@@ -4,7 +4,7 @@ require 'pp'
 
 require 'cli'
 
-describe 'running query functions' do
+describe 'subcommand' do
     before(:all) do
 
         result = $client.query(File.read("./data/buttons.sql"))
@@ -66,6 +66,42 @@ describe 'running query functions' do
             expected = {"button_id" => button_id, "timestamp" => timestamp, "developers_id" => developer_id, "reason_id" => reason_id, "to_ignore" => 0}
 
             expect(result).to eq(expected)
+        end
+
+        it "does not insert event into table when timestamp is missing" do
+            timestamp = nil
+            button_id = 4
+            developer_id = 3
+            reason_id = 1
+
+            expect {add_event(button_id, timestamp, developer_id, reason_id)}.to raise_error(Mysql2::Error)
+        end
+
+        it "does not insert event into table when button is missing" do
+            timestamp = "2020-07-08 12:04:01"
+            button_id = nil
+            developer_id = 3
+            reason_id = 1
+
+            expect {add_event(button_id, timestamp, developer_id, reason_id)}.to raise_error(Mysql2::Error)
+        end
+
+        it "does not insert event into table when developer_id is missing" do
+            timestamp = "2020-07-08 12:04:01"
+            button_id = 4
+            developer_id = nil
+            reason_id = 1
+
+            expect {add_event(button_id, timestamp, developer_id, reason_id)}.to raise_error(Mysql2::Error)
+        end
+
+        it "does not insert event into table when reason_id is missing" do
+            timestamp = "2020-07-08 12:04:01"
+            button_id = 4
+            developer_id = 3
+            reason_id = nil
+
+            expect {add_event(button_id, timestamp, developer_id, reason_id)}.to raise_error(Mysql2::Error)
         end
     end
 end

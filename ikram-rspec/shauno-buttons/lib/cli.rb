@@ -11,7 +11,6 @@ end
 $client = Mysql2::Client.new(:host => "intern-party-2.cpj2kqopsdsq.ap-southeast-2.rds.amazonaws.com", :username => "admin", :password => ENV["DB_PASSWORD"], :database => database_name, :flags => Mysql2::Client::MULTI_STATEMENTS)
 
 def list_buttons()
-    puts "querying database..."
     return $client.query(
         "SELECT developer_pairings.button_id, reason, name FROM reason_pairings 
         JOIN developer_pairings ON reason_pairings.button_id=developer_pairings.button_id 
@@ -20,15 +19,9 @@ def list_buttons()
 end
 
 def add_event(button_id, timestamp, developer, reason) 
-    begin
-        results = $client.query(
-            "INSERT INTO events (button_id, timestamp, developers_id, reason_id) VALUES (#{button_id}, '#{timestamp}', #{developer}, #{reason});"
-        )
-        p "Insert successful!"
-    rescue => err
-        p "Insert failed."
-        p err
-    end
+    query_text = "INSERT INTO events (button_id, timestamp, developers_id, reason_id) VALUES (?, ?, ?, ?);"
+    statement = $client.prepare(query_text)
+    statement.execute(button_id, timestamp, developer, reason)
 end
 
 SUB_COMMANDS = %w(list_buttons, add_event) #%w makes these things into a list
