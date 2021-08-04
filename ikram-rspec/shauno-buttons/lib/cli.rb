@@ -2,6 +2,8 @@ require 'optimist'
 require 'mysql2'
 require 'pp'
 
+require_relative 'subcommands'
+
 database_name = "shauno_buttons"
 if ENV["DB_NAME"]
     # puts "we r in the env if statement"
@@ -10,25 +12,6 @@ if ENV["DB_NAME"]
 end
 $client = Mysql2::Client.new(:host => "intern-party-2.cpj2kqopsdsq.ap-southeast-2.rds.amazonaws.com", :username => "admin", :password => ENV["DB_PASSWORD"], :database => database_name, :flags => Mysql2::Client::MULTI_STATEMENTS)
 
-class NoPermissionError < StandardError
-    def initialize(msg="Please check your permissions and try again")
-        super
-    end
-end
-
-def list_buttons()
-    return $client.query(
-        "SELECT developer_pairings.button_id, reason, name FROM reason_pairings 
-        JOIN developer_pairings ON reason_pairings.button_id=developer_pairings.button_id 
-        JOIN reasons ON reason_pairings.reason_id=reasons.id 
-        JOIN developers ON developer_pairings.developer_id=developers.id;")
-end
-
-def add_event(button_id, timestamp, developer, reason) 
-    query_text = "INSERT INTO events (button_id, timestamp, developers_id, reason_id) VALUES (?, ?, ?, ?);"
-    statement = $client.prepare(query_text)
-    statement.execute(button_id, timestamp, developer, reason)
-end
 
 SUB_COMMANDS = %w(list_buttons, add_event) #%w makes these things into a list
 
@@ -72,13 +55,13 @@ if cmd_opts
         when "list_buttons"
             puts "list buttons subcommand called"
 
-            results = list_buttons
+            results = Subcommands::list_buttons
 
             results.each do |row|
                 p row
             end
         when "add_event"
-            add_event(cmd_opts[:button_id], cmd_opts[:timestamp], cmd_opts[:developer], cmd_opts[:reason])
+            Subcomannds::add_event(cmd_opts[:button_id], cmd_opts[:timestamp], cmd_opts[:developer], cmd_opts[:reason])
         else # nothing?
     end
 end

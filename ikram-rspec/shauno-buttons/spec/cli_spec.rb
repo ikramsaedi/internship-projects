@@ -3,8 +3,9 @@ require 'mysql2'
 require 'pp'
 
 require 'cli'
+require 'subcommands'
 
-describe 'subcommand' do
+describe Subcommands do
     before(:all) do
 
         result = $client.query(File.read("./data/setup.sql"))
@@ -29,13 +30,13 @@ describe 'subcommand' do
             # counting will be easiest I guess
             expected_num = 6
 
-            result = list_buttons
+            result = Subcommands::list_buttons
 
             expect(result.size).to eq(expected_num)
         end
 
         it "lists the correct reason with the buttons" do
-            result = list_buttons
+            result = Subcommands::list_buttons
 
             correct_reason = "CI is broken"
 
@@ -43,7 +44,7 @@ describe 'subcommand' do
         end
 
         it "lists the correct developer with the buttons" do
-            result = list_buttons
+            result = Subcommands::list_buttons
             correct_name = "Ikram Saedi"
 
             expect(result.first["name"]).to eq(correct_name)
@@ -57,7 +58,7 @@ describe 'subcommand' do
             developer_id = 1
             reason_id = 3
 
-            add_event(button_id, timestamp, developer_id, reason_id)
+            Subcommands::add_event(button_id, timestamp, developer_id, reason_id)
 
             result = $client.query("SELECT button_id, DATE_FORMAT(timestamp, '%Y-%c-%e %H:%i:%s') AS timestamp, developers_id, reason_id, to_ignore FROM events WHERE button_id=#{button_id} AND timestamp='#{timestamp}';")
 
@@ -74,7 +75,7 @@ describe 'subcommand' do
             developer_id = 3
             reason_id = 1
 
-            expect {add_event(button_id, timestamp, developer_id, reason_id)}.to raise_error(Mysql2::Error)
+            expect {Subcommands::add_event(button_id, timestamp, developer_id, reason_id)}.to raise_error(Mysql2::Error)
         end
 
         it "does not insert event into table when button is missing" do
@@ -83,7 +84,7 @@ describe 'subcommand' do
             developer_id = 3
             reason_id = 1
 
-            expect {add_event(button_id, timestamp, developer_id, reason_id)}.to raise_error(Mysql2::Error)
+            expect {Subcommands::add_event(button_id, timestamp, developer_id, reason_id)}.to raise_error(Mysql2::Error)
         end
 
         it "does not insert event into table when developer_id is missing" do
@@ -92,7 +93,7 @@ describe 'subcommand' do
             developer_id = nil
             reason_id = 1
 
-            expect {add_event(button_id, timestamp, developer_id, reason_id)}.to raise_error(Mysql2::Error)
+            expect {Subcommands::add_event(button_id, timestamp, developer_id, reason_id)}.to raise_error(Mysql2::Error)
         end
 
         it "does not insert event into table when reason_id is missing" do
@@ -101,18 +102,18 @@ describe 'subcommand' do
             developer_id = 3
             reason_id = nil
 
-            expect {add_event(button_id, timestamp, developer_id, reason_id)}.to raise_error(Mysql2::Error)
+            expect {Subcommands::add_event(button_id, timestamp, developer_id, reason_id)}.to raise_error(Mysql2::Error)
         end
     end
     #functions we haven't written yet
     
     context "checking if a developer is an admin" do
         xit "succeeds if the developer is an admin" do
-            expect(is_admin(3)).to be true
+            expect(Subcommands::is_admin(3)).to be true
         end
 
         xit "errors if the developer is not an admin" do
-            expect(is_admin(2)).to raise_error(NoPermissionError) # we need to decide what our custom error will be
+            expect(Subcommands::is_admin(2)).to raise_error(NoPermissionError) # we need to decide what our custom error will be
         end
     end
 
@@ -123,7 +124,7 @@ describe 'subcommand' do
             timestamp = '2021-08-03 05:39:47'
             developer_id = 3
 
-            invalidate_event(developer_id, button_id, timestamp)
+            Subcommands::invalidate_event(developer_id, button_id, timestamp)
 
             result = $client.query("SELECT to_ignore FROM events WHERE button_id=#{button_id} AND timestamp=#{timestamp}")
 
@@ -134,9 +135,8 @@ describe 'subcommand' do
             button_id = 4
             timestamp = "2021-6-12 03:22:43"
             developer_id = 2
-            invalidate_event(developer_id, button_id, timestamp)
 
-            expect{invalidate_event(developer_id, button_id, timestamp)}.to raise_error(NoPermissionError)
+            expect{Subcommands::invalidate_event(developer_id, button_id, timestamp)}.to raise_error(NoPermissionError)
         end
     end
 end
