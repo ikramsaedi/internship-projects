@@ -50,6 +50,22 @@ describe 'running query functions' do
         end
     end
 
-        
+    context "add_event" do
+        it "successfully adds event when given valid information" do
+            button_id = 2
+            timestamp = "2021-3-2 06:24:49"
+            developer_id = 1
+            reason_id = 3
+
+            add_event(button_id, timestamp, developer_id, reason_id)
+
+            result = $client.query("SELECT button_id, DATE_FORMAT(timestamp, '%Y-%c-%e %H:%i:%s') AS timestamp, developers_id, reason_id, to_ignore FROM events WHERE button_id=#{button_id} AND timestamp='#{timestamp}';")
+
+            result = result.first
+
+            expected = {"button_id" => button_id, "timestamp" => timestamp, "developers_id" => developer_id, "reason_id" => reason_id, "to_ignore" => 0}
+
+            expect(result).to eq(expected)
+        end
     end
 end
