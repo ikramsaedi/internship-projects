@@ -108,17 +108,16 @@ describe Subcommands do
     #functions we haven't written yet
     
     context "checking if a developer is an admin" do
-        xit "succeeds if the developer is an admin" do
+        it "succeeds if the developer is an admin" do
             expect(Subcommands::is_admin(3)).to be true
         end
 
-        xit "errors if the developer is not an admin" do
-            expect(Subcommands::is_admin(2)).to raise_error(NoPermissionError) # we need to decide what our custom error will be
+        it "errors if the developer is not an admin" do
+            expect {Subcommands::is_admin(2)}.to raise_error(Subcommands::NoPermissionError)
         end
     end
 
     context "invalidate event" do
-        #we need to insert events before invalidating
         xit "succeeds when supplied with an admin user" do
             button_id = 6
             timestamp = '2021-08-03 05:39:47'
@@ -136,7 +135,7 @@ describe Subcommands do
             timestamp = "2021-6-12 03:22:43"
             developer_id = 2
 
-            expect{Subcommands::invalidate_event(developer_id, button_id, timestamp)}.to raise_error(NoPermissionError)
+            expect {Subcommands::invalidate_event(developer_id, button_id, timestamp)}.to raise_error(Subcommands::NoPermissionError.new)
         end
     end
 end

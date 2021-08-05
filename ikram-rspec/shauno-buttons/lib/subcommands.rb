@@ -1,7 +1,7 @@
 module Subcommands 
     class NoPermissionError < StandardError
-        def initialize(msg="Please check your permissions and try again")
-            super
+        def message
+            "Please check your permissions and try again"
         end
     end
 
@@ -18,4 +18,18 @@ module Subcommands
         statement = $client.prepare(query_text)
         statement.execute(button_id, timestamp, developer, reason)
     end
+
+    def self.is_admin(developer_id)
+        query_text = "SELECT is_admin FROM developers WHERE id=?"
+        statement = $client.prepare(query_text)
+        result = statement.execute(developer_id).first
+
+        if result["is_admin"] == 1
+            return true
+        else
+            raise NoPermissionError
+            # return false
+        end
+    end
+
 end

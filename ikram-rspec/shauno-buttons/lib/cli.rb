@@ -37,7 +37,6 @@ cmd_opts = case cmd
         end
 
     else 
-        # puts "we dieeeee"
         Optimist::die "Unknown subcommand #{cmd.inspect}" if cmd # if no subcommand is given, we don't want it to die, just move on
     end
 
