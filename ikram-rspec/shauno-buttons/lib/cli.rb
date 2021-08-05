@@ -15,9 +15,17 @@ $client = Mysql2::Client.new(:host => "intern-party-2.cpj2kqopsdsq.ap-southeast-
 
 SUB_COMMANDS = %w(list_buttons, add_event, invalidate_event) #%w makes these things into a list
 
+commands_info = "
+Subcommands include:
+    list_buttons        return a list of all buttons, along with their associated reason and developer
+    add_event           adds a new event to the events table
+    invalidate_event    sets an event to be ignored by statistics"
+
 main_opts = Optimist::options do
     opt :hello, "Says hello to the given thing", :default => "world"
+    opt :help, "Show this message"
     stop_on SUB_COMMANDS
+    banner commands_info
 end
 
 cmd = ARGV.shift
