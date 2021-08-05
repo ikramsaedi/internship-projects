@@ -32,4 +32,11 @@ module Subcommands
         end
     end
 
+    def self.invalidate_event(developer_id, button_id, timestamp)
+        if is_admin(developer_id)
+            query_text = "UPDATE events SET to_ignore = 1 WHERE button_id=? AND timestamp=?;"
+            statement = $client.prepare(query_text)
+            statement.execute(button_id, timestamp)
+        end
+    end
 end

@@ -118,24 +118,24 @@ describe Subcommands do
     end
 
     context "invalidate event" do
-        xit "succeeds when supplied with an admin user" do
+        it "succeeds when supplied with an admin user" do
             button_id = 6
             timestamp = '2021-08-03 05:39:47'
             developer_id = 3
 
             Subcommands::invalidate_event(developer_id, button_id, timestamp)
 
-            result = $client.query("SELECT to_ignore FROM events WHERE button_id=#{button_id} AND timestamp=#{timestamp}")
+            result = $client.query("SELECT to_ignore FROM events WHERE button_id=#{button_id} AND timestamp='#{timestamp}'")
 
             expect(result.first).to eq({"to_ignore" => 1})
         end
         
-        xit "raises a custom error when the user is not a admin" do
+        it "raises a custom error when the user is not a admin" do
             button_id = 4
             timestamp = "2021-6-12 03:22:43"
             developer_id = 2
 
-            expect {Subcommands::invalidate_event(developer_id, button_id, timestamp)}.to raise_error(Subcommands::NoPermissionError.new)
+            expect {Subcommands::invalidate_event(developer_id, button_id, timestamp)}.to raise_error(Subcommands::NoPermissionError)
         end
     end
 end

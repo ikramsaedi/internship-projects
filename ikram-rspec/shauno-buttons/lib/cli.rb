@@ -13,7 +13,7 @@ end
 $client = Mysql2::Client.new(:host => "intern-party-2.cpj2kqopsdsq.ap-southeast-2.rds.amazonaws.com", :username => "admin", :password => ENV["DB_PASSWORD"], :database => database_name, :flags => Mysql2::Client::MULTI_STATEMENTS)
 
 
-SUB_COMMANDS = %w(list_buttons, add_event) #%w makes these things into a list
+SUB_COMMANDS = %w(list_buttons, add_event, invalidate_event) #%w makes these things into a list
 
 main_opts = Optimist::options do
     opt :hello, "Says hello to the given thing", :default => "world"
@@ -33,9 +33,13 @@ cmd_opts = case cmd
             opt :timestamp, "The timestamp of the event", :type => :string, :required => true
             opt :reason, "The reason ID of the event", :type => :int, :required => true
             opt :developer, "The developer ID who triggered the event", :type => :int, :required => true
-
         end
-
+    when "invalidate_event"
+        Optimist::options do
+            opt :developer_id, "The developer who is performing the action", :type => :int, :required => :true
+            opt :button_id, "The button used in the event", :type => :int, :required => :true
+            opt :timestamp, "The timestamp of the event", :type => :string, :required => :true
+        end
     else 
         Optimist::die "Unknown subcommand #{cmd.inspect}" if cmd # if no subcommand is given, we don't want it to die, just move on
     end
@@ -60,7 +64,9 @@ if cmd_opts
                 p row
             end
         when "add_event"
-            Subcomannds::add_event(cmd_opts[:button_id], cmd_opts[:timestamp], cmd_opts[:developer], cmd_opts[:reason])
+            Subcommands::add_event(cmd_opts[:button_id], cmd_opts[:timestamp], cmd_opts[:developer], cmd_opts[:reason])
+        when "invalidate_event"
+            Subcommands::invalidate_event(cmd_opts[:developer_id], cmd_opts[:button_id], cmd_opts[:timestamp])
         else # nothing?
     end
 end
