@@ -1,0 +1,1 @@
+ALTER TABLE buttons ADD is_active INTEGER DEFAULT 1;
