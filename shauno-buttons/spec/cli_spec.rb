@@ -26,8 +26,6 @@ describe Subcommands do
     
     context 'list_buttons' do
         it "returns the correct number of buttons" do
-            # so how do we test it?
-            # counting will be easiest I guess
             expected_num = 6
 
             result = Subcommands::list_buttons
@@ -52,12 +50,12 @@ describe Subcommands do
     end
 
     context "add_event" do
-        it "successfully adds event when given valid information" do
-            button_id = 2
-            timestamp = "2021-3-2 06:24:49"
-            developer_id = 1
-            reason_id = 3
+        let(:button_id) { 2 }
+        let(:timestamp) { "2021-3-2 06:24:49" }
+        let(:developer_id) { 1 }
+        let(:reason_id) { 3 }
 
+        it "successfully adds event when given valid information" do
             Subcommands::add_event(button_id, timestamp, developer_id, reason_id)
 
             result = $client.query("SELECT button_id, DATE_FORMAT(timestamp, '%Y-%c-%e %H:%i:%s') AS timestamp, developers_id, reason_id, to_ignore FROM events WHERE button_id=#{button_id} AND timestamp='#{timestamp}';")
@@ -71,49 +69,40 @@ describe Subcommands do
 
         it "does not insert event into table when timestamp is missing" do
             timestamp = nil
-            button_id = 4
-            developer_id = 3
-            reason_id = 1
 
             expect {Subcommands::add_event(button_id, timestamp, developer_id, reason_id)}.to raise_error(Mysql2::Error)
         end
 
         it "does not insert event into table when button is missing" do
-            timestamp = "2020-07-08 12:04:01"
             button_id = nil
-            developer_id = 3
-            reason_id = 1
 
             expect {Subcommands::add_event(button_id, timestamp, developer_id, reason_id)}.to raise_error(Mysql2::Error)
         end
 
         it "does not insert event into table when developer_id is missing" do
-            timestamp = "2020-07-08 12:04:01"
-            button_id = 4
             developer_id = nil
-            reason_id = 1
 
             expect {Subcommands::add_event(button_id, timestamp, developer_id, reason_id)}.to raise_error(Mysql2::Error)
         end
 
         it "does not insert event into table when reason_id is missing" do
-            timestamp = "2020-07-08 12:04:01"
-            button_id = 4
-            developer_id = 3
             reason_id = nil
 
             expect {Subcommands::add_event(button_id, timestamp, developer_id, reason_id)}.to raise_error(Mysql2::Error)
         end
     end
-    #functions we haven't written yet
     
     context "checking if a developer is an admin" do
         it "succeeds if the developer is an admin" do
-            expect(Subcommands::is_admin(3)).to be true
+            expect(Subcommands::is_admin!(3)).to be true
         end
 
         it "errors if the developer is not an admin" do
-            expect {Subcommands::is_admin(2)}.to raise_error(Subcommands::NoPermissionError)
+            expect {Subcommands::is_admin!(2)}.to raise_error(Subcommands::NoPermissionError)
+        end
+
+        it "errors if the developer_id does not exist in the table" do
+            expect {Subcommands::is_admin!(6)}.to raise_error(Subcommands::NoPermissionError)
         end
     end
 
@@ -138,4 +127,31 @@ describe Subcommands do
             expect {Subcommands::invalidate_event(developer_id, button_id, timestamp)}.to raise_error(Subcommands::NoPermissionError)
         end
     end
+
+    context "add button" do
+        it "adds button successfully" do
+            uuid = "fa22866c-f8af-11eb-9a03-0242ac130003"
+            Subcommands::add_button(uuid)
+
+            query_text = "SELECT uuid FROM buttons WHERE uuid=?"
+            statement = $client.prepare(query_text)
+            result = statement.execute(uuid)
+
+            expect(result.first["uuid"]).to eq(uuid)
+        end
+
+        it "throws an error if the uuid is already in the table" do #this requires adding a constraint
+            uuid = "467fa190-d806-4d45-9eda-08e322d6fccf"
+
+            expect {Subcommands::add_button(uuid)}.to raise_error(Mysql2::Error)
+        end
+
+        it "does not insert into table when uuid is missing" do
+            uuid = nil
+
+            expect {Subcommands::add_button(uuid)}.to raise_error(Mysql2::Error)
+        end
+    end
+
+    
 end

@@ -19,12 +19,12 @@ module Subcommands
         statement.execute(button_id, timestamp, developer, reason)
     end
 
-    def self.is_admin(developer_id)
+    def self.is_admin!(developer_id)
         query_text = "SELECT is_admin FROM developers WHERE id=?"
         statement = $client.prepare(query_text)
         result = statement.execute(developer_id).first
 
-        if result["is_admin"] == 1
+        if result && result["is_admin"] == 1 #check if result exists and if the dev is an admin
             return true
         else
             raise NoPermissionError
@@ -33,10 +33,16 @@ module Subcommands
     end
 
     def self.invalidate_event(developer_id, button_id, timestamp)
-        if is_admin(developer_id)
+        if is_admin!(developer_id)
             query_text = "UPDATE events SET to_ignore = 1 WHERE button_id=? AND timestamp=?;"
             statement = $client.prepare(query_text)
             statement.execute(button_id, timestamp)
         end
+    end
+
+    def self.add_button(uuid)
+        query_text = "INSERT INTO buttons (uuid) VALUES (?);"
+        statement = $client.prepare(query_text)
+        statement.execute(uuid)
     end
 end
