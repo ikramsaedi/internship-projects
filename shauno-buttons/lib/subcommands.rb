@@ -14,14 +14,12 @@ module Subcommands
     end
 
     def self.add_event(button_id, timestamp, developer, reason) 
-        query_text = "INSERT INTO events (button_id, timestamp, developers_id, reason_id) VALUES (?, ?, ?, ?);"
-        statement = $client.prepare(query_text)
+        statement = $client.prepare("INSERT INTO events (button_id, timestamp, developers_id, reason_id) VALUES (?, ?, ?, ?);")
         statement.execute(button_id, timestamp, developer, reason)
     end
 
     def self.is_admin!(developer_id)
-        query_text = "SELECT is_admin FROM developers WHERE id=?"
-        statement = $client.prepare(query_text)
+        statement = $client.prepare("SELECT is_admin FROM developers WHERE id=?")
         result = statement.execute(developer_id).first
 
         if result && result["is_admin"] == 1 #check if result exists and if the dev is an admin
@@ -34,15 +32,23 @@ module Subcommands
 
     def self.invalidate_event(developer_id, button_id, timestamp)
         if is_admin!(developer_id)
-            query_text = "UPDATE events SET to_ignore = 1 WHERE button_id=? AND timestamp=?;"
-            statement = $client.prepare(query_text)
+            statement = $client.prepare("UPDATE events SET to_ignore = 1 WHERE button_id=? AND timestamp=?;")
             statement.execute(button_id, timestamp)
         end
     end
 
-    def self.add_button(uuid)
-        query_text = "INSERT INTO buttons (uuid) VALUES (?);"
-        statement = $client.prepare(query_text)
+    def self.add_button(uuid, reason_id, developer_id)
+        statement = $client.prepare("INSERT INTO buttons (uuid) VALUES (?);")
         statement.execute(uuid)
+
+        statement = $client.prepare("SELECT button_id FROM buttons WHERE uuid=?;")
+        result = statement.execute(uuid)
+        id = result.first["button_id"]
+
+        statement = $client.prepare("INSERT INTO reason_pairings (button_id, reason_id) VALUES (?, ?);")
+        statement.execute(id, reason_id)
+
+        statement = $client.prepare("INSERT INTO developer_pairings (button_id, developer_id) VALUES (?, ?);")
+        statement.execute(id, developer_id)
     end
 end

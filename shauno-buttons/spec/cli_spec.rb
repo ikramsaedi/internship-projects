@@ -129,29 +129,61 @@ describe Subcommands do
     end
 
     context "add button" do
+        let(:uuid) { "fa22866c-f8af-11eb-9a03-0242ac130003" }
+        let(:reason_id) { 3 }
+        let(:developer_id) { 1 }
+
         it "adds button successfully" do
-            uuid = "fa22866c-f8af-11eb-9a03-0242ac130003"
-            Subcommands::add_button(uuid)
+            Subcommands::add_button(uuid, reason_id, developer_id)
 
-            query_text = "SELECT uuid FROM buttons WHERE uuid=?"
-            statement = $client.prepare(query_text)
+            statement = $client.prepare("SELECT button_id, uuid FROM buttons WHERE uuid=?")
             result = statement.execute(uuid)
+            result = result.first
 
-            expect(result.first["uuid"]).to eq(uuid)
+            expect(result["uuid"]).to eq(uuid)
+
+            db_button_id = result["button_id"]
+
+            statement = $client.prepare("SELECT button_id, reason_id FROM reason_pairings WHERE button_id=?")
+            result = statement.execute(db_button_id)
+            result = result.first
+
+            expect(result["button_id"]).to eq(db_button_id)
+            expect(result["reason_id"]).to eq(reason_id)
+
+            statement = $client.prepare("SELECT button_id, developer_id FROM developer_pairings WHERE button_id=?")
+            result = statement.execute(db_button_id)
+            result = result.first
+
+            expect(result["button_id"]).to eq(db_button_id)
+            expect(result["developer_id"]).to eq(developer_id)
+            
         end
 
         it "throws an error if the uuid is already in the table" do #this requires adding a constraint
             uuid = "467fa190-d806-4d45-9eda-08e322d6fccf"
 
-            expect {Subcommands::add_button(uuid)}.to raise_error(Mysql2::Error)
+            expect {Subcommands::add_button(uuid, reason_id, developer_id)}.to raise_error(Mysql2::Error)
         end
 
         it "does not insert into table when uuid is missing" do
             uuid = nil
 
-            expect {Subcommands::add_button(uuid)}.to raise_error(Mysql2::Error)
+            expect {Subcommands::add_button(uuid, reason_id, developer_id)}.to raise_error(Mysql2::Error)
+        end
+
+        it "does not insert into table when reason_id is missing" do
+            reason_id = nil
+
+            expect {Subcommands::add_button(uuid, reason_id, developer_id)}.to raise_error(Mysql2::Error)
+        end
+
+        it "does not insert into table when developer_id is missing" do
+            developer_id = nil
+
+            expect {Subcommands::add_button(uuid, reason_id, developer_id)}.to raise_error(Mysql2::Error)
         end
     end
 
-    
+
 end
