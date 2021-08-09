@@ -185,5 +185,47 @@ describe Subcommands do
         end
     end
 
+    context "invalidate button" do
+        let(:button_id) { 1 }
+        let(:developer_id) { 3 }
 
+        it "invalidates button successfully" do
+            Subcommands::invalidate_button(developer_id, button_id)
+
+            statement = $client.prepare("SELECT is_active FROM buttons WHERE button_id=?;")
+            result = statement.execute(button_id)
+            result = result.first
+
+            expect(result["is_active"]).to eq(0) 
+
+            statement = $client.prepare("SELECT CURRENT FROM reason_pairings WHERE button_id=?;")
+            result = statement.execute(button_id)
+            result = result.first
+
+            expect(result["CURRENT"]).to eq(0)
+
+            statement = $client.prepare("SELECT CURRENT FROM developer_pairings WHERE button_id=?;")
+            result = statement.execute(button_id)
+            result = result.first
+
+            expect(result["CURRENT"]).to eq(0)
+        end
+
+        it "errors when the developer is not an admin" do
+            developer_id = 2
+            expect {Subcommands::invalidate_button(developer_id, button_id)}.to raise_error(Subcommands::NoPermissionError)
+        end
+    
+        it "errors when button id is missing" do
+            button_id = nil
+
+            expect {Subcommands::invalidate_button(developer_id, button_id)}.to raise_error(Subcommands::MissingDataError)
+        end
+
+        it "errors when developer id is missing" do
+            developer_id = nil
+
+            expect {Subcommands::invalidate_button(developer_id, button_id)}.to raise_error(Subcommands::NoPermissionError)
+        end
+    end
 end

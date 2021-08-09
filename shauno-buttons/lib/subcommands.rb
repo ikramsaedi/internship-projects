@@ -1,7 +1,13 @@
 module Subcommands 
     class NoPermissionError < StandardError
         def message
-            "Please check your permissions and try again"
+            "Please check your permissions and try again."
+        end
+    end
+
+    class MissingDataError < StandardError
+        def message
+            "Please provide all required data to run this command."
         end
     end
 
@@ -50,5 +56,28 @@ module Subcommands
 
         statement = $client.prepare("INSERT INTO developer_pairings (button_id, developer_id) VALUES (?, ?);")
         statement.execute(id, developer_id)
+    end
+
+    def self.invalidate_button(developer_id, button_id)
+        if is_admin!(developer_id)
+            if button_id
+                statement = $client.prepare("UPDATE buttons SET is_active=0 WHERE button_id=?;")
+                result = statement.execute(button_id)
+                result
+                print result
+
+                statement = $client.prepare("UPDATE reason_pairings SET CURRENT=0 WHERE button_id=?;")
+                result = statement.execute(button_id)
+                result
+                print result
+
+                statement = $client.prepare("UPDATE developer_pairings SET CURRENT=0 WHERE button_id=?;")
+                result = statement.execute(button_id)
+                result
+                print result
+            else
+                raise MissingDataError
+            end
+        end
     end
 end
