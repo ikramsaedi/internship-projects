@@ -80,4 +80,41 @@ module Subcommands
             end
         end
     end
+
+    def self.reassign_button(button_id, reason_id, developer_id)
+        # check if at least one of the things to update has been given, and throw an error if not
+        if !reason_id && !developer_id
+            raise MissingDataError
+        end
+
+        #check that the button provided has not been deactivated
+        statement = $client.prepare("SELECT is_active FROM buttons WHERE button_id=?;")
+        result = statement.execute(button_id).first
+
+        if result["is_active"] == 0
+            raise InactiveButtonError
+        end
+
+        if reason_id # if a new reason is given
+
+            # invalidate any existing reasons
+            statement = $client.prepare("UPDATE reason_pairings SET CURRENT=0 WHERE button_id=?;")
+            statement.execute(button_id)
+
+            # add the new reason
+            statement = $client.prepare("INSERT INTO reason_pairings (button_id, reason_id) VALUES (?, ?);")
+            statement.execute(button_id, reason_id)
+        end
+
+        if developer_id # do the same if a new developer was given
+
+            # invalidate any existing developers
+            statement = $client.prepare("UPDATE developer_pairings SET CURRENT=0 WHERE button_id=?;")
+            statement.execute(button_id)
+
+            # add the new developer
+            statement = $client.prepare("INSERT INTO developer_pairings (button_id, developer_id) VALUES (?, ?);")
+            statement.execute(button_id, developer_id)
+        end
+    end
 end

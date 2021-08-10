@@ -240,10 +240,10 @@ describe Subcommands do
             Subcommands::reassign_button(button_id, new_reason_id, new_developer_id)
 
             statement = $client.prepare("SELECT button_id, reason_id FROM reason_pairings WHERE button_id=? AND reason_id=?;")
-            result = statement.execute(button_id, reason_id).first
+            result = statement.execute(button_id, new_reason_id).first
 
             expect(result["button_id"]).to eq(button_id)
-            expect(result["reason_id"]).to eq(reason_id)
+            expect(result["reason_id"]).to eq(new_reason_id)
         end
         
         it "successfully assigns a new developer" do
@@ -255,7 +255,7 @@ describe Subcommands do
             result = statement.execute(button_id, new_developer_id).first
 
             expect(result["button_id"]).to eq(button_id)
-            expect(result["developer_id"]).to eq (developer_id)
+            expect(result["developer_id"]).to eq (new_developer_id)
 
         end
         
@@ -263,15 +263,15 @@ describe Subcommands do
             Subcommands::reassign_button(button_id, new_reason_id, new_developer_id)
 
             statement = $client.prepare("SELECT button_id, reason_id FROM reason_pairings WHERE button_id=? AND reason_id=?;")
-            result = statement.execute(button_id, reason_id).first
+            result = statement.execute(button_id, new_reason_id).first
 
             expect(result["button_id"]).to eq(button_id)
-            expect(result["reason_id"]).to eq(reason_id)
+            expect(result["reason_id"]).to eq(new_reason_id)
 
             statement = $client.prepare("SELECT button_id, developer_id FROM developer_pairings WHERE button_id=? AND developer_id=?;")
             result = statement.execute(button_id, new_developer_id).first
 
-            expect(result["developer_id"]).to eq (developer_id)
+            expect(result["developer_id"]).to eq (new_developer_id)
         end
 
         it "throws errors when button provided is inactive" do
