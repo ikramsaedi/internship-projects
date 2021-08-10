@@ -228,4 +228,62 @@ describe Subcommands do
             expect {Subcommands::invalidate_button(developer_id, button_id)}.to raise_error(Subcommands::NoPermissionError)
         end
     end
+
+    context "reassign button" do
+        let(:button_id) { 2 }
+        let(:new_reason_id) { 2 }
+        let(:new_developer_id) {2}
+
+        it "successfully assigns a new reason" do
+            new_developer_id = nil
+
+            Subcommands::reassign_button(button_id, new_reason_id, new_developer_id)
+
+            statement = $client.prepare("SELECT button_id, reason_id FROM reason_pairings WHERE button_id=? AND reason_id=?;")
+            result = statement.execute(button_id, reason_id).first
+
+            expect(result["button_id"]).to eq(button_id)
+            expect(result["reason_id"]).to eq(reason_id)
+        end
+        
+        it "successfully assigns a new developer" do
+            new_reason_id = nil
+
+            Subcommands::reassign_button(button_id, new_reason_id, new_developer_id)
+
+            statement = $client.prepare("SELECT button_id, developer_id FROM developer_pairings WHERE button_id=? AND developer_id=?;")
+            result = statement.execute(button_id, new_developer_id).first
+
+            expect(result["button_id"]).to eq(button_id)
+            expect(result["developer_id"]).to eq (developer_id)
+
+        end
+        
+        it "successfully assigns both a new developer and reason" do
+            Subcommands::reassign_button(button_id, new_reason_id, new_developer_id)
+
+            statement = $client.prepare("SELECT button_id, reason_id FROM reason_pairings WHERE button_id=? AND reason_id=?;")
+            result = statement.execute(button_id, reason_id).first
+
+            expect(result["button_id"]).to eq(button_id)
+            expect(result["reason_id"]).to eq(reason_id)
+
+            statement = $client.prepare("SELECT button_id, developer_id FROM developer_pairings WHERE button_id=? AND developer_id=?;")
+            result = statement.execute(button_id, new_developer_id).first
+
+            expect(result["developer_id"]).to eq (developer_id)
+        end
+
+        it "throws errors when button provided is inactive" do
+            button_id = 1 #inactive button
+            expect {Subcommands::reassign_button(button_id, new_reason_id, new_developer_id)}.to raise_error(Subcommands::InactiveButtonError)
+        end
+
+        it "throws error when neither reason id or developer id is given" do
+            new_developer_id = nil
+            new_reason_id = nil
+
+            expect {Subcommands::reassign_button(button_id, new_reason_id, new_developer_id)}.to raise_error(Subcommands::MissingDataError)
+        end
+    end
 end

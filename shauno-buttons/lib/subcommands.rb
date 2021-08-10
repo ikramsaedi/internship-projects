@@ -11,6 +11,12 @@ module Subcommands
         end
     end
 
+    class InactiveButtonError < StandardError
+        def message
+            "You cannot reassign a button that is inactive."
+        end
+    end
+
     def self.list_buttons()
         return $client.query(
             "SELECT developer_pairings.button_id, reason, name FROM reason_pairings 
@@ -62,19 +68,13 @@ module Subcommands
         if is_admin!(developer_id)
             if button_id
                 statement = $client.prepare("UPDATE buttons SET is_active=0 WHERE button_id=?;")
-                result = statement.execute(button_id)
-                result
-                print result
+                statement.execute(button_id)
 
                 statement = $client.prepare("UPDATE reason_pairings SET CURRENT=0 WHERE button_id=?;")
-                result = statement.execute(button_id)
-                result
-                print result
+                statement.execute(button_id)
 
                 statement = $client.prepare("UPDATE developer_pairings SET CURRENT=0 WHERE button_id=?;")
-                result = statement.execute(button_id)
-                result
-                print result
+                statement.execute(button_id)
             else
                 raise MissingDataError
             end
