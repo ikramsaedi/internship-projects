@@ -215,7 +215,7 @@ describe Subcommands do
         it "errors when button id is missing" do
             button_id = nil
 
-            expect {Subcommands::invalidate_button(developer_id, button_id)}.to raise_error(Subcommands::MissingDataError)
+            expect {Subcommands::invalidate_button(developer_id, button_id)}.to raise_error(Subcommands::InvalidDataError)
         end
 
         it "errors when developer id is missing" do
@@ -279,7 +279,7 @@ describe Subcommands do
             new_developer_id = nil
             new_reason_id = nil
 
-            expect {Subcommands::reassign_button(button_id, new_reason_id, new_developer_id)}.to raise_error(Subcommands::MissingDataError)
+            expect {Subcommands::reassign_button(button_id, new_reason_id, new_developer_id)}.to raise_error(Subcommands::InvalidDataError)
         end
     end
 
@@ -315,6 +315,32 @@ describe Subcommands do
             expected_timestamp = "2021-8-3 20:52:22"
             
             expect(result.first["end"]).to eq(expected_timestamp)
+        end
+    end
+
+    context "list_timeblock_events" do
+        let(:result) { Subcommands::list_timeblock_events(1) } # list all the events from timeblock 1
+
+        it "successfully lists the correct number of events in the timeblock" do
+            expected_num = 3
+
+            expect(result.size).to eq(expected_num)
+        end
+
+        it "returns the correct information for the first event" do
+            expected_button = 1
+            expected_timestamp = "2021-8-3 00:36:30"
+
+            expect(result.first["button_id"]).to eq(expected_button)
+            expect(result.first["timestamp"]).to eq(expected_timestamp)
+        end
+
+        it "errors when given a timeblock that doesn't exist" do
+            expect {Subcommands::list_timeblock_events(10)}.to raise_error(Subcommands::InvalidDataError)
+        end
+
+        it "errors when nil timeblock is given" do
+            expect {Subcommands::list_timeblock_events(nil)}.to raise_error(Subcommands::InvalidDataError)
         end
     end
 end

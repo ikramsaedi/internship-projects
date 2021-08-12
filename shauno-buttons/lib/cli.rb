@@ -13,17 +13,18 @@ end
 $client = Mysql2::Client.new(:host => "intern-party-2.cpj2kqopsdsq.ap-southeast-2.rds.amazonaws.com", :username => "admin", :password => ENV["DB_PASSWORD"], :database => database_name, :flags => Mysql2::Client::MULTI_STATEMENTS)
 
 
-SUB_COMMANDS = %w(list_buttons, add_event, invalidate_event, add_button, invalidate_button, reassign_button, list_timeblocks) #%w makes these things into a list
+SUB_COMMANDS = %w(list_buttons, add_event, invalidate_event, add_button, invalidate_button, reassign_button, list_timeblocks, list_timeblock_events) #%w makes these things into a list
 
 commands_info = "
 Subcommands include:
-    list_buttons        return a list of all buttons, along with their associated reason and developer
-    add_event           adds a new event to the events table
-    invalidate_event    sets an event to be ignored by statistics
-    add_button          adds a button to the table and associates it with the given reason and ID
-    invalidate_button   marks the given button as inactive and removes its associations
-    reassign_button     removes the given buttons old association and adds a new one. one or both out of the reason and developer must be given
-    list_timeblocks     returns the current table of timeblocks, along with the associated developer and reason, and the beginning and ending timestamps"
+    list_buttons            return a list of all buttons, along with their associated reason and developer
+    add_event               adds a new event to the events table
+    invalidate_event        sets an event to be ignored by statistics
+    add_button              adds a button to the table and associates it with the given reason and ID
+    invalidate_button       marks the given button as inactive and removes its associations
+    reassign_button         removes the given buttons old association and adds a new one. one or both out of the reason and developer must be given
+    list_timeblocks         returns the current table of timeblocks, along with the associated developer and reason, and the beginning and ending timestamps
+    list_timeblock_events   returns all the events associated with the given timeblock"
 
 main_opts = Optimist::options do
     opt :hello, "Says hello to the given thing", :default => "world"
@@ -74,6 +75,10 @@ cmd_opts = case cmd
         Optimist::options do
             banner "This subcommand does not have any options"
         end
+    when "list_timeblock_events"
+        Optimist::options do
+            opt :timeblock_id, "The ID of the timeblock you want to list events for", :type => :int, :required => :true
+        end
     else 
         Optimist::die "Unknown subcommand #{cmd.inspect}" if cmd # if no subcommand is given, we don't want it to die, just move on
     end
@@ -105,6 +110,12 @@ if cmd_opts
         when "list_timeblocks"
             results = Subcommands::list_timeblocks
 
+            results.each do |row|
+                p row
+            end
+        when "list_timeblock_events"
+            results = Subcommands::list_timeblock_events(cmd_opts[:timeblock_id])
+            
             results.each do |row|
                 p row
             end

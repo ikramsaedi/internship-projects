@@ -5,7 +5,7 @@ module Subcommands
         end
     end
 
-    class MissingDataError < StandardError
+    class InvalidDataError < StandardError
         def message
             "Please provide all required data to run this command."
         end
@@ -76,7 +76,7 @@ module Subcommands
                 statement = $client.prepare("UPDATE developer_pairings SET CURRENT=0 WHERE button_id=?;")
                 statement.execute(button_id)
             else
-                raise MissingDataError
+                raise InvalidDataError
             end
         end
     end
@@ -84,7 +84,7 @@ module Subcommands
     def self.reassign_button(button_id, reason_id, developer_id)
         # check if at least one of the things to update has been given, and throw an error if not
         if !reason_id && !developer_id
-            raise MissingDataError
+            raise InvalidDataError
         end
 
         #check that the button provided has not been deactivated
@@ -137,5 +137,16 @@ module Subcommands
                 timeblocks.timeblock_id; "
         
         return $client.query(query_text)
+    end
+
+    def self.list_timeblock_events(timeblock_id)
+        statement = $client.prepare("select button_id, DATE_FORMAT(timestamp, '%Y-%c-%e %H:%i:%s') AS timestamp from timeblock_mapping WHERE timeblock_id = ?;")
+        result = statement.execute(timeblock_id)
+
+        if result.first
+            return result
+        else 
+            raise InvalidDataError
+        end
     end
 end
