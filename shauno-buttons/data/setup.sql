@@ -42,3 +42,24 @@ insert into events (button_id, timestamp, developers_id, reason_id) values (6, '
 insert into events (button_id, timestamp, developers_id, reason_id) values (6, '2021-08-03 10:21:02', 1, 2);
 insert into events (button_id, timestamp, developers_id, reason_id) values (5, '2021-08-03 01:46:15', 3, 3);
 insert into events (button_id, timestamp, developers_id, reason_id) values (3, '2021-08-03 18:25:44', 1, 1);
+
+
+INSERT INTO timeblocks (developer_id, reason_id) SELECT
+	developers_id,
+	reason_id
+FROM
+	events
+GROUP BY
+	developers_id,
+	reason_id;
+
+
+INSERT INTO timeblock_mapping (timeblock_id, button_id, `timestamp`)
+SELECT
+	timeblocks.timeblock_id,
+	events.button_id,
+	events. `timestamp`
+FROM
+	timeblocks
+	JOIN events ON timeblocks.developer_id = events.developers_id
+		AND timeblocks.reason_id = events.reason_id;

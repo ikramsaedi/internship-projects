@@ -117,4 +117,25 @@ module Subcommands
             statement.execute(button_id, developer_id)
         end
     end
+
+    def self.list_timeblocks()
+        query_text = "
+            SELECT
+                timeblocks.timeblock_id,
+                developers.name AS developer,
+                reasons.reason,
+                DATE_FORMAT(min(timeblock_mapping.TIMESTAMP), '%Y-%c-%e %H:%i:%s') AS start,
+                DATE_FORMAT(max(timeblock_mapping.TIMESTAMP), '%Y-%c-%e %H:%i:%s') AS end
+            FROM
+                timeblocks
+                JOIN timeblock_mapping ON timeblocks.timeblock_id = timeblock_mapping.timeblock_id
+                JOIN developers ON timeblocks.developer_id = developers.id
+                JOIN reasons ON timeblocks.reason_id = reasons.id
+            GROUP BY
+                timeblocks.timeblock_id
+            ORDER BY
+                timeblocks.timeblock_id; "
+        
+        return $client.query(query_text)
+    end
 end

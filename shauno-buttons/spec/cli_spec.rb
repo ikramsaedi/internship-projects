@@ -8,20 +8,16 @@ require 'subcommands'
 describe Subcommands do
     before(:all) do
 
-        result = $client.query(File.read("./data/setup.sql"))
-
-        while $client.next_result #this checks if theres another result left to handle
-            result = $client.store_result
-        end
-    end
-
-    after(:all) do
-
         result = $client.query(File.read("./data/truncate.sql"))
         while $client.next_result
             result = $client.store_result
         end
 
+        result = $client.query(File.read("./data/setup.sql"))
+
+        while $client.next_result #this checks if theres another result left to handle
+            result = $client.store_result
+        end
     end
     
     context 'list_buttons' do
@@ -284,6 +280,41 @@ describe Subcommands do
             new_reason_id = nil
 
             expect {Subcommands::reassign_button(button_id, new_reason_id, new_developer_id)}.to raise_error(Subcommands::MissingDataError)
+        end
+    end
+
+    context "list timeblocks" do
+        let(:result) { Subcommands::list_timeblocks }
+        it "returns the correct number of timeblocks" do
+            expected_num = 8
+
+            # result = Subcommands::list_timeblocks
+            
+            expect(result.size).to eq(expected_num)
+        end
+
+        it "returns the correct developer name" do
+            expected_name = "Ikram Saedi"
+
+            expect(result.first["developer"]).to eq(expected_name)
+        end
+
+        it "returns the correct reason" do
+            expected_reason = "Developer sad"
+
+            expect(result.first["reason"]).to eq(expected_reason)
+        end
+
+        it "returns the correct starting timestamp" do
+            expected_timestamp = "2021-8-3 00:36:30"
+
+            expect(result.first["start"]).to eq(expected_timestamp)
+        end
+
+        it "returns the correct ending timestamp" do
+            expected_timestamp = "2021-8-3 20:52:22"
+            
+            expect(result.first["end"]).to eq(expected_timestamp)
         end
     end
 end
