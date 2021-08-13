@@ -390,4 +390,24 @@ describe Subcommands do
         end
     end
     
+    context "clean_timeblocks" do
+        before(:all) do
+            Subcommands::reassign_event(1, "2021-08-03 00:36:30", 1)
+            Subcommands::reassign_event(2, "2021-08-03 20:52:22", 1)
+
+            Subcommands::clean_timeblocks
+        end
+
+        it "successfully deletes rows in the timeblocks table that are not associated with any events" do
+            result = $client.query("SELECT * FROM timeblocks WHERE timeblock_id=9;").first
+
+            expect(result).to be_nil
+        end
+
+        it "does not delete rows in the timeblocks table that are associated with events" do 
+            result = $client.query("SELECT COUNT(*) FROM timeblocks;").first
+
+            expect(result["COUNT(*)"]).to eq(8)
+        end
+    end
 end

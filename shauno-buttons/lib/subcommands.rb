@@ -185,4 +185,20 @@ module Subcommands
             
         end
     end
+
+    def self.clean_timeblocks 
+        query_text = '
+        DELETE FROM timeblocks
+        WHERE timeblock_id IN(
+                SELECT
+                    timeblocks.timeblock_id FROM (
+                        SELECT
+                            * FROM timeblocks) AS timeblocks
+                    WHERE
+                        timeblocks.timeblock_id NOT IN(
+                            SELECT
+                                timeblock_mapping.timeblock_id FROM timeblock_mapping));
+        '
+        $client.query(query_text)
+    end
 end

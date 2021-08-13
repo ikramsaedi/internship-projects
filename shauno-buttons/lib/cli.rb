@@ -13,7 +13,7 @@ end
 $client = Mysql2::Client.new(:host => "intern-party-2.cpj2kqopsdsq.ap-southeast-2.rds.amazonaws.com", :username => "admin", :password => ENV["DB_PASSWORD"], :database => database_name, :flags => Mysql2::Client::MULTI_STATEMENTS)
 
 
-SUB_COMMANDS = %w(list_buttons, add_event, invalidate_event, add_button, invalidate_button, reassign_button, list_timeblocks, list_timeblock_events, reassign_event) #%w makes these things into a list
+SUB_COMMANDS = %w(list_buttons, add_event, invalidate_event, add_button, invalidate_button, reassign_button, list_timeblocks, list_timeblock_events, reassign_event, clean_timeblocks) #%w makes these things into a list
 
 commands_info = "
 Subcommands include:
@@ -25,7 +25,8 @@ Subcommands include:
     reassign_button         removes the given buttons old association and adds a new one. one or both out of the reason and developer must be given
     list_timeblocks         returns the current table of timeblocks, along with the associated developer and reason, and the beginning and ending timestamps
     list_timeblock_events   returns all the events associated with the given timeblock
-    reassign_event          moves an event into either an existing timeblock or into a new timeblock"
+    reassign_event          moves an event into either an existing timeblock or into a new timeblock
+    clean_timeblocks        deletes timeblocks not associated with any events"
 
 main_opts = Optimist::options do
     opt :hello, "Says hello to the given thing", :default => "world"
@@ -86,6 +87,10 @@ cmd_opts = case cmd
             opt :timestamp, "The timestamp in the event you want to move", :type => :string, :required => :true
             opt :timeblock_id, "The ID of the existing timeblock you want to move the event to", :type => :int
         end
+    when "clean_timeblocks"
+        Optimist::options do
+            banner "This subcommand does not have any options"
+        end
     else 
         Optimist::die "Unknown subcommand #{cmd.inspect}" if cmd # if no subcommand is given, we don't want it to die, just move on
     end
@@ -128,6 +133,8 @@ if cmd_opts
             end
         when "reassign_event"
             Subcommands::reassign_event(cmd_opts[:button_id], cmd_opts[:timestamp], cmd_opts[:timeblock_id])
+        when "clean_timeblocks"
+            Subcommands::clean_timeblocks
         else # nothing?
     end
 end
