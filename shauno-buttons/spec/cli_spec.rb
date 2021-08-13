@@ -343,4 +343,51 @@ describe Subcommands do
             expect {Subcommands::list_timeblock_events(nil)}.to raise_error(Subcommands::InvalidDataError)
         end
     end
+
+    context "reassign_event" do 
+    let(:timestamp) { "2021-08-03 00:36:30" }
+    let(:button_id) { 1 }
+    let(:timeblock_id) { 9 }
+        it "successfully reassigns event to new timeblock" do
+            Subcommands::reassign_event(button_id, timestamp)
+            result = $client.query("SELECT developer_id, reason_id FROM timeblocks WHERE timeblock_id=9;").first
+            expect(result["developer_id"]).to eq(1)
+            expect(result["reason_id"]).to eq(2)
+
+            result = $client.query("SELECT timeblock_id FROM timeblock_mapping WHERE button_id=#{button_id} AND timestamp='#{timestamp}';").first
+            expect(result["timeblock_id"]).to eq(9)
+        end
+
+        it "successfully reassigns event to existing timeblock" do
+            button_id = 2
+            timestamp = "2021-08-03 20:52:22"
+
+            Subcommands::reassign_event(button_id, timestamp, timeblock_id)
+            result = $client.query("SELECT developer_id, reason_id FROM timeblocks WHERE timeblock_id=9;").first
+            expect(result["developer_id"]).to eq(1)
+            expect(result["reason_id"]).to eq(2)
+
+            result = $client.query("SELECT timeblock_id FROM timeblock_mapping WHERE button_id=#{button_id} AND timestamp='#{timestamp}';").first
+            expect(result["timeblock_id"]).to eq(9)
+        end
+
+        it "errors when reassigning event that does not exist" do
+            timestamp = "2021-08-06 00:26:10"
+            
+            expect {Subcommands::reassign_event(button_id, timestamp)}.to raise_error(Subcommands::InvalidDataError)
+            expect {Subcommands::reassign_event(button_id, timestamp, timeblock_id)}.to raise_error(Subcommands::InvalidDataError)
+        end
+
+        it "errors when timeblock developer and reason and event developer and reason do not match" do
+            timeblock_id = 4
+
+            expect {Subcommands::reassign_event(button_id, timestamp, timeblock_id)}.to raise_error(Subcommands::InvalidDataError)
+        end
+
+        it "errors when the timeblock passed in does not exist" do
+            timeblock_id = 25
+            expect {Subcommands::reassign_event(button_id, timestamp, timeblock_id)}.to raise_error(Subcommands::InvalidDataError)
+        end
+    end
+    
 end

@@ -13,7 +13,7 @@ end
 $client = Mysql2::Client.new(:host => "intern-party-2.cpj2kqopsdsq.ap-southeast-2.rds.amazonaws.com", :username => "admin", :password => ENV["DB_PASSWORD"], :database => database_name, :flags => Mysql2::Client::MULTI_STATEMENTS)
 
 
-SUB_COMMANDS = %w(list_buttons, add_event, invalidate_event, add_button, invalidate_button, reassign_button, list_timeblocks, list_timeblock_events) #%w makes these things into a list
+SUB_COMMANDS = %w(list_buttons, add_event, invalidate_event, add_button, invalidate_button, reassign_button, list_timeblocks, list_timeblock_events, reassign_event) #%w makes these things into a list
 
 commands_info = "
 Subcommands include:
@@ -24,7 +24,8 @@ Subcommands include:
     invalidate_button       marks the given button as inactive and removes its associations
     reassign_button         removes the given buttons old association and adds a new one. one or both out of the reason and developer must be given
     list_timeblocks         returns the current table of timeblocks, along with the associated developer and reason, and the beginning and ending timestamps
-    list_timeblock_events   returns all the events associated with the given timeblock"
+    list_timeblock_events   returns all the events associated with the given timeblock
+    reassign_event          moves an event into either an existing timeblock or into a new timeblock"
 
 main_opts = Optimist::options do
     opt :hello, "Says hello to the given thing", :default => "world"
@@ -79,6 +80,12 @@ cmd_opts = case cmd
         Optimist::options do
             opt :timeblock_id, "The ID of the timeblock you want to list events for", :type => :int, :required => :true
         end
+    when "reassign_event"
+        Optimist::options do
+            opt :button_id, "The button ID in the event you want to move", :type => :int, :required => :true
+            opt :timestamp, "The timestamp in the event you want to move", :type => :string, :required => :true
+            opt :timeblock_id, "The ID of the existing timeblock you want to move the event to", :type => :int
+        end
     else 
         Optimist::die "Unknown subcommand #{cmd.inspect}" if cmd # if no subcommand is given, we don't want it to die, just move on
     end
@@ -119,6 +126,8 @@ if cmd_opts
             results.each do |row|
                 p row
             end
+        when "reassign_event"
+            Subcommands::reassign_event(cmd_opts[:button_id], cmd_opts[:timestamp], cmd_opts[:timeblock_id])
         else # nothing?
     end
 end

@@ -149,4 +149,40 @@ module Subcommands
             raise InvalidDataError
         end
     end
+
+    def self.reassign_event(button_id, timestamp, timeblock_id=nil)
+        statement = $client.prepare("SELECT developers_id, reason_id FROM events WHERE button_id=? AND timestamp=?")
+        event = statement.execute(button_id, timestamp).first
+
+        if !event
+            raise InvalidDataError
+        end
+        
+        if timeblock_id
+            statement = $client.prepare("SELECT developer_id, reason_id FROM timeblocks WHERE timeblock_id=?")
+            timeblock = statement.execute(timeblock_id).first
+          
+            if timeblock 
+                if timeblock["developer_id"] == event["developers_id"] && timeblock["reason_id"] == event["reason_id"]
+                    statement = $client.prepare("UPDATE timeblock_mapping SET timeblock_id=? WHERE button_id=? AND timestamp=?")
+                    statement.execute(timeblock_id, button_id, timestamp)
+                else
+                    raise InvalidDataError
+                end
+            else 
+                raise InvalidDataError
+            end
+        else
+
+            statement = $client.prepare("INSERT INTO timeblocks (developer_id, reason_id) VALUES (?, ?)")
+            statement.execute(event["developers_id"], event["reason_id"])
+
+            statement = $client.prepare("SELECT timeblock_id FROM timeblocks WHERE developer_id=? AND reason_id=? ORDER BY timeblock_id DESC LIMIT 1;")
+            timeblock_new = statement.execute(event["developers_id"], event["reason_id"]).first
+
+            statement = $client.prepare("UPDATE timeblock_mapping SET timeblock_id=? WHERE button_id=? AND timestamp=?")
+            statement.execute(timeblock_new["timeblock_id"], button_id, timestamp)
+            
+        end
+    end
 end
