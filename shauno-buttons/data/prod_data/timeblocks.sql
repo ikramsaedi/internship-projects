@@ -1,0 +1,15 @@
+insert into timeblocks (developer_id, reason_id) values (2, 5);
+insert into timeblocks (developer_id, reason_id) values (1, 9);
+insert into timeblocks (developer_id, reason_id) values (2, 5);
+insert into timeblocks (developer_id, reason_id) values (10, 9);
+insert into timeblocks (developer_id, reason_id) values (10, 9);
+insert into timeblocks (developer_id, reason_id) values (3, 10);
+insert into timeblocks (developer_id, reason_id) values (4, 3);
+insert into timeblocks (developer_id, reason_id) values (2, 10);
+insert into timeblocks (developer_id, reason_id) values (2, 6);
+insert into timeblocks (developer_id, reason_id) values (5, 9);
+insert into timeblocks (developer_id, reason_id) values (1, 3);
+insert into timeblocks (developer_id, reason_id) values (2, 9);
+insert into timeblocks (developer_id, reason_id) values (8, 9);
+insert into timeblocks (developer_id, reason_id) values (3, 8);
+insert into timeblocks (developer_id, reason_id) values (5, 9);

@@ -2,7 +2,7 @@ SET FOREIGN_KEY_CHECKS=0;
 TRUNCATE TABLE buttons;
 TRUNCATE TABLE developer_pairings;
 TRUNCATE TABLE developers;
-TRUNCATE TABLE event_grouping;
+TRUNCATE TABLE timeblock_mapping;
 TRUNCATE TABLE events;
 TRUNCATE TABLE explanations;
 TRUNCATE TABLE reason_pairings;

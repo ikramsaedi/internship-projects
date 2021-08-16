@@ -1,0 +1,10 @@
+insert into reasons (reason) values ('mesh visionary infomediaries');
+insert into reasons (reason) values ('visualize vertical infomediaries');
+insert into reasons (reason) values ('utilize killer synergies');
+insert into reasons (reason) values ('extend sticky communities');
+insert into reasons (reason) values ('seize killer infomediaries');
+insert into reasons (reason) values ('recontextualize back-end systems');
+insert into reasons (reason) values ('leverage next-generation schemas');
+insert into reasons (reason) values ('brand dynamic web services');
+insert into reasons (reason) values ('disintermediate killer e-services');
+insert into reasons (reason) values ('synthesize magnetic synergies');

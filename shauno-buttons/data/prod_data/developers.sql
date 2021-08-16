@@ -1,0 +1,10 @@
+insert into developers (name, is_admin) values ('Ruthie Halloway', false);
+insert into developers (name, is_admin) values ('Camala Ruddy', false);
+insert into developers (name, is_admin) values ('Donnell Bruins', false);
+insert into developers (name, is_admin) values ('Jermain Huburn', false);
+insert into developers (name, is_admin) values ('Eugenius Manderson', false);
+insert into developers (name, is_admin) values ('Demetris Bernath', false);
+insert into developers (name, is_admin) values ('Nikolaos Morrieson', true);
+insert into developers (name, is_admin) values ('Enrica Chittenden', true);
+insert into developers (name, is_admin) values ('Crosby Muselli', false);
+insert into developers (name, is_admin) values ('Jamison Ham', false);

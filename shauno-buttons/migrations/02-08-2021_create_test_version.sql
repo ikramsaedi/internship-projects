@@ -44,7 +44,7 @@ CREATE TABLE timeblocks (
 	FOREIGN KEY (developer_id) REFERENCES developers(id)
 );
 
-CREATE TABLE event_grouping (
+CREATE TABLE timeblock_mapping (
 	mapping_id INTEGER PRIMARY KEY AUTO_INCREMENT,
 	timeblock_id INTEGER NOT NULL,
 	button_id INTEGER NOT NULL,
