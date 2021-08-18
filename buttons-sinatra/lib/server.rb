@@ -20,10 +20,6 @@ get '/frank-says' do
     "Put this in your pipe & smoke it!"
 end
 
-def hi
-    puts "hi"
-end
-
 get '/buttons' do
     result = $client.query(
             "SELECT developer_pairings.button_id, reason, name FROM reason_pairings 
@@ -32,7 +28,7 @@ get '/buttons' do
             JOIN developers ON developer_pairings.developer_id=developers.id;").to_a
             #how to turn this into json, json.generate
             #how to do error handling in sinatra
-    erb :index, :locals => {:buttons => result} #locals = variables we pass to template
+    return JSON.generate(result)
 end
 
 get '/buttons/:id' do #404 status code if button doesnt exist
@@ -69,6 +65,7 @@ get '/invalidate_event/:developer_id/:button_id/:timestamp' do
     pp session
 
     if session[:is_admin] == "true"
+        session[:is_admin] = nil
         statement = $client.prepare("UPDATE events SET to_ignore = 1 WHERE button_id=? AND timestamp=?;")
         statement.execute(params["button_id"], params["timestamp"])
         "it works!"
@@ -76,10 +73,5 @@ get '/invalidate_event/:developer_id/:button_id/:timestamp' do
         redirect to("/is_admin/#{params['developer_id']}?previous=#{URI.encode(request.url)}")
     end
 end
-
-get '/' do
-    erb :home
-end
-
 
 #### http://localhost:4567/invalidate_event/3/2/23131
