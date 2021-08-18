@@ -30,7 +30,7 @@ describe "Sinatra App" do
             get "/buttons"
             data = JSON.parse last_response.body
             pp data # pp = puts but calls .inspect
-            binding.irb
+            # binding.irb
             expect(data.size).to eq(6)
         end
     end

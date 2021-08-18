@@ -1,0 +1,5 @@
+<h1> Buttons </h1>
+<% buttons.each do |button| %>
+    <%= "#{button["button_id"].to_s}: #{button["name"]}, #{button["reason"]}"%>
+    <br>
+<% end %>

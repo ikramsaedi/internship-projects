@@ -3,6 +3,10 @@ require "sinatra/reloader" if development?
 
 require 'mysql2'
 
+require 'uri'
+
+enable :sessions
+
 database_name = "shauno_buttons"
 if ENV["DB_NAME"]
     # puts "we r in the env if statement"
@@ -12,10 +16,12 @@ end
 
 $client = Mysql2::Client.new(:host => "intern-party-2.cpj2kqopsdsq.ap-southeast-2.rds.amazonaws.com", :username => "admin", :password => ENV["DB_PASSWORD"], :database => database_name, :flags => Mysql2::Client::MULTI_STATEMENTS)
 
-post '/frank-says' do
-    request.body.rewind  # in case someone already read it
-    data = JSON.parse request.body.read
-    "Put this in your pipe & smoke it! #{data['name']}"
+get '/frank-says' do
+    "Put this in your pipe & smoke it!"
+end
+
+def hi
+    puts "hi"
 end
 
 get '/buttons' do
@@ -26,7 +32,7 @@ get '/buttons' do
             JOIN developers ON developer_pairings.developer_id=developers.id;").to_a
             #how to turn this into json, json.generate
             #how to do error handling in sinatra
-    return JSON.generate(result)
+    erb :index, :locals => {:buttons => result} #locals = variables we pass to template
 end
 
 get '/buttons/:id' do #404 status code if button doesnt exist
@@ -35,8 +41,7 @@ get '/buttons/:id' do #404 status code if button doesnt exist
     if !result.nil?
         JSON.generate(result)
     else result
-        # halt 404
-        raise Sinatra::NotFound
+        [403, ["Error 403: You can't see that ;-;\n"]]
     end
 end
 
@@ -46,9 +51,35 @@ post '/add_event' do
 end
 
 get '/is_admin/:developer_id' do
-    params["developer_id"]
+    puts "call is_admin"
+    statement = $client.prepare("SELECT is_admin FROM developers WHERE id=?")
+    result = statement.execute(params["developer_id"]).first
+
+    if result && result["is_admin"] == 1 #check if result exists and if the dev is an admin
+        pp session
+        session[:is_admin] = "true"
+        pp session
+        redirect params["previous"]
+    else
+        [403, ["Please check your permissions and try again."]]
+    end
 end
 
-not_found do #calling the method and passing it block
-    "Error 404: We couldn't find that ;-;\n"
+get '/invalidate_event/:developer_id/:button_id/:timestamp' do
+    pp session
+
+    if session[:is_admin] == "true"
+        statement = $client.prepare("UPDATE events SET to_ignore = 1 WHERE button_id=? AND timestamp=?;")
+        statement.execute(params["button_id"], params["timestamp"])
+        "it works!"
+    else
+        redirect to("/is_admin/#{params['developer_id']}?previous=#{URI.encode(request.url)}")
+    end
 end
+
+get '/' do
+    erb :home
+end
+
+
+#### http://localhost:4567/invalidate_event/3/2/23131
