@@ -115,7 +115,6 @@ end
 get '/invalidate_button/:developer_id/:button_id' do
     
     if session["is_admin"] == "true"
-        if params[:button_id]
             statement = $client.prepare("UPDATE buttons SET is_active=0 WHERE button_id=?;")
             statement.execute(params[:button_id])
 
@@ -124,9 +123,6 @@ get '/invalidate_button/:developer_id/:button_id' do
 
             statement = $client.prepare("UPDATE developer_pairings SET CURRENT=0 WHERE button_id=?;")
             statement.execute(params[:button_id])
-        else
-            raise InvalidDataError
-        end
     else
         redirect to("/is_admin/#{params["developer_id"]}?previous=#{URI.encode(request.url)}") #test not following the redirect
     end
