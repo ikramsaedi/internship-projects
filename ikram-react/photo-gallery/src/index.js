@@ -14,6 +14,7 @@ class Website extends React.Component {
   }
 
   updateFilter(filterName) {
+    console.log("hi");
     this.setState({
       filter: filterName,
     });
@@ -121,10 +122,6 @@ class Gallery extends React.Component {
         fact: "Snowshoe hares have hind feet that are 117 to 147 mm long, acting like snowshoes so they can stay on top of the snow.",
       },
     ];
-
-    this.state = {
-      cellsDisplayed: this.cellsArray,
-    };
   }
 
   filterCells() {
