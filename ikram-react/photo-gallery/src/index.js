@@ -86,19 +86,19 @@ class Gallery extends React.Component {
         fact: "Beavers have orange teeth because of the iron present in them, allowing them to cut down trees!",
       },
       {
-        imgSrc: "./assets/blanket-squid.jpeg",
+        imgSrc: "./assets/blanket-octopus.jpeg",
         habitat: "aquatic",
-        fact: "Female blanket squid (as displayed) can be long as 1.8metres whereas their male counterparts are the size of a walnut!",
+        fact: "Female blanket octopus (as displayed) can be long as 1.8metres whereas their male counterparts are the size of a walnut!",
       },
       {
         imgSrc: "./assets/vogelkop.png",
         habitat: "forest",
-        fact: "This is their courtship dance",
+        fact: "This male vogelkop (a bird of paradise) here is enacting his courtship dance.",
       },
       {
         imgSrc: "./assets/bigfin-squid.jpeg",
         habitat: "aquatic",
-        fact: "Up to 7 metres long",
+        fact: "Bigfin squid are up to 7 metres long!",
       },
       {
         imgSrc: "./assets/macgregor-bowerbird.jpeg",
@@ -113,7 +113,7 @@ class Gallery extends React.Component {
       {
         imgSrc: "./assets/raccoon.jpeg",
         habitat: "forest",
-        fact: "Raccoons wash their food before they eat it!",
+        fact: "Raccoons wash their food before they eat it! Cleaner than you may think!",
       },
       {
         imgSrc: "./assets/snowshoe-hare.jpeg",
@@ -142,12 +142,20 @@ class Gallery extends React.Component {
     }
   }
 
+  mouseOverPic(fact) {
+    console.log(fact);
+    return true;
+  }
+
   render() {
     console.log(this.props.filter, "in gallery render");
     return (
       <div>
         <h3>This is a gallery</h3>
-        <Grid cellsArray={this.filterCells()} />
+        <Grid
+          cellsArray={this.filterCells()}
+          mouseOverPic={(fact) => this.mouseOverPic(fact)}
+        />
       </div>
     );
   }
@@ -174,6 +182,8 @@ class Grid extends React.Component {
                     <Cell
                       imgSrc={this.props.cellsArray[row * 3 + column]["imgSrc"]}
                       className="cell"
+                      mouseOverPic={(fact) => this.props.mouseOverPic(fact)}
+                      fact={this.props.cellsArray[row * 3 + column]["fact"]}
                     />
                   );
                 })}
@@ -189,16 +199,39 @@ class Grid extends React.Component {
 class Cell extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      showFact: false,
+    };
+  }
+  mouseEnterPic(fact) {
+    this.setState({
+      showFact: true,
+    });
+  }
+
+  mouseLeavePic(fact) {
+    this.setState({
+      showFact: false,
+    });
   }
 
   render() {
     //require("./assets/rusty-spotted-cat.jpeg").default is the syntax
     return (
-      <div>
+      <div
+        className="cell-container"
+        onMouseEnter={(fact) => this.mouseEnterPic(this.props.fact)}
+        onMouseLeave={(fact) => this.mouseLeavePic(this.props.fact)}
+      >
         <img
           className={this.props.className}
           src={require(`${this.props.imgSrc}`).default}
         ></img>
+        <div className="fact">
+          {(() => {
+            return this.state.showFact ? <p>{this.props.fact}</p> : null;
+          })()}
+        </div>
       </div>
     );
   }
