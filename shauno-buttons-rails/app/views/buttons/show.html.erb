@@ -1,0 +1,15 @@
+<h1>Button number <%= @button.id %></h1>
+
+<p>
+    <strong>UUID: </strong><%= @button.uuid %>
+    <br>
+    <strong>Is active: </strong><%= @button.is_active %>
+</p>
+<p>
+    <strong>Associated reason: </strong><%= @reason.reason %>
+    <br>
+    <strong>Associated developer: </strong><%= @developer.name %>
+</p>
+
+<h4><%= link_to "Edit", edit_button_path(@button) %></h4>
+<h4><%= link_to "Back to all buttons", buttons_path %></h4>

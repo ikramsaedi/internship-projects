@@ -1,0 +1,24 @@
+<h1>Edit Button</h1>
+
+<%# <%= render "form", button: @button, reasons: @reasons, reason: @reason, developers: @developers, developer: @developer %> 
+
+<%= form_with model: @button do |form| %>
+    <div>
+        <%= form.label :is_active, "Button is inactive" %>: 
+        <%= form.check_box :is_active, { checked: !@button.is_active }, false, true %>
+    </div>
+
+    <div>
+        <%= form.label :reason %><br>
+        <%= form.select :reason, @reasons, selected: @reason.reason %>
+    </div>
+
+    <div>
+        <%= form.label :developer %><br>
+        <%= form.select :developer, @developers, selected: @developer.name %>
+    </div>
+
+    <div>
+        <%= form.submit %>
+    </div>
+<% end %>
