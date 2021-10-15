@@ -1,3 +1,44 @@
+body {
+  background-color: rgb(243, 255, 221);
+}
+#heading {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family: "Courier New", monospace;
+  font-size: 70px;
+  text-align: center;
+  color: rgb(51, 79, 0);
+  text-shadow: 2px 2px white;
+}
+
+#header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding-bottom: 50px;
+  background: linear-gradient(
+    to bottom,
+    rgb(243, 255, 221),
+    rgba(243, 255, 221, 0.838),
+    rgba(243, 255, 221, 0)
+  );
+}
+
+.navbar {
+  display: flex;
+  justify-content: center;
+}
+
+.navbar-button {
+  background-color: rgb(209, 237, 158);
+  font-family: "Courier New", monospace;
+  font-size: 20px;
+}
+
+.navbar-button:hover {
+  background-color: rgb(162, 197, 99);
+}
+
 .grid-container {
   display: flex;
   flex-direction: column;
@@ -10,6 +51,7 @@
 }
 .cell-container {
   position: relative;
+  text-align: center;
 }
 
 .cell {
@@ -21,14 +63,15 @@
   display: flex;
 }
 
+.dark-cell {
+  filter: brightness(50%);
+}
+
 .fact {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: white;
-}
-.navbar {
-  background-color: greenyellow;
-  display: flex;
+  color: rgb(243, 255, 221);
+  font-family: "Courier New", monospace;
 }

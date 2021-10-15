@@ -23,11 +23,13 @@ class Website extends React.Component {
   render() {
     return (
       <div>
-        <h1>Animal Gallery</h1>
-        <NavBar
-          buttonTexts={this.buttonTexts}
-          updateFilter={this.updateFilter.bind(this)}
-        />
+        <div id="header">
+          <p id="heading">Ikram's Animal Photo Gallery</p>
+          <NavBar
+            buttonTexts={this.buttonTexts}
+            updateFilter={this.updateFilter.bind(this)}
+          />
+        </div>
         <Gallery filter={this.state.filter} buttonTexts={this.buttonTexts} />
       </div>
     );
@@ -64,7 +66,10 @@ class NavBarButton extends React.Component {
   render() {
     return (
       <div>
-        <button onClick={this.onClickHabitat.bind(this)}>
+        <button
+          className="navbar-button"
+          onClick={this.onClickHabitat.bind(this)}
+        >
           {this.props.text}
         </button>
       </div>
@@ -148,7 +153,6 @@ class Gallery extends React.Component {
     console.log(this.props.filter, "in gallery render");
     return (
       <div>
-        <h3>This is a gallery</h3>
         <Grid
           cellsArray={this.filterCells()}
           mouseOverPic={(fact) => this.mouseOverPic(fact)}
@@ -214,6 +218,7 @@ class Cell extends React.Component {
 
   render() {
     //require("./assets/rusty-spotted-cat.jpeg").default is the syntax
+
     return (
       <div
         className="cell-container"
@@ -221,7 +226,11 @@ class Cell extends React.Component {
         onMouseLeave={(fact) => this.mouseLeavePic(this.props.fact)}
       >
         <img
-          className={this.props.className}
+          className={
+            this.state.showFact
+              ? `${this.props.className} dark-cell`
+              : this.props.className
+          }
           src={require(`${this.props.imgSrc}`).default}
         ></img>
         <div className="fact">
