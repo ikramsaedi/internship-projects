@@ -1,0 +1,12 @@
+GEM
+  specs:
+    dotenv (2.7.6)
+
+PLATFORMS
+  universal-darwin-20
+
+DEPENDENCIES
+  dotenv
+
+BUNDLED WITH
+   2.2.27
