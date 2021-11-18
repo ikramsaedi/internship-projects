@@ -23,16 +23,28 @@ result = HTTParty.get(
 
 # pp result
 
-json_result = JSON.generate(result)
+# file = File.open("result.json", "w")
 
-file = File.open("result.json", "w")
+# file.write(result)
 
-file.write()
-
-file.close
+# file.close
 
 # puts result["results"][1]["id"]
 
 for space in result["results"] do
-  puts space["name"] + " : " + space["id"].to_s
+  puts space["name"] + " : " + space["key"].to_s
 end
+
+space =
+  HTTParty.get(
+    'https://stileeducation.atlassian.net/wiki/rest/api/space/STILE/content?expand=children.page', # currently hardcoding the space for development
+    :headers => headers
+  )
+
+pp space
+
+file = File.open("result.json", "w")
+
+file.write(space)
+
+file.close
