@@ -2,12 +2,12 @@ puts "how does the api work :("
 
 require 'dotenv'
 require 'httparty'
-require "base64"
+require 'base64'
 require 'json'
 
 Dotenv.load
 
-auth_raw = "ikram.saedi@stileeducation.com:" + ENV["API_KEY"]
+auth_raw = ENV['EMAIL'] + ':' + ENV["API_KEY"] # has to be EMAIL and not USER, otherwise dotenv automatically trims it at the @, breaking the authentication
 # puts "raw: " + auth_raw
 # puts "encoded: " + Base64.urlsafe_encode64(auth_raw)
 
