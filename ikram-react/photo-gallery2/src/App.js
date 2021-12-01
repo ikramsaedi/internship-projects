@@ -14,7 +14,6 @@ class Website extends React.Component {
   }
 
   updateFilter(filterName) {
-    console.log("hi");
     this.setState({
       filter: filterName,
     });
@@ -145,12 +144,10 @@ class Gallery extends React.Component {
   }
 
   mouseOverPic(fact) {
-    console.log(fact);
     return true;
   }
 
   render() {
-    console.log(this.props.filter, "in gallery render");
     return (
       <div>
         <Grid
@@ -217,7 +214,7 @@ class Cell extends React.Component {
   }
 
   render() {
-    //require("./assets/rusty-spotted-cat.jpeg").default is the syntax
+    //require("./assets/rusty-spotted-cat.jpeg") is the syntax
 
     return (
       <div
