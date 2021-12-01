@@ -231,7 +231,7 @@ class Cell extends React.Component {
               ? `${this.props.className} dark-cell`
               : this.props.className
           }
-          src={require(`${this.props.imgSrc}`).default}
+          src={require(`${this.props.imgSrc}`)}
         ></img>
         <div className="fact">
           {(() => {
