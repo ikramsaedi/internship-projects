@@ -1,3 +1,0 @@
-#!/bin/bash
-cd "$(dirname "$0")" &&
-aws-vault exec dev -- aws s3 sync ../about-us-website s3://stile-internship-sites
