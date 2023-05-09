@@ -1,0 +1,59 @@
+#user-input-div {
+  background-image: radial-gradient(
+    rgb(110, 148, 60),
+    transparent,
+    transparent
+  );
+  padding: 700px;
+  position: absolute;
+  z-index: 1;
+}
+
+#weather-result-div {
+  position: relative;
+  top: 25%;
+  z-index: 2;
+  width: 300px;
+  margin: auto;
+  background-color: rgba(140, 190, 95, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: rgb(188, 228, 152);
+}
+#weather-result-div:empty {
+  display: none;
+}
+body {
+  background-image: url("./assets/background-default.jpeg");
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  height: 100vh;
+  font-family: monospace;
+}
+
+h1 {
+  text-align: center;
+}
+
+select,
+input,
+button {
+  font-family: monospace;
+  color: rgb(62, 85, 23);
+}
+
+button {
+  background-color: rgb(183, 221, 119);
+}
+
+#weather-icon {
+  width: 150px;
+}

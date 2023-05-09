@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>really cool weather</title>
+    <link rel="icon" href="./assets/favicon.ico" type="image/x-icon" />
+    <script src="https://unpkg.com/lodash@4.17.20"></script>
+  </head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="./index.css" />
+  <body>
+    <div id="user-input-div">
+      <h1>WEATHER</h1>
+      <form>
+        <label> City Name: </label>
+        <input id="city-name" />
+        <button id="submit-city" type="button">Submit</button>
+      </form>
+      <form>
+        <label>Country:</label>
+        <select name="countries-dropdown" id="countries-dropdown"></select>
+        <button id="submit-country" type="button">Submit</button>
+      </form>
+    </div>
+    <div id="weather-result-div"></div>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
